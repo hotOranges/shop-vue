@@ -85,9 +85,8 @@ export default {
           dis_1:[],
           dis_2:[],
       },
-      days:null,
+
       disabled:false,
-      broadcast:null,
     }
   },
   props:{
@@ -95,14 +94,12 @@ export default {
   },
   computed: {
     ...mapState({
-      title: state => state.home.tab.title,
       icon: state => state.home.badge.icon,
       bageTitle: state => state.home.badge.title,
       actives: state => state.active.home.title,
       src : state => state.home.lunbo.src,
       activeTitle: state => state.active.home.activeTitle,
-      days: state => state.active.home.days,
-      broadcast: state => state.home.broadcast,
+     
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
     }),
@@ -152,11 +149,10 @@ export default {
               //  console.log(res.data.home.active,this.days,this.activeTitle)
            } else {
              this.imageList = this.src;
-             this.broadcast = "暂无消息~~QAQ~"
+             
            }
             },(err)=>{
             this.imageList = this.src;
-            this.broadcast = "暂无消息~~QAQ~"
     })
 
   },

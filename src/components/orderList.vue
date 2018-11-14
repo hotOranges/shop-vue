@@ -187,11 +187,10 @@ disableStepperInput:false,
     onBuyClicked(data){
       const sel = document.querySelector('.van-stepper__input');
       this.orderNum(sel.value);
-       this.$toast(JSON.stringify(data));
+      this.$toast(JSON.stringify(data));
       this.$router.push('/goods/id_0/buy/pay');
     },
     onAddCartClicked(){
-        
     }
     
   },

@@ -235,7 +235,12 @@ export default {
 #app >>> .van-nav-bar{
   width: 100%;
   position: fixed;
-
+}
+#app  >>>  .van-nav-bar__text {
+color:#323232;
+}
+#app  >>>  .van-nav-bar .van-icon{
+  color:#323232;
 }
 </style>
 
