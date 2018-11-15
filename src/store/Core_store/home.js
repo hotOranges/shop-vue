@@ -21,6 +21,7 @@ export default {
         buyInfo:{
             img:[],
         },
+        token:null,
         orderShow:false,
         numO:null,
     },

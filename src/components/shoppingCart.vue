@@ -18,19 +18,19 @@
         <!-- 标签区域 -->
         <van-row class="shop-col">
             <van-col span="10" class="check" offset="1">
-                <van-checkbox v-model="checked[index]">{{shops[index]}} &nbsp;></van-checkbox>
+                <van-checkbox v-model="checkeds[index]">{{shops[index]}} &nbsp;></van-checkbox>
             </van-col>
         </van-row>
-        <div  v-for="(i,index) in goodsTitle" :key="index.id" class="shopp_conent">
+        <div class="shopp_conent">
         <van-col span='2' offset="1" class="">
-          <van-checkbox v-model="checked[index]"></van-checkbox>
+          <van-checkbox v-model="v.danxuan" class="checkedBox"  @change="singleChecked(item.danxuan,index)"></van-checkbox>
         </van-col>
         <van-col span='6' offset="1" class="imgList">
-      <img  :src="imageUrl[index][index]" name="adapter" />
+      <img  :src="imageUrl[index]" name="adapter" />
     </van-col>
     <van-col span='15' offset="1" class="goodList">
-      <span>{{i[index]}}</span>
-      <span>￥{{prices[index][index]}}</span>
+      <span>{{goodsTitle[index].slice(0,16)}}</span>
+      <span>￥{{prices[index]}}</span>
       <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper v-model="counts[index]"/></span>
     </van-col>
         </div>
@@ -41,14 +41,14 @@
   button-text="去结算"
   @submit="onSubmit"
   v-if="canel==false">
-  <van-checkbox v-model="checked">全选</van-checkbox>
+  <van-checkbox v-model="allchecked" @change="allCheck">全选</van-checkbox>
 </van-submit-bar>
 <van-submit-bar
  
   button-text="删除"
   @submit="onSubmit2"
   v-else >
-  <van-checkbox v-model="checked">全选</van-checkbox>
+  <van-checkbox v-model="allchecked">全选</van-checkbox>
 </van-submit-bar>
     </div>
 </template>
@@ -85,7 +85,9 @@ export default {
         canel:false,
         cantext:'编辑',
         isLoading: false,
-        checked: [false,false,false,false],
+        allchecked:false,
+        checked: [],
+        checkeds:[],
         chosenCoupon: -1,
         coupons: [coupon],
         disabledCoupons: [coupon],
@@ -122,8 +124,45 @@ export default {
     onSubmit2(){
 
     },
+    allCheck(val){
+    for (var i = 0; i < this.checked.length; i++) {
+      // this.checked[i] = val ==true ? false:true
+      if (val ==true) {
+        this.checked[i] = true
+      } else {
+        this.checked[i] = false
+      }
+    }
+      console.log(val,this.checked)
+    },
     onSubmit(){
 
+    },
+    singleChecked:function(checked,index){
+     
+        let p = parseFloat(this.cart[index]['pro_price'])*parseFloat(this.cart[index]['buyNum'])
+       
+        if (!checked) {
+          
+          this.checked -=1;
+          this.cart[index].danxuan = false;
+          this.total -= (p)*100  
+        }
+        else{
+         
+          this.checked += 1;
+          this.cart[index].danxuan = true;
+          this.total += (p)*100  
+        }
+         console.log("this.checked = " + this.checked)
+        // 判断checked的值是否还等于商品种类数目，
+       if (this.checked == this.cart.length) {
+          this.checkAll = true;
+       }else{
+          this.checkAll = false;
+       }
+ 
+ 
     },
     onClickRight(){
       this.canel = !this.canel;
@@ -187,26 +226,24 @@ export default {
      this.axios.get('./static/data.json').then((res)=>{
           if( res.status == 200 ) {
               const data = res.data.goods;
-              const preImg = data.id_0.imgList;
-              const title = data.id_0.title;
-              const price = data.id_0.limit_price;
+              const preImg = data.id_0.imgList[0];
+              const title = data.id_0.title[0];
+              const price = data.id_0.limit_price[0];
               const count = data.id_0.count;
               const description = data.id_0.description; 
               const shops = data.id_0.shops;
-              // console.log(JSON.stringify(data))
+             
+              // console.log(this.checked)
               this.imageUrl = preImg;
               this.goodsTitle = title;
               this.prices = price;
+              this.checked = shops.length;
+
               this.goodsDescription = description;
               this.shops = shops;
               this.counts =  count;
-              this.newcons.push({
-                title:title,
-                price:price,
-                count:count,
-                preImg:preImg
-              })
-              console.log(this.newcons)       
+              
+              // console.log(this.newcons)       
               
            } else {
              this.imageList = this.src;

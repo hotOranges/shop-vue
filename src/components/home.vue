@@ -41,8 +41,7 @@
 
     <!-- tabBar -->
       <van-tabbar v-model="tabarActive">
-        <van-tabbar-item  icon="location" @click="redirects('/address')"></van-tabbar-item>
-        <van-tabbar-item icon="pending-orders" dot @click="redirects('/community')"></van-tabbar-item>
+        <van-tabbar-item  icon="contact" @click="redirects('/Me')"></van-tabbar-item>
         <van-tabbar-item icon="shopping-cart" info="5" v-infos="shop_info" @click="redirects('/shoppingCart')"></van-tabbar-item>
         <!-- <van-tabbar-item icon="contact" info="2" v-infos="my_info" @click="redirects('/me')">我的</van-tabbar-item> -->
       </van-tabbar>
@@ -182,7 +181,7 @@ color:#323232;
 }
 
 #app  >>> .van-tabbar{
-    width: 35%;
+    width: 25%;
     background-color: rgba(0,0,0,.7);
     border-radius:8px;
     left: 15px;

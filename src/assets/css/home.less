@@ -191,48 +191,69 @@
     //我的样式
     .col-me{
         .title{
-            height: 50px;
-            background: white;
-            h4{
-                font-size: @fonts;
-                margin-top: 20px;
-                color: black;
-                font-weight: normal;
+            height:210px;
+            background:linear-gradient(48deg,rgba(239,158,62,1) 0%,rgba(228,160,66,1) 100%);
+            justify-content: center;
+            align-items: center;
+            display: -webkit-flex;
+            margin-bottom: 75px;
+            .imgList{
+               img{
+                   border-radius: 50%;
+                   width: 75px;
+                   height: 75px;
+                   margin-bottom: 75px;
+               }
+            }
+            .goodList{
+                text-align: left;
+                margin-bottom: 75px;
+                span{
+                    color: #fff;
+                    font-size: 19px;
+                }
+            }
+            .goodIntegral{
+                margin-bottom: 75px;
+                background-color: #F4DE56;
+                border-radius: 12px 0px 0px 12px;
+                height: 25px;
+                span{
+                    line-height: 29px;
+                    color: #652111;
+                    display: inline-flex;
+                    .van-icon{
+                        font-size: 18px;
+                        line-height: 25px;
+                        padding-right: 9px;
+                    }
+                }
             }
         }
 
-        .headerImg,{
+        .headerImg{
             margin-top: 1px;
-            height: 70px;
+            // height: 70px;
             background: white;
             position: relative;
-            .me-img{
-               height: 50px;
-            img{
-                width:50px;
-                height: 50px;
-                border-radius: 50px;
-                background-size: 200%;
-                background-position: 50% 50%;
-                position: absolute;
-                left: 20px;
-                top: 7px;
-            }
-         }
-         .me-img-t{
-             position: absolute;
-             top: 0;
-             left: 80px;
-             font-size: 17px;
-         }
-         .me-img-p{
+            width: 94%;
+            margin-left: 3%;
             position: absolute;
-            top: -5px;
-            right:30px;
-            font-size: 20px;
-            color: #F2F2F2;
-            font-weight: normal;
-         }
+            top: 175px;
+            padding-bottom: 20px;
+            border-radius: 10px;
+            .van-cell__title{
+                text-align: left
+            }
+            span{
+                display: -webkit-box;
+                /* margin: 0 auto; */
+                text-align: center;
+                -webkit-box-orient: horizontal;
+                -webkit-box-pack: center;
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
         }
 
         .headerList{
@@ -240,6 +261,8 @@
             background: white;
             position: relative;
             margin-top: 1px;
+            width: 94%;
+            margin-left: 3%;
             .me-img-ts{
                 position: absolute;
                 top: 10px;

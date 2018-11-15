@@ -1,185 +1,59 @@
 <template>
    <!-- 我的 组件 -->
   <div id="app">
-  <van-row class="col-me">
-                
+  <van-nav-bar title="" @click-left="onClickLeft" left-arrow>
+  <van-icon name="discount" slot="right" />
+</van-nav-bar>
+  <van-row class="col-me" style="background: rgba(242,242,242,1);">            
                     <van-col span='24' class="title">
-                         <h4>{{'我的'}}</h4>  
+                         <van-col span='6' offset="1" class="imgList">
+                          <img src="../../static/images/icon/icon_9.png" name="adapter" />
+                        </van-col>
+                        <van-col span='9' offset="1" class="goodList">
+                          <span>init</span>
+               
+                        </van-col>
+                        <van-col span='6' offset="1" class="goodIntegral">
+                          <span style="font-size: 12px;"><van-icon name="points" />积分12</span>
+                        </van-col>
                      </van-col>
-                     <!-- 登录 -->
+                     <!-- 订单 -->
                      <van-col span="24" class="headerImg">
-                         <div class="me-img">
-                           <van-uploader :after-read="onRead" accept="image/gif, image/jpeg" multiple>
-                            <van-icon name="photograph" style="marginTop:25px;"/>
-                          </van-uploader>
-
-                          <img  v-lazy="img" name="adapter" @click.stop="redirect('#')" />
-                         </div>
-
-                         <div class="me-img-t">
-                             <h5 @click="redirects('/login')">{{login[0]}}</h5>  
-                         </div>
-
-                         <div class="me-img-p">
-                             <h4>{{'>'}}</h4>  
-                         </div>
-
+                      <van-cell @click="redirects('/orderForm')" style="padding-bottom: 15px;" title="我的订单" value="查看全部订单" icon="location" is-link />
+                     <van-col span='4' offset="1" class="">
+                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span>待付款</span>
+                     </van-col>
+                     <van-col span='5' offset="1" class="">
+                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span>待收货</span>
+                     </van-col>
+                     <van-col span='5' offset="1" class="">
+                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span>退换货</span>
+                     </van-col>
+                     <van-col span='5' offset="1" class="">
+                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span>已收货</span>
+                     </van-col>
                      </van-col>
                       
                       <!-- 列表区 -->
-                      <van-col span="24" class="headerList" v-for="v in menu" :key="v.id">
-
-                         <div class="me-img-ts" @click.stop="listCover(v)">
-                             <span>{{v}}</span>  
-                         </div>
-
-                         <div class="me-img-ps">
-                             <h4>{{'>'}}</h4>  
-                         </div>
-
-                     </van-col>
-
                       <van-col span="24" class="headerList">
-
-                         <div class="me-img-ts">
-                             <span>{{'安全模式'}}</span>  
-                         </div>
-
-                         <div class="me-img-ps">
-                            <van-switch :value="checked" size="22px" @input="onInput" class="btns"/>
-                         </div>
+                      <van-cell style="padding-bottom: 15px;" title="我的收藏"  icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="我的优惠劵"  icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="帮助与反馈"  icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="客服中心"  icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="关于"  icon="location" is-link />
 
                      </van-col>
-
-                     <van-col span="24" class="boxer">
-                        <!-- 进度条 -->
-                         <van-circle
-                            v-model="currentRate"
-                            :rate="94"
-                            :speed="100"
-                            :text="text"
-                             size="150px"
-                              color="#d34ba8"
-                            layer-color="#eee"
-                            class="range"
-                            />
-
-                            <span>今日运势</span>
-
-                     </van-col>
-
-                    <!-- 弹出层 -->
-                     <van-popup v-model="shows" position="top" :overlay="true">
-                      <van-col span='24' class="title" style="width:400px;height:100%;paddingBottom:20px;">
-                        <!-- 信用 -->
-                        <div v-if="xinyong">
-                          <h4>{{menu[0]}}</h4> 
-                          <van-rate v-model="value"  color='#d34ba8' void-color="#eee"/> 
-                           <h4 style="color:#d34ba8;">{{'100分'}}</h4> 
-                          <span style="fontSize:12px;color:#A9A9A9;">本月表现绝佳 &nbsp;小主人再接再厉 ~~</span>
-                        </div>
-                      <!-- 物流信息 -->
-                         <div v-if="wuliu">
-                          <h4>{{menu[1]}}</h4>  
-
-                          <van-steps 
-                            :active="active"
-                            icon="logistics"
-                            title=""
-                            description=""
-                          >
-                           <van-step>买家下单</van-step>
-                            <van-step>商家接单</van-step>
-                            <van-step>买家提货</van-step>
-                             <van-step></van-step>
-                            <van-step>交易完成</van-step>
-                          </van-steps>
-
-                          <van-steps direction="vertical" :active="0" active-color="#06bf04">
-                            <van-step>
-                              <h3>【常州市】快件已到菜鸟驿站请带好证件来取件</h3>
-                              <p>2018-06-12 12:40</p>
-                            </van-step>
-                            <van-step>
-                              <h3>【无锡市】已到无锡集散中心正准备发往下一站</h3>
-                              <p>2016-06-11 10:00</p>
-                            </van-step>
-                            <van-step>
-                              <h3>快件已发货</h3>
-                              <p>2018-06-10 09:30</p>
-                            </van-step>
-                          </van-steps>
-
-                        </div>
-                      <!-- 联系人 -->
-                         <div v-if="contact" style="height:300px;">
-                          <h4>{{menu[2]}}</h4>  
-
-                          <!-- 联系人卡片 -->
-                              <van-contact-card
-                                :type="cardType"
-                                :name="currentContact.name"
-                                :tel="currentContact.tel"
-                                @click="showList = true"
-                              />
-
-                              <!-- 联系人列表 -->
-                              <van-popup v-model="showList" position="bottom">
-                                <van-contact-list
-                                  v-model="chosenContactId"
-                                  :list="list"
-                                  @add="onAdd"
-                                  @edit="onEdit"
-                                  @select="onSelect"
-                                />
-                              </van-popup>
-
-                              <!-- 联系人编辑 -->
-                              <van-popup v-model="showEdit" position="bottom">
-                                <van-contact-edit
-                                  :contact-info="editingContact"
-                                  :is-edit="isEdit"
-                                  @save="onSave"
-                                  @delete="onDelete"
-                                />
-                              </van-popup>
-
-                            <div style="fontSize:12px;color:#A9A9A9;marginTop:20px;">{{'保存联系人联系方式 能够有效的与他人取得联系哦~~'}}</div>  
-                        </div>
-                      <!-- 密码设置 -->
-                         <div v-if="pass" style="height:700px;">
-                          <h4>{{menu[3]}}</h4>  
-
-                          <!-- 密码输入框 -->
-                            <van-password-input
-                              :value="value"
-                              info="密码为 6 位数字"
-                              @focus="showKeyboard = true"
-                            />
-
-                            <!-- 数字键盘 -->
-                            <van-number-keyboard
-                              :show="showKeyboard"
-                              @input="onInputs"
-                              @delete="onDelete"
-                              @blur="showKeyboard = false"
-                            />
-                    <div style="fontSize:12px;color:#A9A9A9;marginTop:20px;">{{'请小主人妥善保管好密码哦~~'}}</div>  
-                        </div>
-                        
-                      </van-col>
-                    </van-popup>
-                    
+ 
        </van-row>
 
    
     <!-- tabBar -->
-      <van-tabbar v-model="tabarActive">
-        <van-tabbar-item  icon="wap-home" @click="redirects('/')">首页</van-tabbar-item>
-        <van-tabbar-item icon="pending-evaluate" dot @click="redirects('/community')">社区</van-tabbar-item>
-        <van-tabbar-item icon="shopping-cart" info="5" v-infos="shop_info" @click="redirects('/shoppingCart')">购物车</van-tabbar-item>
-        <van-tabbar-item icon="contact" info="2" v-infos="my_info" @click="redirects('/me')">我的</van-tabbar-item>
-      </van-tabbar>
+   
 
     </div>
 
@@ -254,6 +128,9 @@ export default {
     ]),
      redirects(url) {
       this.$router.push(url);
+    },
+    onClickLeft(){
+      this.$router.push('/');
     },
      onInput(checked) {
         if(this.checked){
@@ -398,4 +275,26 @@ export default {
 <style lang="less" scoped>
 @import url('../assets/css/home.less');
 </style>
+<style scoped>
+#app >>> .van-nav-bar{
+  background:linear-gradient(48deg,rgba(239,158,62,1) 0%,rgba(228,160,66,1) 100%);
+}
+#app >>> .van-nav-bar .van-icon{
+  color: #fff
+}
+#app >>> .van-icon-discount::before{
+      font-size: 22px;
+}
+#app >>> .van-hairline--bottom::after{
+  border-bottom-width: 0px;
+}
+#app >>> .van-cell__title{
+  text-align: left;
+  font-size: 15px;
+  color: #323232;
 
+}
+#app >>> .van-cell__value{
+  font-size: 12px
+}
+</style>

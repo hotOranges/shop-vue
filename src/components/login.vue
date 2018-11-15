@@ -1,14 +1,24 @@
 <template>
    <!-- 登录注册 组件 -->
   <div id="apps">
-                <div class="login">
+                <div class="login" style="width: 90%; margin-left: 5%;">
                     <div class="welcome"><img src="../../static/images/welcome.png"></div>
                     <div class="login-form">
-                        <div class="login-inp"><label>用户名</label><input type="text" placeholder="请输入用户名" v-model="username" @keydown="rules(username,'user')"/></div>
-                        <div class="login-inp"><label>密码</label><input type="password" placeholder="请输入密码" v-model="password" @keydown="rules(password,'pass')"/></div>
+                        <van-cell-group>
+                        <van-field clearable  style="box-shadow: 0 0 0 60px #fff inset;-webkit-text-fill-color: #000;" placeholder="请输入用户名" type="number" v-model="username" @keydown="rules(username,'user')"/>
+                        </van-cell-group>
+                        <van-cell-group>
+                        <van-field style="box-shadow: 0 0 0 60px #fff inset;-webkit-text-fill-color: #000;" placeholder="请输入密码" type="password" v-model="password" @keydown="rules(password,'pass')"/>
+                        </van-cell-group>
+                        <van-cell-group>
+                          <van-checkbox v-model="checked" id="checkedinit">记住密码</van-checkbox>
+                          <a style="float: right;padding-right: 18px;font-size: 12px;color: rgb(147, 94, 70);" @click="redirects('/respassworld')">忘记密码？</a>
+                        </van-cell-group>
                         <div class="login-inp"><a href="#" @click="submit(username,password)">{{btnName}}</a></div>
+                  
+
                     </div>
-                    <div class="login-txt"><a href="#" @click="redirects('/register')">立即注册</a>|<a href="#" @click="tip()">忘记密码？</a></div>
+                    <div class="login-txt">还没有注册？<a style="color:#935E46" @click="redirects('/register')">立即注册</a></div>
                 </div>
                 <div style="text-align:center;">
                 </div>
@@ -33,6 +43,7 @@ export default {
        username:null,
        password:null,
        btnName:'立即登录',
+       checked:false
     }
   },
   computed: {
@@ -104,11 +115,11 @@ export default {
     },
     redirects(url) {
       this.$router.push(url);
-        if(this.$route.name == 'login') {
-                    this.btnName = '立即登录';
-                }else if (this.$route.name == 'register') {
-                    this.btnName = '立即注册';
-        }
+        // if(this.$route.name == 'login') {
+        //             this.btnName = '立即登录';
+        //         }else if (this.$route.name == 'register') {
+        //             this.btnName = '立即注册';
+        // }
     },
     tip() {
         Toast('该功能正在维护 o(╥﹏╥)o');
@@ -131,5 +142,39 @@ export default {
 
 <style lang="less" scoped>
 @import url('../assets/css/login.less');
+</style>
+<style scoped>
+#checkedinit >>>  .van-checkbox__icon--round .van-icon{
+    border-radius: 2px;
+    width: 15px;
+    height: 15px;
+}
+#checkedinit >>>  .van-checkbox__icon, .van-checkbox__label{
+    line-height: 15px;
+}
+#checkedinit >>>  .van-checkbox__icon--checked .van-icon{
+    color: #fff;
+    border-color: rgba(179,144,97,1);
+    background-color: rgba(179,144,97,1);
+    background: rgba(179,144,97,1);
+}
+#checkedinit{
+    text-align: left;
+    padding-left: 15px;
+    width: 40%;
+    display: inline-block;
+    font-size: 12px;
+}
+.van-cell-group{
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.van-cell{
+    border-bottom: 1px solid #D8D8D8
+}
+.van-field__control{
+    color: #C1C1C1
+}
 </style>
 

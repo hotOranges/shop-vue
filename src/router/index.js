@@ -12,6 +12,11 @@ import Login from '@/components/login'
 import About from '@/components/about'
 import Address from '@/components/address'
 import AddressEdit from '@/components/addressEdit'
+import Reg from '@/components/reg'
+import Respassworld from '@/components/respassworld'
+import OrderForm from '@/components/orderForm'
+import Addressnew from '@/components/addressnew'
+
 Vue.use(Router)
 
 export default new Router({
@@ -37,6 +42,11 @@ export default new Router({
       component: AddressEdit,
     },
     {
+      path:'/addressnew',
+      name:'addressnew',
+      component:Addressnew,
+    },
+    {
       path:'/goods/:id',
         name:'goodsInfo',
         component:GoodsInfo,
@@ -59,6 +69,9 @@ export default new Router({
     {
       path:'/shoppingCart',
       name:'shoppingCart',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component:ShopingCart,
     },
     {
@@ -72,9 +85,20 @@ export default new Router({
       component:Login,
     },
     {
+      name:'/orderForm',
+      path:'/orderForm',
+      name:'orderForm',
+      component:OrderForm,
+    },
+    {
       path:'/register',
       name:'register',
-      component:Login,
+      component:Reg,
+    },
+    {
+      path:'/respassworld',
+      name:'respassworld',
+      component:Respassworld,
     },
     {
       path:'/about',

@@ -2,7 +2,7 @@
   <section>
     <van-nav-bar
   class="init-header"
-  title="编辑地址"
+  title="新增地址"
   left-text=""
   right-text=""
   left-arrow
