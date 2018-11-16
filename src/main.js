@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import qs from 'qs'
 Vue.config.productionTip = false
 
 //ajax
@@ -30,7 +31,13 @@ Vue.use(Waterfall);
 
 import store from './store/index'
 
-
+Vue.prototype.$ajax = axios
+axios.interceptors.request.use((config) => {
+  config.data = qs.stringify(config.data)
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
 /*登录拦截*/
 // router.beforeEach((to, from, next) => {
 //   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限

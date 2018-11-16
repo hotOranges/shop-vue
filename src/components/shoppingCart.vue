@@ -125,6 +125,7 @@ export default {
 
     },
     allCheck(val){
+      console.log(this.shops.danxuan)
     for (var i = 0; i < this.checked.length; i++) {
       // this.checked[i] = val ==true ? false:true
       if (val ==true) {
@@ -232,7 +233,12 @@ export default {
               const count = data.id_0.count;
               const description = data.id_0.description; 
               const shops = data.id_0.shops;
-             
+            //  for(let value of data.id_0){
+            //   console.log(value)
+            //   value['danxuan'] = true;  
+            
+            // }
+
               // console.log(this.checked)
               this.imageUrl = preImg;
               this.goodsTitle = title;

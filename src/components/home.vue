@@ -7,15 +7,20 @@
   class="init-header"
   title="商城"
   left-text=""
-  right-text="客服"
   left-arrow
   @click-left="onClickLeft"
-  @click-right="onClickRight"
-/>
+>
+<van-icon name="chat" slot="right" info="8"/>
+</van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
       <van-col span="24">
-        
+        <van-tabs v-model="active" swipeable v-tab>
+          <van-tab v-for="index in 7" 
+          :title="title[index]" 
+          :key="index.id" 
+          class="tab"
+          >
           <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 
             <!-- 今日推荐版块 -->
@@ -35,7 +40,8 @@
 
          
              </van-pull-refresh>   
-         
+              </van-tab>
+         </van-tabs>
       </van-col>
     </van-row>
 
@@ -50,6 +56,9 @@
 </template>
 
 <script>
+import {
+  getAllProject
+} from '../../src/api/login'
 import { mapState,mapActions,mapGetters } from 'vuex';
 import { Waterfall } from 'vant';
 import Swiper from './swiper';
@@ -94,6 +103,7 @@ export default {
       Toast('客服');
     },
     onRefresh() {
+     
       setTimeout(() => {
         this.$toast('刷新成功');
         this.isLoading = false;
@@ -189,6 +199,12 @@ color:#323232;
 }
 #app  >>> .van-tabbar-item{
   color: #fff
+}
+#app >>> .van-tab--active{
+  color: #B39061;
+}
+#app >>> .van-tabs__line{
+  background-color:#B39061;
 }
 </style>
 

@@ -5,7 +5,78 @@
 </van-nav-bar>
 <van-tabs>
   <van-tab v-for="index in Tabtext" :key="index+1" :title="' ' + index">
-    内容 {{ index }}
+  <div v-if="index=='全部订单'">
+  <div class="init-list">
+  <van-cell-group>
+  <van-cell title="2018-11-03 12:56" value="已完成" />
+  </van-cell-group>
+  <div class="init-soller-list">
+  <van-col span='5' offset="1" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>
+  <van-col span='5' offset="1" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>  
+  <van-col span='5' offset="1" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>
+  <van-col span='5' offset="1" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>
+   <van-col span='5' offset="1" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>
+  </div>
+    <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
+  <van-cell-group id="init-border" style="">
+  <div span='4' offset="1" class="btn">
+      <button>评价晒单</button>
+  </div>
+  <div span='4' offset="1" class="btn">
+      <button>申请售后</button>
+  </div>
+  <div span='4' offset="1" class="btn">
+      <button>删除订单</button>
+  </div>
+  </van-cell-group>
+  <div class="init-clear"></div>
+  </div>
+  <div class="init-border-20"></div>
+   <div class="init-list">
+  <van-cell-group>
+  <van-cell title="2018-11-03 12:56" value="已完成" />
+  </van-cell-group>
+  <div class="init-soller-list2">
+  <van-col span='5' offset="2" class="imgList">
+      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+  </van-col>
+   <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
+      <span>翼贝贝儿童手表T8S</span>
+  </van-col>
+  <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
+      <span>¥499</span>
+      <span style="font-size: 11px;">X1</span>
+  </van-col>
+  
+  </div>
+    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
+  <van-cell-group id="init-border" style="">
+  <div span='4' offset="1" class="btn">
+      <button>评价晒单</button>
+  </div>
+  <div span='4' offset="1" class="btn">
+      <button>申请售后</button>
+  </div>
+  <div span='4' offset="1" class="btn">
+      <button>删除订单</button>
+  </div>
+  </van-cell-group>
+  
+  <div class="init-clear"></div>
+  
+  </div>
+  <div class="init-border-20"></div>
+  </div>
   </van-tab>
 </van-tabs>
   </div>
@@ -39,4 +110,80 @@ export default {
 #app >>> .van-tabs__line{
     background-color: #B5915C;
 }
+#app >>> .van-cell__title, .van-cell__value{
+  text-align: left
+}
+#app >>> .imgList img{
+  width: 100%
+}
+#app >>> .init-soller-list{
+   /*display: flex;*/
+    overflow-y:hidden;
+    overflow-x:auto;
+    white-space: nowrap;
+    /*解决ios上滑动不流畅*/
+        -webkit-overflow-scrolling: touch;
+    /*利用padding将滚动条挤出：纵向超出部分将会隐藏，即滚动条部分被挤出可视区域*/
+          
+}
+#app >>> .init-soller-list2{
+  padding-bottom: 5px;
+     /* justify-content: center; */
+  /* align-items: center; */
+  display: -webkit-flex;
+
+}
+#app >>> .van-col--offset-1{
+  display: inline-table;
+  vertical-align: top;
+  float: inherit;
+}
+  /*掩藏滚动条*/
+::-webkit-scrollbar {
+    display: none!important;
+}
+#app .btn{
+    float: right;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+#app .btn button{
+  font-weight:500;
+  color:rgba(179,144,97,1);
+  background-color: transparent;
+  border: 1px solid #B39061;
+  line-height: 31px;
+  border-radius: 3px;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#app >>> .van-col--4{
+  text-align: right;
+  padding-right: 11px;
+  line-height: 28px;
+}
+#app >>> .van-hairline--top-bottom::after{
+  border-color:#D8D8D8;
+}
+#app >>> .init-border ::before{
+  border-bottom: 1px solid #d8d8d8
+}
+#app >>> #init-border::after{
+  transform: scale(.3);
+}
+#app >>> .init-clear{
+  clear: both;
+}
+#app >>> .van-tab__pane{
+}
+#app >>> .init-border-20{
+  background:rgba(242,242,242,1);
+  height: 20px;
+  position: relative;
+  width: 100%
+}
+
 </style>

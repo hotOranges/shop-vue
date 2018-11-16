@@ -11,7 +11,6 @@
          </div>
           <!-- <span>{{actives[2]}}</span> -->
      </van-col>
-
        </van-row>
 
     <van-row class="col-3">
