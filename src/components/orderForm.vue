@@ -242,7 +242,7 @@
       <button>申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>评价晒单</button>
+      <button @click="redirects('/evaluation')">评价晒单</button>
   </div>
   </van-cell-group>
   
@@ -304,7 +304,11 @@ export default {
   methods: {
       onClickLeft(){
         this.$router.back(-1);
+    },
+    redirects(url) {
+      this.$router.push(url);
     }
+
   }
 }
 

@@ -16,6 +16,7 @@ import Reg from '@/components/reg'
 import Respassworld from '@/components/respassworld'
 import OrderForm from '@/components/orderForm'
 import Addressnew from '@/components/addressnew'
+import Evaluation from '@/components/Evaluation'
 
 Vue.use(Router)
 
@@ -89,6 +90,12 @@ export default new Router({
       path:'/orderForm',
       name:'orderForm',
       component:OrderForm,
+    },
+    {
+      name:'/evaluation',
+      path:'/evaluation',
+      name:'evaluation',
+      component:Evaluation,
     },
     {
       path:'/register',
