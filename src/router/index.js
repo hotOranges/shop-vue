@@ -17,6 +17,10 @@ import Respassworld from '@/components/respassworld'
 import OrderForm from '@/components/orderForm'
 import Addressnew from '@/components/addressnew'
 import Evaluation from '@/components/Evaluation'
+import paySuccess from '@/components/paySuccess'
+import payFailed from '@/components/payFailed'
+import Orderdetail from '@/components/Orderdetail'
+
 
 Vue.use(Router)
 
@@ -33,9 +37,24 @@ export default new Router({
       component: Search,
     },
     {
-      path: '/address',
-      name: 'address',
-      component: Address,
+      path: '/paySuccess',
+      name: 'paySuccess',
+      component: paySuccess,
+    },
+    {
+      path: '/payFailed',
+      name: 'payFailed',
+      component: payFailed,
+    },
+    {
+      path: '/Orderdetail',
+      name: 'Orderdetail',
+      component: Orderdetail,
+    },  
+    {
+      path:'/address',
+      name:'address',
+      component:Address,
     },
     {
       path: '/addressEdit',

@@ -3,7 +3,7 @@
   <div id="app" style="background:white;margin-top:0px;">
     <van-nav-bar
   class="init-header"
-  title="确认订单"
+  title="订单详情"
   left-text=""
   left-arrow
   @click-left="onClickLeft"
@@ -15,10 +15,10 @@
 <div class="init-10"></div>
   <van-radio-group v-model="radio3">
         <van-cell-group>
-          <van-cell title="支付宝" clickable @click="radio3 = '1'">
+           <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '1'">
             <van-radio name="1" />
           </van-cell>
-          <van-cell title="微信" clickable @click="radio3 = '2'">
+          <van-cell title="微信" icon="wechat" clickable @click="radio3 = '2'">
             <van-radio name="2" />
           </van-cell>
         </van-cell-group>
@@ -49,11 +49,11 @@
 </van-notice-bar>
 </van-cell-group>
 </van-panel>
-      <van-submit-bar
-        :price="50900*numO"
-        button-text="提交订单"
-        @submit="onSubmit"
-        />
+     <van-goods-action>
+        <van-goods-action-mini-btn text="合计¥499" />
+        <van-goods-action-big-btn text="取消订单" @click="redirects('Orderdetail')"  />
+        <van-goods-action-big-btn text="去支付" primary />
+    </van-goods-action> 
   </div>
 </template>
 
@@ -63,7 +63,6 @@ import { ImagePreview } from "vant";
 import { Toast } from "vant";
 
 export default {
-  name: "pay",
   data() {
     return {
       chosenAddressId: "1",
@@ -191,6 +190,12 @@ export default {
   padding-bottom: 0px;
   padding-top: 40px;
 }
+#app >>> .van-icon-alipay::before{
+    color: #108EE9;
+}
+#app >>> .van-icon-wechat::before {
+    color: #00C801
+}
 #app >>> .van-cell__title {
   text-align: left;
 }
@@ -241,6 +246,29 @@ color:#323232;
 }
 #app  >>>  .van-nav-bar .van-icon{
   color:#323232;
+}
+#app .van-button--warning{
+  background-color: #B39061;
+  border: 1px solid #B39061;
+}
+#app .van-goods-action-mini-btn{
+    width: 38%;
+    color: rgba(207,57,57,1);
+    font-size: 16px;
+    height: 65px;
+}
+#app .van-goods-action{
+    background-color: #fff
+}
+#app >>> .van-button--square{
+  border-radius: 24px 24px 24px 24px;
+}
+#app >>> .van-button--large{
+    height: 37px;
+    line-height: 37px;
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 </style>
 

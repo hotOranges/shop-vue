@@ -32,11 +32,11 @@
 </van-cell-group>
 <van-checkbox v-model="checked" checked-color="#CF3939">匿名评论</van-checkbox> 
 </van-row>
-<vanr-row>
+<van-row>
 <van-cell-group>
   <van-cell title="物流服务评分" value="" />
 </van-cell-group>
-</vanr-row>
+</van-row>
  <van-row class="shopp_conent">
  <van-col span='6' offset="1" class="">
      快递包装
