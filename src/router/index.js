@@ -2,14 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home'
 import Search from '@/components/search'
-import  GoodsInfo from '@/components/goodsInfo'
+import GoodsInfo from '@/components/goodsInfo'
 import Buy from '@/components/buyInfo'
 import Pay from '@/components/orderPay'
-import Community from '@/components/community'
 import ShopingCart from '@/components/shoppingCart'
 import Me from '@/components/me'
 import Login from '@/components/login'
-import About from '@/components/about'
 import Address from '@/components/address'
 import AddressEdit from '@/components/addressEdit'
 import Reg from '@/components/reg'
@@ -20,8 +18,8 @@ import Evaluation from '@/components/Evaluation'
 import paySuccess from '@/components/paySuccess'
 import payFailed from '@/components/payFailed'
 import Orderdetail from '@/components/Orderdetail'
-
-
+import aftersales from '@/components/aftersales'
+import aftersalesDetil from '@/components/aftersalesDetil'
 Vue.use(Router)
 
 export default new Router({
@@ -67,6 +65,16 @@ export default new Router({
       component:Addressnew,
     },
     {
+      path:'/aftersales',
+      name:'aftersales',
+      component:aftersales
+    },
+    {
+      path:'/aftersalesDetil',
+      name:'aftersalesDetil',
+      component:aftersalesDetil
+    },
+    {
       path:'/goods/:id',
         name:'goodsInfo',
         component:GoodsInfo,
@@ -81,11 +89,7 @@ export default new Router({
       name:'pay',
       component:Pay,
     },
-    {
-      path:'/community',
-      name:'community',
-      component:Community,
-    },
+    
     {
       path:'/shoppingCart',
       name:'shoppingCart',
@@ -126,11 +130,7 @@ export default new Router({
       name:'respassworld',
       component:Respassworld,
     },
-    {
-      path:'/about',
-      name:'aboutMe',
-      component:About,
-    },
+   
     {
       path:'*',
       redirect:'/'

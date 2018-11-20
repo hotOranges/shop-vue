@@ -27,7 +27,6 @@
     type="textarea"
     placeholder="请输入留言"
     rows="1"
-    
   />
 </van-cell-group>
 <van-checkbox v-model="checked" checked-color="#CF3939">匿名评论</van-checkbox> 

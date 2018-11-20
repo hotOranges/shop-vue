@@ -8,7 +8,6 @@
                      </van-col>
        </van-row>
                 <!-- 下拉刷新 -->
-            
                 <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> 
                     <!-- 商品列表 -->
                  <div class="over">
@@ -46,7 +45,7 @@
 
                 </van-pull-refresh>
     </div>
-  </div>
+  
 </template>
 
 <script>

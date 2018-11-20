@@ -101,6 +101,9 @@ color:red;
     font-family:PingFangSC-Medium;
     padding-right: 10px;
 }
+.payContent{
+  text-align: center
+}
 .payContent img{
   max-width: 100px;
 }

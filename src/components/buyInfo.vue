@@ -45,7 +45,6 @@
     </van-goods-action>    
      
 
-
   </div>
 </template>
 

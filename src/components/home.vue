@@ -99,11 +99,11 @@ export default {
      onClickLeft() {
       Toast('返回');
     },
+    
     onClickRight() {
       Toast('客服');
     },
     onRefresh() {
-     
       setTimeout(() => {
         this.$toast('刷新成功');
         this.isLoading = false;
@@ -116,8 +116,6 @@ export default {
        setTimeout(() => {
          for (let i = 0; i < 5; i++) {
             this.imageList.push(this.imageList[i]);
-          
-          
         }
         this.disabled = false;
        }, 200);

@@ -34,7 +34,7 @@
       <button>评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>申请售后</button>
+      <button @click="redirects('aftersales')">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button>删除订单</button>
@@ -65,7 +65,7 @@
       <button>评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>申请售后</button>
+     <button @click="redirects('aftersales')">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button>删除订单</button>
@@ -239,7 +239,7 @@
       <button>删除订单</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>申请售后</button>
+      <button @click="redirects('aftersales')">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="redirects('/evaluation')">评价晒单</button>
