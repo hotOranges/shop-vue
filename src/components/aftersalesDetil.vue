@@ -36,6 +36,26 @@
   <van-cell-group id="init-border" style="">
        <van-cell title="" value="申请数量：1" />
   </van-cell-group>
+  <div class="init-border-20"></div>
+  <van-cell-group id="table">
+  <van-cell title="服务单号：xxxxxxxxx"  />
+  <van-cell title="申请时间：2018-11-11 18:58"  />
+  <van-cell title="售后类型：退货"  />
+  <van-cell title="售后原因：不想要了"  />
+  <van-cell title="退款方式：原返"  />
+  <van-cell title="退货方式：快递到新翔"  />
+  <van-cell title="商家" class="init-title" />
+  <van-cell title="吴先生" value="021-3468-3561" />
+  <van-cell value="上海市闵行区沪闵路7866弄莲花国际广场1号楼1201室" />
+  <van-cell title="寄件人手机号：18888888888"  />
+  <van-cell title="自己" class="init-title" />
+  <van-cell title="喵酱" value="1888888888888" />
+  <van-cell value="上海市闵行区沪闵路7866弄莲花国际广场1号楼1201室" />
+
+
+
+
+</van-cell-group>
   </div>
 </template>
 
@@ -54,9 +74,9 @@ export default {
 //   mounted: {},
 
   methods: {
-      onClickLeft(){
-
-      }
+       onClickLeft(){
+        this.$router.back(-1);
+    },
   }
 }
 
@@ -119,7 +139,7 @@ export default {
     display: inline-block;
     padding-bottom: 5px;
 }
-#apps >>> .van-cell__value--alone{
+#apps >>> #init-border .van-cell__value--alone{
     text-align: right;
     padding-right: 15px;
 }
@@ -130,5 +150,24 @@ export default {
 #apps >>> .van-cell{
     padding: 5px 15px;
     line-height: 18px;
+    color: #6B6B6B;
+    font-size: 13px;
 }
+#apps >>> .van-cell::after{
+   border: 1px solid #D8D8D8;
+   transform: scaleY(.4);
+   left: 0px;
+}
+#apps >>> .init-border-20{
+  background:rgba(242,242,242,1);
+  height: 10px;
+  position: relative;
+  width: 100%
+}
+#apps >>> #table .van-cell{
+    line-height: 31px;
+}
+#apps >>> .init-title  .van-cell__title{
+    color: #000
+} 
 </style>

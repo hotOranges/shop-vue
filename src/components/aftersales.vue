@@ -34,7 +34,6 @@
   </div>
   <div class="init-border-20"></div>
   </div>
-  </div>
 </template>
 
 <script>

@@ -16,7 +16,7 @@
         @add="onAdd"
         @edit="onEdit"
       />
-      <div v-else style="margin-top:160px">
+      <div v-else style="margin-top:160px;text-align: center;padding-bottom: 240px;">
         <h5 style="color:#6B6B6B;">
           您还没有收货地址哦
         </h5>

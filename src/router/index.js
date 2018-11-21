@@ -20,6 +20,7 @@ import payFailed from '@/components/payFailed'
 import Orderdetail from '@/components/Orderdetail'
 import aftersales from '@/components/aftersales'
 import aftersalesDetil from '@/components/aftersalesDetil'
+import aftersalesServer from '@/components/aftersalesServer'
 Vue.use(Router)
 
 export default new Router({
@@ -75,6 +76,11 @@ export default new Router({
       component:aftersalesDetil
     },
     {
+      path:'/aftersalesServer',
+      name:'aftersalesServer',
+      component:aftersalesServer
+    },
+    {
       path:'/goods/:id',
         name:'goodsInfo',
         component:GoodsInfo,
@@ -101,6 +107,9 @@ export default new Router({
     {
       path:'/me',
       name:'Me',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       component:Me,
     },
     {

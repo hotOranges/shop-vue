@@ -3,8 +3,8 @@
   <div id="app">
       <van-nav-bar title="我的订单" @click-left="onClickLeft" left-arrow>
 </van-nav-bar>
-<van-tabs>
-  <van-tab v-for="index in Tabtext" :key="index+1" :title="' ' + index">
+<van-tabs v-model="active">
+  <van-tab v-for="index in Tabtext" :key="index+1" :title="' ' + index" >
     <!--全部订单-->
   <div v-if="index=='全部订单'">
   <div class="init-list">
@@ -31,13 +31,13 @@
 <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
   <van-cell-group id="init-border" style="">
   <div span='4' offset="1" class="btn">
-      <button>评价晒单</button>
+      <button @click="redirects('evaluation')">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('aftersales')">申请售后</button>
+      <button @click="redirects('aftersalesServer')">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>删除订单</button>
+      <button  @click="delOrder()">删除订单</button>
   </div>
   </van-cell-group>
   <div class="init-clear"></div>
@@ -104,11 +104,11 @@
             <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
             <van-cell-group id="init-border" style="">
             
-            <div span='4' offset="1" class="btn">
-                <button>去支付</button>
+             <div span='4' offset="1" class="btn">
+                <button @click="pay()">去支付</button>
             </div>
             <div span='4' offset="1" class="btn">
-                <button>取消订单</button>
+                <button @click="canel()">取消订单</button>
             </div>
             </van-cell-group>
             
@@ -135,10 +135,10 @@
   <van-cell-group id="init-border" style="">
  
   <div span='4' offset="1" class="btn">
-      <button>去支付</button>
+      <button @click="pay()">去支付</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>取消订单</button>
+      <button @click="canel()">取消订单</button>
   </div>
   </van-cell-group>
   
@@ -174,10 +174,10 @@
 <van-cell-group id="init-border" style="">
  
   <div span='4' offset="1" class="btn">
-      <button>确认收货</button>
+      <button @click="confirm()">确认收货</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button>查看物流</button>
+      <button @click="logistics()">查看物流</button>
   </div>
   </van-cell-group>
    <div class="init-clear"></div>
@@ -283,6 +283,29 @@
    </div>
   </div>
 <!--已取消完成-->
+
+
+<!--查看物流-->
+<van-actionsheet
+  v-model="show"
+  @select="onSelect"
+>
+  <van-steps direction="vertical" :active="0" active-color="#f44">
+  <van-step>
+    <h3>【城市】物流状态1</h3>
+    <p>2016-07-12 12:40</p>
+  </van-step>
+  <van-step>
+    <h3>【城市】物流状态2</h3>
+    <p>2016-07-11 10:00</p>
+  </van-step>
+  <van-step>
+    <h3>快件已发货</h3>
+    <p>2016-07-10 09:30</p>
+  </van-step>
+</van-steps>
+</van-actionsheet>
+<!--查看物流结束-->
   </van-tab>
 </van-tabs>
   </div>
@@ -292,11 +315,14 @@
 export default {
   data () {
     return {
+        show: false,
+        active:0,
         Tabtext:["全部订单","待付款","待收货","已收货","已取消"]
     };
   },
-
-
+created(){
+ this.active = this.$route.query.activeId
+},
 //   mounted: {
     
 //   },
@@ -307,6 +333,26 @@ export default {
     },
     redirects(url) {
       this.$router.push(url);
+    },
+    delOrder(){
+        alert('删除订单')
+    },
+    pay(){
+        alert('去支付')
+    },
+    canel(){
+        alert('取消订单')
+    },
+    confirm(){
+      alert('确认收货')  
+    },
+     onSelect(item) {
+      // 点击选项时默认不会关闭菜单，可以手动关闭
+      this.show = false;
+      Toast(item.name);
+    },
+    logistics(){
+       this.show = true; 
     }
 
   }
