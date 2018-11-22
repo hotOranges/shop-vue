@@ -21,6 +21,9 @@ import Orderdetail from '@/components/Orderdetail'
 import aftersales from '@/components/aftersales'
 import aftersalesDetil from '@/components/aftersalesDetil'
 import aftersalesServer from '@/components/aftersalesServer'
+import AFASDetil from '@/components/AFASDetil'
+import AFAS from '@/components/AFAS'
+import AFASAddress from '@/components/AFASAddress'
 Vue.use(Router)
 
 export default new Router({
@@ -79,6 +82,21 @@ export default new Router({
       path:'/aftersalesServer',
       name:'aftersalesServer',
       component:aftersalesServer
+    },
+    {
+      path:'/AFAS',
+      name:'AFAS',
+      component:AFAS
+    },
+    {
+      path:'/AFASDetil',
+      name:'AFASDetil',
+      component:AFASDetil
+    },
+    {
+      path:'/AFASAddress',
+      name:'AFASAddress',
+      component:AFASAddress
     },
     {
       path:'/goods/:id',

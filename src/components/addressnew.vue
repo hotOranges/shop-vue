@@ -39,7 +39,7 @@ export default {
     
     },
     onClickLeft(){
-       this.$router.push('address');
+      this.$router.back(-1);
     },
     onChangeDetail(val) {
      

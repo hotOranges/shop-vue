@@ -53,7 +53,7 @@ export default {
       this.$router.push("addressnew");
     },
     onClickLeft() {
-      this.$router.push("/");
+      this.$router.back(-1);
     },
     onEdit(item, index) {
       this.$router.push("addressEdit");

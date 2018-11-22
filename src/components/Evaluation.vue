@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       value: 3,
+      message:'',
       textareaH: { maxHeight: 150, minHeight: 60 },
       checked: true
     };

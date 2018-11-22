@@ -35,7 +35,7 @@
   </div>
     <van-cell-group id="init-border">
       <div span='4' offset="1" class="btn">
-      <button @click="">申请售后</button>
+      <button @click="redirects('/AFAS')">申请售后</button>
   </div>
   </van-cell-group>
  </van-cell>  
@@ -109,7 +109,7 @@
       <van-cell-group id="init-border" style="">
  
   <div span='4' offset="1" class="btn">
-      <button @click="pay()">评价晒单</button>
+      <button @click="redirects('evaluation')">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="canel()">删除订单</button>
@@ -138,6 +138,9 @@ export default {
     },
     onClickLeft() {
       this.$router.back(-1);
+    },
+    canel(){
+      alert('删除订单')
     }
   }
 };
