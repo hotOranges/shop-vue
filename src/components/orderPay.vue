@@ -34,7 +34,7 @@
       <span>翼贝贝智能儿童手表T8</span>
       <span>￥499.00</span>
     </van-col>
-    <van-col span='1' offset="1" class="">
+    <van-col span='1' offset="1">
       <span style="font-size: 12px;">X1</span>
     </van-col>
   </van-row>
@@ -217,11 +217,11 @@ export default {
   align-items: center;
   display: -webkit-flex;
 }
-#app >>> .van-submit-bar__text{
+#app >>> .van-submit-bar__text {
   text-align: left;
   padding-left: 12px;
 }
-#app >>> .van-submit-bar .van-button{
+#app >>> .van-submit-bar .van-button {
   width: 145px;
   background-color: #cf3939;
   border: 1px solid #cf3939;
@@ -232,15 +232,15 @@ export default {
   margin-left: 5px;
   margin-right: 14px;
 }
-#app >>> .van-nav-bar{
+#app >>> .van-nav-bar {
   width: 100%;
   position: fixed;
 }
-#app  >>>  .van-nav-bar__text {
-color:#323232;
+#app >>> .van-nav-bar__text {
+  color: #323232;
 }
-#app  >>>  .van-nav-bar .van-icon{
-  color:#323232;
+#app >>> .van-nav-bar .van-icon {
+  color: #323232;
 }
 </style>
 

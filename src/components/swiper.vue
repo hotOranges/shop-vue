@@ -14,68 +14,62 @@
 </template>
 
 <script>
-
-import { mapState,mapActions,mapGetters } from 'vuex';
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'swiper',
+  name: "swiper",
   data() {
     return {
-        value:null,
-        active:null,
-        images:[],
-    }
+      value: null,
+      active: null,
+      images: []
+    };
   },
 
   computed: {
     ...mapState({
-       src : state => state.home.lunbo.src
-    }),
+      src: state => state.home.lunbo.src
+    })
   },
   methods: {
-      redirect(url){
-           this.$router.push(url);
-      }
+    redirect(url) {
+      this.$router.push(url);
+    }
   },
-  watch: {
-
-  },
-  directives: {
- 
-
-  },
+  watch: {},
+  directives: {},
   beforeCreate() {
-      this.axios.get('./static/data.json').then((res)=>{
-           if( res.status == 200 ) {
-               const data = res.data.home.lunbo;
-               this.images = data.home;
-                // if(this.tabs == '今日推荐') { 
-                //      this.images = data.home;
-                //  }else if(this.tabs == '美妆'){
-                //      this.images = data.meizhuang;
-                //  }else if(this.tabs == '家电') {
-                //      this.images = data.jiadian;
-                //  }else if(this.tabs == '家居') {
-                //      this.images = data.jiaju;
-                //  }else if(this.tabs == '国际') {
-                //      this.images = data.guoji;
-                //  }else if(this.tabs == '生活') {
-                //      this.images = data.shenghuo;
-                //  }else{
-                //      this.images = this.src;
-                //   }
-              }else{
-                     this.images = this.src;
-                }      
-       },(err)=>{
-              this.images = this.src;
-   })
+    this.axios.get("./static/data.json").then(
+      res => {
+        if (res.status == 200) {
+          const data = res.data.home.lunbo;
+          this.images = data.home;
+          // if(this.tabs == '今日推荐') {
+          //      this.images = data.home;
+          //  }else if(this.tabs == '美妆'){
+          //      this.images = data.meizhuang;
+          //  }else if(this.tabs == '家电') {
+          //      this.images = data.jiadian;
+          //  }else if(this.tabs == '家居') {
+          //      this.images = data.jiaju;
+          //  }else if(this.tabs == '国际') {
+          //      this.images = data.guoji;
+          //  }else if(this.tabs == '生活') {
+          //      this.images = data.shenghuo;
+          //  }else{
+          //      this.images = this.src;
+          //   }
+        } else {
+          this.images = this.src;
+        }
+      },
+      err => {
+        this.images = this.src;
+      }
+    );
   },
-  created() {
-    
-     
-  }
-}
+  created() {}
+};
 </script>
 
 

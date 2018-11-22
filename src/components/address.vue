@@ -28,8 +28,8 @@
 export default {
   data() {
     return {
-      chosenAddressId: '1',
-         list: [
+      chosenAddressId: "1",
+      list: [
         // {
         //   id: '1',
         //   name: '张三',
@@ -43,28 +43,28 @@ export default {
         //   address: '浙江省杭州市拱墅区莫干山路 50 号'
         // }
       ],
-      add: '新增地址',
-      edit: '编辑地址',
-      disabledText: '以下地址超出配送范围'
-    }
+      add: "新增地址",
+      edit: "编辑地址",
+      disabledText: "以下地址超出配送范围"
+    };
   },
   methods: {
     onAdd() {
-      this.$router.push('addressnew');
+      this.$router.push("addressnew");
     },
-     onClickLeft(){
-       this.$router.push('/');
+    onClickLeft() {
+      this.$router.push("/");
     },
     onEdit(item, index) {
-      this.$router.push('addressEdit');
+      this.$router.push("addressEdit");
     }
   }
 };
 </script>
 <style scoped>
 #app >>> .van-address-list__add {
-    margin-top: 30px;
-    width: 80%;
-    position: relative;
+  margin-top: 30px;
+  width: 80%;
+  position: relative;
 }
 </style>

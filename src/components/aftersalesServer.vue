@@ -11,7 +11,8 @@
 
 <van-row>
      <van-col span='24' offset="0" class="payContent">
-     <img src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" alt="">
+      <van-icon name="passed"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>   
+
     <p style="font-size: 22px;margin-bottom:30px">订单已完成</p>
     </van-col>
     <div class="init-10"></div>
@@ -32,7 +33,7 @@
       <span style="font-size: 11px;"></span>
   </van-col>
   </div>
-    <van-cell-group id="init-border" style="">
+    <van-cell-group id="init-border">
       <div span='4' offset="1" class="btn">
       <button @click="">申请售后</button>
   </div>
@@ -125,153 +126,149 @@
 </template>
 
 <script>
-
-
-
 export default {
   data() {
     return {
-         radio3: "1",
-    }
+      radio3: "1"
+    };
   },
   methods: {
-     redirects(url) {
+    redirects(url) {
       this.$router.push(url);
     },
     onClickLeft() {
       this.$router.back(-1);
-    }, 
+    }
   }
-}
+};
 </script>
 <style lang="less" scoped>
-
 </style>
-<style scoped> 
-#apps  >>>  .van-nav-bar__text {
-color:red;
+<style scoped>
+#apps >>> .van-nav-bar__text {
+  color: red;
 }
-.init-10{
+.init-10 {
   background-color: #f2f2f2;
   width: 100%;
   height: 20px;
   position: relative;
-  float: left
+  float: left;
 }
-.van-cell{
-    text-align: left
+.van-cell {
+  text-align: left;
 }
-#apps >>> .init-table .van-cell__value--alone{
-    text-align: right
+#apps >>> .init-table .van-cell__value--alone {
+  text-align: right;
 }
-.custom-text{
-    color:rgba(107,107,107,1);
-    font-family:PingFangSC-Medium;
-    padding-right: 10px;
+.custom-text {
+  color: rgba(107, 107, 107, 1);
+  font-family: PingFangSC-Medium;
+  padding-right: 10px;
 }
-.payContent{
-  text-align: center
+.payContent {
+  text-align: center;
 }
-.payContent img{
+.payContent img {
   max-width: 100px;
 }
-.payContent p{
-    margin-bottom: 10px;
-    font-size: 13px
+.payContent p {
+  margin-bottom: 10px;
+  font-size: 13px;
 }
-.remark p{
-    text-align: left;
-    padding-left: 5%;
-    padding-right: 5%;
-    color:rgba(107,107,107,1);
-    font-family:PingFangSC-Medium;
-    font-size: 12px;
-    margin-top: 10px;
-    margin-bottom: 10px
+.remark p {
+  text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
+  color: rgba(107, 107, 107, 1);
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.payBack button{
-    border:1px solid #B39061;
-    color:rgba(179,144,97,1);
-    height:42px;
-    font-family:PingFangSC-Medium;
-    margin-bottom: 20px;
-    padding: 0 30px;
-    margin-left: 10px;
-    margin-right: 10px;
+.payBack button {
+  border: 1px solid #b39061;
+  color: rgba(179, 144, 97, 1);
+  height: 42px;
+  font-family: PingFangSC-Medium;
+  margin-bottom: 20px;
+  padding: 0 30px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-p{
- font-family:PingFangSC-Medium;   
- color:rgba(107,107,107,1);
- padding: 0;
- margin: 0
+p {
+  font-family: PingFangSC-Medium;
+  color: rgba(107, 107, 107, 1);
+  padding: 0;
+  margin: 0;
 }
-#apps >>> .van-button--square{
+#apps >>> .van-button--square {
   border-radius: 24px 24px 24px 24px;
 }
-#apps >>> .van-button--large{
-    height: 37px;
-    line-height: 37px;
-    margin-top: 15px;
-    margin-left: 5px;
-    margin-right: 5px;
+#apps >>> .van-button--large {
+  height: 37px;
+  line-height: 37px;
+  margin-top: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
-#apps >>> .van-icon-alipay::before{
-    color: #108EE9;
+#apps >>> .van-icon-alipay::before {
+  color: #108ee9;
 }
 #apps >>> .van-icon-wechat::before {
-    color: #00C801
+  color: #00c801;
 }
-#apps .van-button--warning{
-  background-color: #B39061;
-  border: 1px solid #B39061;
+#apps .van-button--warning {
+  background-color: #b39061;
+  border: 1px solid #b39061;
 }
-#apps .van-goods-action-mini-btn{
-    width: 38%;
-    color: rgba(207,57,57,1);
-    font-size: 16px;
-    height: 65px;
+#apps .van-goods-action-mini-btn {
+  width: 38%;
+  color: rgba(207, 57, 57, 1);
+  font-size: 16px;
+  height: 65px;
 }
-#apps .van-goods-action{
-    background-color: #fff
+#apps .van-goods-action {
+  background-color: #fff;
 }
-#apps >>> .imgList img{
-  width: 100%
+#apps >>> .imgList img {
+  width: 100%;
 }
 
-#apps >>> .init-soller-list2{
+#apps >>> .init-soller-list2 {
   padding-bottom: 0px;
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
 }
-#apps >>> .van-col--offset-2 span{
-    font-size: 13px;
-    display: inline-block;
-    padding-bottom: 5px;
+#apps >>> .van-col--offset-2 span {
+  font-size: 13px;
+  display: inline-block;
+  padding-bottom: 5px;
 }
-#apps .btn{
-    float: right;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-top: 10px;
-    padding-bottom: 10px;
+#apps .btn {
+  float: right;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 10px;
+  padding-bottom: 10px;
 }
-#apps .btn button{
-  font-weight:500;
-  color:rgba(179,144,97,1);
+#apps .btn button {
+  font-weight: 500;
+  color: rgba(179, 144, 97, 1);
   background-color: transparent;
-  border: 1px solid #B39061;
+  border: 1px solid #b39061;
   line-height: 31px;
   border-radius: 3px;
   font-size: 14px;
   padding-left: 10px;
   padding-right: 10px;
 }
-#apps >>> .van-button--small{
-    border: 1px solid #979797;
-    color: #6B6B6B;
-    height: 25px;
-    line-height: 25px
+#apps >>> .van-button--small {
+  border: 1px solid #979797;
+  color: #6b6b6b;
+  height: 25px;
+  line-height: 25px;
 }
 </style>
 

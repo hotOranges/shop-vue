@@ -53,24 +53,24 @@
 </template>
 
 <script>
-import { mapState,mapActions,mapGetters } from 'vuex';
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'search',
+  name: "search",
   data() {
     return {
-        tabarActive:0,
-        value:null,
-        active:0,
-        path:'../../static/images/',
-        imageList:[],
-        activeTitle:null,
-        days:null,
-        disabled:false,
-        broadcast:null,
-        show:true,
-        sshow:false,
-    }
+      tabarActive: 0,
+      value: null,
+      active: 0,
+      path: "../../static/images/",
+      imageList: [],
+      activeTitle: null,
+      days: null,
+      disabled: false,
+      broadcast: null,
+      show: true,
+      sshow: false
+    };
   },
   computed: {
     ...mapState({
@@ -78,76 +78,76 @@ export default {
       icon: state => state.home.badge.icon,
       bageTitle: state => state.home.badge.title,
       actives: state => state.active.home.title,
-      src : state => state.home.lunbo.src,
+      src: state => state.home.lunbo.src,
       activeTitle: state => state.active.home.activeTitle,
       days: state => state.active.home.days,
       broadcast: state => state.home.broadcast,
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
       show: state => state.home.show,
-      sshow: state => state.home.sshow,
+      sshow: state => state.home.sshow
     }),
-    ...mapGetters(['bc_notshow']),
+    ...mapGetters(["bc_notshow"])
   },
   methods: {
-     search() {
-       console.log(this.value)
-     },
-     search_shows(){
-         this.$router.back(-1);
-     },
-     keyboradWatch(){
-         this.value == '' || this.value == null ?  this.show = true : this.show = false;
-         this.value == '' || this.value == null ?  this.sshow = false : this.sshow = true;
-     },
-     ...mapActions([
-      'searchA'
-    ]),
-     // 瀑布流方法
-     loadMore() {
+    search() {
+      console.log(this.value);
+    },
+    search_shows() {
+      this.$router.back(-1);
+    },
+    keyboradWatch() {
+      this.value == "" || this.value == null
+        ? (this.show = true)
+        : (this.show = false);
+      this.value == "" || this.value == null
+        ? (this.sshow = false)
+        : (this.sshow = true);
+    },
+    ...mapActions(["searchA"]),
+    // 瀑布流方法
+    loadMore() {
       this.disabled = true;
-       setTimeout(() => {
-         for (let i = 0; i < 5; i++) {
-            this.imageList.push(this.imageList[i]);
-            this.activeTitle.push(this.activeTitle[i]);
-            this.days.push(this.days[i]); 
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          this.imageList.push(this.imageList[i]);
+          this.activeTitle.push(this.activeTitle[i]);
+          this.days.push(this.days[i]);
         }
         this.disabled = false;
-       }, 200);
+      }, 200);
     },
-     redirects(url) {
+    redirects(url) {
       this.$router.push(url);
-    },
+    }
   },
-  watch: {
-
-  },
-  directives: {
-
-  },
+  watch: {},
+  directives: {},
   beforeCreate() {
-     this.axios.get('./static/data.json').then((res)=>{
-          if( res.status == 200 ) {
-                const data = res.data.home;
-                this.broadcast = data.broadcast;
-              //  console.log(res.data.home.active,this.days,this.activeTitle)
-           } else {
-             this.imageList = this.src;
-             this.broadcast = "暂无消息~~QAQ~"
-           }
-            },(err)=>{
-            this.imageList = this.src;
-            this.broadcast = "暂无消息~~QAQ~"
-    })
-
+    this.axios.get("./static/data.json").then(
+      res => {
+        if (res.status == 200) {
+          const data = res.data.home;
+          this.broadcast = data.broadcast;
+          //  console.log(res.data.home.active,this.days,this.activeTitle)
+        } else {
+          this.imageList = this.src;
+          this.broadcast = "暂无消息~~QAQ~";
+        }
+      },
+      err => {
+        this.imageList = this.src;
+        this.broadcast = "暂无消息~~QAQ~";
+      }
+    );
   },
   created() {
-     console.log(this.show,this.search_show);
+    console.log(this.show, this.search_show);
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import url('../assets/css/search.less');
+@import url("../assets/css/search.less");
 </style>
 

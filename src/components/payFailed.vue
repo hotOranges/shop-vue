@@ -9,7 +9,9 @@
 
 <van-row>
      <van-col span='24' offset="0" class="payContent">
-     <img src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" alt="">
+      <van-icon name="close"  size="60px" color="#CF3939" style="padding-top:20px;padding-bottom:10px"/>
+      
+     <!-- <img src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" alt=""> -->
  <p style="font-size: 22px;">支付失败</p>
  <p style="margin-bottom:30px">超时订单将关闭</p>
  </van-col>
@@ -63,108 +65,104 @@
 </template>
 
 <script>
-
-
-
 export default {
   data() {
     return {
-         radio3: "1",
-    }
+      radio3: "1"
+    };
   },
   methods: {
-     redirects(url) {
+    redirects(url) {
       this.$router.push(url);
-    }, 
+    }
   }
-}
+};
 </script>
 <style lang="less" scoped>
-
 </style>
-<style scoped> 
-#apps  >>>  .van-nav-bar__text {
-color:red;
+<style scoped>
+#apps >>> .van-nav-bar__text {
+  color: red;
 }
-.init-10{
+.init-10 {
   background-color: #f2f2f2;
   width: 100%;
   height: 20px;
   position: relative;
-  float: left
+  float: left;
 }
-.van-cell{
-    text-align: left
+.van-cell {
+  text-align: left;
 }
-.custom-text{
-    color:rgba(107,107,107,1);
-    font-family:PingFangSC-Medium;
-    padding-right: 10px;
+.custom-text {
+  color: rgba(107, 107, 107, 1);
+  font-family: PingFangSC-Medium;
+  padding-right: 10px;
 }
-.payContent{
-  text-align: center
+.payContent {
+  text-align: center;
 }
-.payContent img{
+.payContent img {
   max-width: 100px;
 }
-.payContent p{
-    margin-bottom: 10px;
-    font-size: 13px
+.payContent p {
+  margin-bottom: 10px;
+  font-size: 13px;
 }
-.remark p{
-    text-align: left;
-    padding-left: 5%;
-    padding-right: 5%;
-    color:rgba(107,107,107,1);
-    font-family:PingFangSC-Medium;
-    font-size: 12px;
-    margin-top: 10px;
-    margin-bottom: 10px
+.remark p {
+  text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
+  color: rgba(107, 107, 107, 1);
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.payBack button{
-    border:1px solid #B39061;
-    color:rgba(179,144,97,1);
-    height:42px;
-    font-family:PingFangSC-Medium;
-    margin-bottom: 20px;
-    padding: 0 30px;
-    margin-left: 10px;
-    margin-right: 10px;
+.payBack button {
+  border: 1px solid #b39061;
+  color: rgba(179, 144, 97, 1);
+  height: 42px;
+  font-family: PingFangSC-Medium;
+  margin-bottom: 20px;
+  padding: 0 30px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-p{
- font-family:PingFangSC-Medium;   
- color:rgba(107,107,107,1);
- padding: 0;
- margin: 0
+p {
+  font-family: PingFangSC-Medium;
+  color: rgba(107, 107, 107, 1);
+  padding: 0;
+  margin: 0;
 }
-#apps >>> .van-button--square{
+#apps >>> .van-button--square {
   border-radius: 24px 24px 24px 24px;
 }
-#apps >>> .van-button--large{
-    height: 37px;
-    line-height: 37px;
-    margin-top: 15px;
-    margin-left: 5px;
-    margin-right: 5px;
+#apps >>> .van-button--large {
+  height: 37px;
+  line-height: 37px;
+  margin-top: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
-#apps >>> .van-icon-alipay::before{
-    color: #108EE9;
+#apps >>> .van-icon-alipay::before {
+  color: #108ee9;
 }
 #apps >>> .van-icon-wechat::before {
-    color: #00C801
+  color: #00c801;
 }
-#apps .van-button--warning{
-  background-color: #B39061;
-  border: 1px solid #B39061;
+#apps .van-button--warning {
+  background-color: #b39061;
+  border: 1px solid #b39061;
 }
-#apps .van-goods-action-mini-btn{
-    width: 38%;
-    color: rgba(207,57,57,1);
-    font-size: 16px;
-    height: 65px;
+#apps .van-goods-action-mini-btn {
+  width: 38%;
+  color: rgba(207, 57, 57, 1);
+  font-size: 16px;
+  height: 65px;
 }
-#apps .van-goods-action{
-    background-color: #fff
+#apps .van-goods-action {
+  background-color: #fff;
 }
 </style>
 

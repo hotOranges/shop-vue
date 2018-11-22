@@ -54,50 +54,49 @@
 </template>
 
 <script>
-import { mapState,mapActions,mapGetters } from 'vuex';
-import { Toast } from 'vant';
+import { mapState, mapActions, mapGetters } from "vuex";
+import { Toast } from "vant";
 
 const coupon = {
   available: 1,
   discount: 0,
   denominations: 10000,
   origin_condition: 0,
-  reason: '',
+  reason: "",
   value: 150,
-  name: '满498减100',
+  name: "满498减100",
   start_at: 1489104000,
   end_at: 1514592000
 };
 
 export default {
-  name: 'shoppingCart',
-  components:{
-  },
+  name: "shoppingCart",
+  components: {},
   data() {
     return {
-        tabarActive:2,
-        value:null,
-        active:0,
-        path:'../../static/images/',
-        imageList:[],
-        disabled:false,
-        count: 0,
-        canel:false,
-        cantext:'编辑',
-        isLoading: false,
-        allchecked:false,
-        checked: [],
-        checkeds:[],
-        chosenCoupon: -1,
-        coupons: [coupon],
-        disabledCoupons: [coupon],
-        imageUrl:[],
-        newcons:[],
-        goodsTitle:[],
-        goodsDescription:[],
-        prices:[],
-        shops:[],
-    }
+      tabarActive: 2,
+      value: null,
+      active: 0,
+      path: "../../static/images/",
+      imageList: [],
+      disabled: false,
+      count: 0,
+      canel: false,
+      cantext: "编辑",
+      isLoading: false,
+      allchecked: false,
+      checked: [],
+      checkeds: [],
+      chosenCoupon: -1,
+      coupons: [coupon],
+      disabledCoupons: [coupon],
+      imageUrl: [],
+      newcons: [],
+      goodsTitle: [],
+      goodsDescription: [],
+      prices: [],
+      shops: []
+    };
   },
   computed: {
     ...mapState({
@@ -105,175 +104,162 @@ export default {
       icon: state => state.home.badge.icon,
       bageTitle: state => state.home.badge.title,
       actives: state => state.active.home.title,
-      src : state => state.home.lunbo.src,
+      src: state => state.home.lunbo.src,
       shop_info: state => state.home.shop_info,
-      my_info: state => state.home.my_info,
+      my_info: state => state.home.my_info
     }),
-    ...mapGetters(['bc_notshow','search_show']),
+    ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
-    ...mapActions([
-      'searchA','infoAction'
-    ]),
+    ...mapActions(["searchA", "infoAction"]),
     search() {
-      this.$router.push('/search');
+      this.$router.push("/search");
     },
-    onClickLeft(){
-       this.$router.back(-1);
+    onClickLeft() {
+      this.$router.back(-1);
     },
-    onSubmit2(){
-
-    },
-    allCheck(val){
-      console.log(this.shops.danxuan)
-    for (var i = 0; i < this.checked.length; i++) {
-      // this.checked[i] = val ==true ? false:true
-      if (val ==true) {
-        this.checked[i] = true
-      } else {
-        this.checked[i] = false
+    onSubmit2() {},
+    allCheck(val) {
+      console.log(this.shops.danxuan);
+      for (var i = 0; i < this.checked.length; i++) {
+        // this.checked[i] = val ==true ? false:true
+        if (val == true) {
+          this.checked[i] = true;
+        } else {
+          this.checked[i] = false;
+        }
       }
-    }
-      console.log(val,this.checked)
+      console.log(val, this.checked);
     },
-    onSubmit(){
+    onSubmit() {},
+    singleChecked: function(checked, index) {
+      let p =
+        parseFloat(this.cart[index]["pro_price"]) *
+        parseFloat(this.cart[index]["buyNum"]);
 
+      if (!checked) {
+        this.checked -= 1;
+        this.cart[index].danxuan = false;
+        this.total -= p * 100;
+      } else {
+        this.checked += 1;
+        this.cart[index].danxuan = true;
+        this.total += p * 100;
+      }
+      console.log("this.checked = " + this.checked);
+      // 判断checked的值是否还等于商品种类数目，
+      if (this.checked == this.cart.length) {
+        this.checkAll = true;
+      } else {
+        this.checkAll = false;
+      }
     },
-    singleChecked:function(checked,index){
-     
-        let p = parseFloat(this.cart[index]['pro_price'])*parseFloat(this.cart[index]['buyNum'])
-       
-        if (!checked) {
-          
-          this.checked -=1;
-          this.cart[index].danxuan = false;
-          this.total -= (p)*100  
-        }
-        else{
-         
-          this.checked += 1;
-          this.cart[index].danxuan = true;
-          this.total += (p)*100  
-        }
-         console.log("this.checked = " + this.checked)
-        // 判断checked的值是否还等于商品种类数目，
-       if (this.checked == this.cart.length) {
-          this.checkAll = true;
-       }else{
-          this.checkAll = false;
-       }
- 
- 
-    },
-    onClickRight(){
+    onClickRight() {
       this.canel = !this.canel;
-      if (this.canel==true) {
-        this.cantext = '完成'
-      }else{
-        this.cantext = '编辑'
+      if (this.canel == true) {
+        this.cantext = "完成";
+      } else {
+        this.cantext = "编辑";
       }
     },
     onRefresh() {
       setTimeout(() => {
-        this.$toast('刷新成功');
+        this.$toast("刷新成功");
         this.isLoading = false;
         for (let i = 0; i < 3; i++) {
-            this.imageUrl.push(this.imageUrl[i]);
-            this.goodsTitle.push(this.goodsTitle[i]);
-            this.goodsDescription.push(this.goodsDescription[i]);
-            this.shops.push(this.shops[i]);
-            this.prices.push(this.prices[i]);
+          this.imageUrl.push(this.imageUrl[i]);
+          this.goodsTitle.push(this.goodsTitle[i]);
+          this.goodsDescription.push(this.goodsDescription[i]);
+          this.shops.push(this.shops[i]);
+          this.prices.push(this.prices[i]);
         }
 
         this.infoAction();
-        const infos = document.querySelector('.van-icon__info');
+        const infos = document.querySelector(".van-icon__info");
         // infos.innerText = this.shop_info;
-
       }, 500);
     },
-     //优惠券
-     onChange(index) {
+    //优惠券
+    onChange(index) {
       this.chosenCoupon = index;
     },
     onExchange(code) {
       this.coupons.push(coupon);
     },
-     redirects(url) {
+    redirects(url) {
       this.$router.push(url);
-    },
+    }
   },
-  watch: {
-
-  },
+  watch: {},
   directives: {
-    tab:{
+    tab: {
       inserted(el) {
         //绑定tab样式
         const tabs = el.childNodes[0].childNodes[0].children[0];
-        tabs.style.backgroundColor = '#d34ba8';
+        tabs.style.backgroundColor = "#d34ba8";
       }
     },
     //tabBar 消息通知指令
-    infos:{
-      inserted(el,obj) {
-         console.log(obj.value);
-         const info = el.childNodes[0].childNodes[1];
-         info.innerText = obj.value;
+    infos: {
+      inserted(el, obj) {
+        console.log(obj.value);
+        const info = el.childNodes[0].childNodes[1];
+        info.innerText = obj.value;
       }
     }
-
   },
   beforeCreate() {
-     this.axios.get('./static/data.json').then((res)=>{
-          if( res.status == 200 ) {
-              const data = res.data.goods;
-              const preImg = data.id_0.imgList[0];
-              const title = data.id_0.title[0];
-              const price = data.id_0.limit_price[0];
-              const count = data.id_0.count;
-              const description = data.id_0.description; 
-              const shops = data.id_0.shops;
-            //  for(let value of data.id_0){
-            //   console.log(value)
-            //   value['danxuan'] = true;  
-            
-            // }
+    this.axios.get("./static/data.json").then(
+      res => {
+        if (res.status == 200) {
+          const data = res.data.goods;
+          const preImg = data.id_0.imgList[0];
+          const title = data.id_0.title[0];
+          const price = data.id_0.limit_price[0];
+          const count = data.id_0.count;
+          const description = data.id_0.description;
+          const shops = data.id_0.shops;
+          //  for(let value of data.id_0){
+          //   console.log(value)
+          //   value['danxuan'] = true;
 
-              // console.log(this.checked)
-              this.imageUrl = preImg;
-              this.goodsTitle = title;
-              this.prices = price;
-              this.checked = shops.length;
+          // }
 
-              this.goodsDescription = description;
-              this.shops = shops;
-              this.counts =  count;
-              
-              // console.log(this.newcons)       
-              
-           } else {
-             this.imageList = this.src;
-           }
-            },(err)=>{
-            this.imageList = this.src;
-    })
+          // console.log(this.checked)
+          this.imageUrl = preImg;
+          this.goodsTitle = title;
+          this.prices = price;
+          this.checked = shops.length;
 
+          this.goodsDescription = description;
+          this.shops = shops;
+          this.counts = count;
+
+          // console.log(this.newcons)
+        } else {
+          this.imageList = this.src;
+        }
+      },
+      err => {
+        this.imageList = this.src;
+      }
+    );
   },
-  created() {  
-      Toast('仅展示作用  ^_^')       
+  created() {
+    Toast("仅展示作用  ^_^");
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import url('../assets/css/home.less');
+@import url("../assets/css/home.less");
 </style>
 
 <style scoped>
-#app >>> .van-card{
-      justify-content: center;
-    align-items: center;
-    display: -webkit-flex;
+#app >>> .van-card {
+  justify-content: center;
+  align-items: center;
+  display: -webkit-flex;
 }
 #app >>> .imgList img {
   width: 100%;
@@ -285,40 +271,40 @@ export default {
   align-items: center;
   display: -webkit-flex;
 }
-#app >>> .van-submit-bar__text{
+#app >>> .van-submit-bar__text {
   /* text-align: left; */
   padding-right: 5px;
 }
-#app >>> .van-checkbox__icon .van-icon{
-  border-color: #979797
+#app >>> .van-checkbox__icon .van-icon {
+  border-color: #979797;
 }
-#app >>> .van-col--offset-1{
-  margin-left: 0
+#app >>> .van-col--offset-1 {
+  margin-left: 0;
 }
-#app >>> .goodList span{
+#app >>> .goodList span {
   display: inherit;
   text-align: left;
   padding-left: 25px;
 }
-#app .van-col--2{
-  text-align: left
+#app .van-col--2 {
+  text-align: left;
 }
-#app .van-checkbox{
+#app .van-checkbox {
   position: absolute;
   left: 20px;
 }
-#app .shop-cart{
+#app .shop-cart {
   height: auto;
 }
-#app .van-submit-bar__bar .van-checkbox{
+#app .van-submit-bar__bar .van-checkbox {
   position: relative;
-  left: 5px
+  left: 5px;
 }
-#app >>> .van-checkbox__icon--checked .van-icon{
-  background-color: #CF3939;
-  border-color: #CF3939
+#app >>> .van-checkbox__icon--checked .van-icon {
+  background-color: #cf3939;
+  border-color: #cf3939;
 }
-#app >>> .van-submit-bar .van-button{
+#app >>> .van-submit-bar .van-button {
   width: 145px;
   background-color: #cf3939;
   border: 1px solid #cf3939;
@@ -329,23 +315,23 @@ export default {
   margin-left: 5px;
   margin-right: 14px;
 }
-#app >>> .van-nav-bar{
+#app >>> .van-nav-bar {
   width: 100%;
   position: fixed;
 }
-#app >>> .van-submit-bar__bar{
-  height: 70px
+#app >>> .van-submit-bar__bar {
+  height: 70px;
 }
-#app >>> .row-1{
-  margin-top: 0
+#app >>> .row-1 {
+  margin-top: 0;
 }
-#app  >>>  .van-nav-bar__text {
-color:#CF3939;
+#app >>> .van-nav-bar__text {
+  color: #cf3939;
 }
-#app  >>>  .van-nav-bar .van-icon{
-  color:#1f1212;
+#app >>> .van-nav-bar .van-icon {
+  color: #1f1212;
 }
-#app >>> .van-submit-bar__price{
-  color: #323232
+#app >>> .van-submit-bar__price {
+  color: #323232;
 }
 </style>

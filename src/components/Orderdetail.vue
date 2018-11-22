@@ -34,7 +34,7 @@
       <span>翼贝贝智能儿童手表T8</span>
       <span>￥499.00</span>
     </van-col>
-    <van-col span='1' offset="1" class="">
+    <van-col span='1' offset="1">
       <span style="font-size: 12px;">X1</span>
     </van-col>
   </van-row>
@@ -139,8 +139,8 @@ export default {
       if (val) {
         this.searchResult = [
           {
-            name: "黄龙万科中心",
-            address: "杭州市西湖区"
+            name: "123",
+            address: "fff"
           }
         ];
       } else {
@@ -190,11 +190,11 @@ export default {
   padding-bottom: 0px;
   padding-top: 40px;
 }
-#app >>> .van-icon-alipay::before{
-    color: #108EE9;
+#app >>> .van-icon-alipay::before {
+  color: #108ee9;
 }
 #app >>> .van-icon-wechat::before {
-    color: #00C801
+  color: #00c801;
 }
 #app >>> .van-cell__title {
   text-align: left;
@@ -222,11 +222,11 @@ export default {
   align-items: center;
   display: -webkit-flex;
 }
-#app >>> .van-submit-bar__text{
+#app >>> .van-submit-bar__text {
   text-align: left;
   padding-left: 12px;
 }
-#app >>> .van-submit-bar .van-button{
+#app >>> .van-submit-bar .van-button {
   width: 145px;
   background-color: #cf3939;
   border: 1px solid #cf3939;
@@ -237,38 +237,38 @@ export default {
   margin-left: 5px;
   margin-right: 14px;
 }
-#app >>> .van-nav-bar{
+#app >>> .van-nav-bar {
   width: 100%;
   position: fixed;
 }
-#app  >>>  .van-nav-bar__text {
-color:#323232;
+#app >>> .van-nav-bar__text {
+  color: #323232;
 }
-#app  >>>  .van-nav-bar .van-icon{
-  color:#323232;
+#app >>> .van-nav-bar .van-icon {
+  color: #323232;
 }
-#app .van-button--warning{
-  background-color: #B39061;
-  border: 1px solid #B39061;
+#app .van-button--warning {
+  background-color: #b39061;
+  border: 1px solid #b39061;
 }
-#app .van-goods-action-mini-btn{
-    width: 38%;
-    color: rgba(207,57,57,1);
-    font-size: 16px;
-    height: 65px;
+#app .van-goods-action-mini-btn {
+  width: 38%;
+  color: rgba(207, 57, 57, 1);
+  font-size: 16px;
+  height: 65px;
 }
-#app .van-goods-action{
-    background-color: #fff
+#app .van-goods-action {
+  background-color: #fff;
 }
-#app >>> .van-button--square{
+#app >>> .van-button--square {
   border-radius: 24px 24px 24px 24px;
 }
-#app >>> .van-button--large{
-    height: 37px;
-    line-height: 37px;
-    margin-top: 15px;
-    margin-left: 5px;
-    margin-right: 5px;
+#app >>> .van-button--large {
+  height: 37px;
+  line-height: 37px;
+  margin-top: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>
 

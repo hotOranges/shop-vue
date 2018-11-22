@@ -22,28 +22,24 @@
 </template>
 
 <script>
-import { Area } from 'vant';
-import AreaList  from '../assets/area';
+import { Area } from "vant";
+import AreaList from "../assets/area";
 
 export default {
-  name: 'addressEdit',
+  name: "addressEdit",
   data() {
     return {
-      areaList:AreaList,
+      areaList: AreaList,
       searchResult: [],
-      deletes:false
+      deletes: false
     };
   },
   methods: {
-    onSave() {
-    
+    onSave() {},
+    onClickLeft() {
+      this.$router.push("address");
     },
-    onClickLeft(){
-       this.$router.push('address');
-    },
-    onChangeDetail(val) {
-     
-    }
+    onChangeDetail(val) {}
   }
 };
 </script>

@@ -22,7 +22,7 @@
       <span style="font-size: 11px;">X1</span>
   </van-col>
   </div>
-  <van-cell-group id="init-border" style="">
+  <van-cell-group id="init-border">
   <div span='4' offset="1" class="btn">
       <button @click="redirects('aftersalesDetil')">查看详情</button>
   </div>
@@ -38,9 +38,8 @@
 
 <script>
 export default {
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
 
   components: {},
@@ -50,80 +49,78 @@ export default {
   mounted: {},
 
   methods: {
-      onClickLeft(){
-        this.$router.back(-1);
+    onClickLeft() {
+      this.$router.back(-1);
     },
-      redirects(url) {
+    redirects(url) {
       this.$router.push(url);
     }
   }
-}
-
+};
 </script>
 <style scoped>
-
-#apps >>> .van-cell__title, .van-cell__value{
-  text-align: left
+#apps >>> .van-cell__title,
+.van-cell__value {
+  text-align: left;
 }
-#apps >>> .imgList img{
-  width: 100%
+#apps >>> .imgList img {
+  width: 100%;
 }
 
-#apps >>> .init-soller-list2{
+#apps >>> .init-soller-list2 {
   padding-bottom: 5px;
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
-
 }
-#apps >>> .van-col--offset-1{
+#apps >>> .van-col--offset-1 {
   display: inline-table;
   vertical-align: top;
   float: inherit;
 }
-  /*掩藏滚动条*/
+/*掩藏滚动条*/
 ::-webkit-scrollbar {
-    display: none!important;
+  display: none !important;
 }
-#apps .btn{
-    float: right;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-top: 10px;
-    padding-bottom: 10px;
+#apps .btn {
+  float: right;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 10px;
+  padding-bottom: 10px;
 }
-#apps .btn button{
-  font-weight:500;
-  color:rgba(179,144,97,1);
+#apps .btn button {
+  font-weight: 500;
+  color: rgba(179, 144, 97, 1);
   background-color: transparent;
-  border: 1px solid #B39061;
+  border: 1px solid #b39061;
   line-height: 31px;
   border-radius: 3px;
   font-size: 14px;
   padding-left: 10px;
   padding-right: 10px;
 }
-#apps >>> .van-col--4{
+#apps >>> .van-col--4 {
   text-align: right;
   padding-right: 11px;
   line-height: 28px;
 }
-#apps >>> .van-hairline--top-bottom::after{
-  border-color:#D8D8D8;
+#apps >>> .van-hairline--top-bottom::after {
+  border-color: #d8d8d8;
 }
-#apps >>> .init-border ::before{
-  border-bottom: 1px solid #d8d8d8
+#apps >>> .init-border ::before {
+  border-bottom: 1px solid #d8d8d8;
 }
-#apps >>> #init-border::after{
-  transform: scale(.3);
+#apps >>> #init-border::after {
+  transform: scale(0.3);
 }
-#apps >>> .init-clear{
+#apps >>> .init-clear {
   clear: both;
 }
-#apps >>> .init-border-20{
-  background:rgba(242,242,242,1);
+#apps >>> .init-border-20 {
+  background: rgba(242, 242, 242, 1);
   height: 20px;
   position: relative;
-  width: 100%
+  width: 100%;
 }
 </style>

@@ -33,7 +33,7 @@
       <span style="font-size: 11px;"></span>
   </van-col>
   </div>
-  <van-cell-group id="init-border" style="">
+  <van-cell-group id="init-border">
        <van-cell title="" value="申请数量：1" />
   </van-cell-group>
   <div class="init-border-20"></div>
@@ -61,113 +61,112 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-        active:''
+      active: ""
     };
   },
 
-//   components: {},
+  //   components: {},
 
-//   computed: {},
+  //   computed: {},
 
-//   mounted: {},
+  //   mounted: {},
 
   methods: {
-       onClickLeft(){
-        this.$router.back(-1);
-    },
+    onClickLeft() {
+      this.$router.back(-1);
+    }
   }
-}
-
+};
 </script>
 <style scoped>
-#apps >>> .van-steps__title{
-    color: #fff;
-    font-size: 16px;
+#apps >>> .van-steps__title {
+  color: #fff;
+  font-size: 16px;
 }
-#apps >>> .van-step--horizontal .van-step__title{
-    padding-top: 30px;
-    color: #fff 
+#apps >>> .van-step--horizontal .van-step__title {
+  padding-top: 30px;
+  color: #fff;
 }
-#apps >>> .van-steps.van-steps--horizontal{
-    background-color: #F8A330
+#apps >>> .van-steps.van-steps--horizontal {
+  background-color: #f8a330;
 }
-#apps >>> .van-step--horizontal .van-step__circle-container{
-    background-color: transparent
+#apps >>> .van-step--horizontal .van-step__circle-container {
+  background-color: transparent;
 }
-#apps >>> .van-step--horizontal .van-step__circle-container{
-    padding: 0;
-    left: 0;
-    top: 13px;
-    /* right: 0; */
+#apps >>> .van-step--horizontal .van-step__circle-container {
+  padding: 0;
+  left: 0;
+  top: 13px;
+  /* right: 0; */
 }
-#apps >>> .van-step .van-step__circle{
-    background-color: #fff;
-    width: 7px;
-    height: 7px;
+#apps >>> .van-step .van-step__circle {
+  background-color: #fff;
+  width: 7px;
+  height: 7px;
 }
-#apps >>> .van-step--horizontal.van-step--process .van-icon{
-    top: -3px
+#apps >>> .van-step--horizontal.van-step--process .van-icon {
+  top: -3px;
 }
-#apps >>> .van-step--horizontal .van-step__line{
-    top: 15px;
-    height: 2px;
+#apps >>> .van-step--horizontal .van-step__line {
+  top: 15px;
+  height: 2px;
 }
 #apps >>> .van-step--horizontal:last-child {
-    right: 0px;
+  right: 0px;
 }
-#apps >>> .van-step--horizontal:last-child .van-step__title{
-    margin-left: -17px;
-}    
-#apps >>> .van-steps__items{
-    width: 80%;
-    margin: 20px auto;
+#apps >>> .van-step--horizontal:last-child .van-step__title {
+  margin-left: -17px;
 }
-#apps >>> .imgList img{
-  width: 100%
+#apps >>> .van-steps__items {
+  width: 80%;
+  margin: 20px auto;
+}
+#apps >>> .imgList img {
+  width: 100%;
 }
 
-#apps >>> .init-soller-list2{
+#apps >>> .init-soller-list2 {
   padding-bottom: 0px;
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
 }
-#apps >>> .van-col--offset-2 span{
-    font-size: 13px;
-    display: inline-block;
-    padding-bottom: 5px;
+#apps >>> .van-col--offset-2 span {
+  font-size: 13px;
+  display: inline-block;
+  padding-bottom: 5px;
 }
-#apps >>> #init-border .van-cell__value--alone{
-    text-align: right;
-    padding-right: 15px;
+#apps >>> #init-border .van-cell__value--alone {
+  text-align: right;
+  padding-right: 15px;
 }
-#apps >>> .van-steps__message{
-    height: 25px;
-    margin: 3px 0;
+#apps >>> .van-steps__message {
+  height: 25px;
+  margin: 3px 0;
 }
-#apps >>> .van-cell{
-    padding: 5px 15px;
-    line-height: 18px;
-    color: #6B6B6B;
-    font-size: 13px;
+#apps >>> .van-cell {
+  padding: 5px 15px;
+  line-height: 18px;
+  color: #6b6b6b;
+  font-size: 13px;
 }
-#apps >>> .van-cell::after{
-   border: 1px solid #D8D8D8;
-   transform: scaleY(.4);
-   left: 0px;
+#apps >>> .van-cell::after {
+  border: 1px solid #d8d8d8;
+  transform: scaleY(0.4);
+  left: 0px;
 }
-#apps >>> .init-border-20{
-  background:rgba(242,242,242,1);
+#apps >>> .init-border-20 {
+  background: rgba(242, 242, 242, 1);
   height: 10px;
   position: relative;
-  width: 100%
+  width: 100%;
 }
-#apps >>> #table .van-cell{
-    line-height: 31px;
+#apps >>> #table .van-cell {
+  line-height: 31px;
 }
-#apps >>> .init-title  .van-cell__title{
-    color: #000
-} 
+#apps >>> .init-title .van-cell__title {
+  color: #000;
+}
 </style>

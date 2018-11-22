@@ -37,7 +37,7 @@
 </van-cell-group>
 </van-row>
  <van-row class="shopp_conent">
- <van-col span='6' offset="1" class="">
+ <van-col span='6' offset="1">
      快递包装
  </van-col>
 <van-col span='15' offset="1">
@@ -52,7 +52,7 @@
     </van-col>
  </van-row>
  <van-row class="shopp_conent">
- <van-col span='6' offset="1" class="">
+ <van-col span='6' offset="1">
      送货速度
  </van-col>
 <van-col span='15' offset="1">
@@ -71,26 +71,24 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-    value:3,
-    textareaH:{ maxHeight: 150, minHeight: 60 },
-    checked:true
+      value: 3,
+      textareaH: { maxHeight: 150, minHeight: 60 },
+      checked: true
     };
   },
 
+  //   mounted: {
 
-//   mounted: {
-    
-//   },
+  //   },
 
   methods: {
-      onClickLeft(){
-        this.$router.back(-1);
+    onClickLeft() {
+      this.$router.back(-1);
     }
   }
-}
-
+};
 </script>
 <style scoped>
 #app >>> .imgList img {
@@ -103,45 +101,45 @@ export default {
   align-items: center;
   display: -webkit-flex;
 }
-#app >>> .van-col.van-col--15.van-col--offset-1{
-  text-align: left
+#app >>> .van-col.van-col--15.van-col--offset-1 {
+  text-align: left;
 }
-#app >>> .van-rate{
+#app >>> .van-rate {
   margin-top: 7px;
 }
-#app >>> .van-cell-group.van-hairline--top-bottom .van-cell.van-field{
-  background-color: rgba(242,242,242,1)
+#app >>> .van-cell-group.van-hairline--top-bottom .van-cell.van-field {
+  background-color: rgba(242, 242, 242, 1);
 }
-#app >>> .van-cell{
-  background-color: #fff
+#app >>> .van-cell {
+  background-color: #fff;
 }
-#app >>> textarea{
-  color: #D8D8D8;
-  font-size: 12px
+#app >>> textarea {
+  color: #d8d8d8;
+  font-size: 12px;
 }
-#app >>> .van-checkbox{
-    text-align: left;
-    padding-left: 15px;
-    padding-top: 15px;
+#app >>> .van-checkbox {
+  text-align: left;
+  padding-left: 15px;
+  padding-top: 15px;
 }
-#app >>> .van-checkbox__label{
-      font-size: 12px;
+#app >>> .van-checkbox__label {
+  font-size: 12px;
 }
-#app >>> .van-cell__title{
+#app >>> .van-cell__title {
   text-align: left;
   font-size: 15px;
   margin-top: 20px;
   margin-bottom: 0px;
   padding-left: 10px;
 }
-#app >>> .van-col.van-col--6.van-col--offset-1{
+#app >>> .van-col.van-col--6.van-col--offset-1 {
   font-size: 15px;
   text-align: left;
 }
-#app >>> .van-nav-bar__text{
-  color: red
+#app >>> .van-nav-bar__text {
+  color: red;
 }
-#app >>> .van-nav-bar .van-icon{
-  color: #2c3e50
+#app >>> .van-nav-bar .van-icon {
+  color: #2c3e50;
 }
 </style>

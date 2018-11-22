@@ -49,11 +49,11 @@
 </template>
 
 <script>
-import { mapState,mapActions,mapGetters } from 'vuex';
-import { ImagePreview } from 'vant';
-import { Toast } from 'vant';
+import { mapState, mapActions, mapGetters } from "vuex";
+import { ImagePreview } from "vant";
+import { Toast } from "vant";
 
-import Order from './orderList';
+import Order from "./orderList";
 
 //obj 优惠券
 const coupon = {
@@ -61,30 +61,28 @@ const coupon = {
   discount: 0,
   denominations: 150,
   origin_condition: 0,
-  reason: '',
+  reason: "",
   value: 150,
-  name: '满498减100',
+  name: "满498减100",
   start_at: 1489104000,
   end_at: 1514592000
 };
 
 export default {
-  name: 'buyInfo',
+  name: "buyInfo",
   data() {
     return {
-      preImgs:[],
+      preImgs: [],
       chosenCoupon: -1,
       coupons: [coupon],
       disabledCoupons: [coupon],
-      showList:null,
-      oShow:false,
-    }
+      showList: null,
+      oShow: false
+    };
   },
-  props:{
-   
-  },
-  components:{
-      Order,
+  props: {},
+  components: {
+    Order
   },
   computed: {
     ...mapState({
@@ -92,104 +90,101 @@ export default {
       actives: state => state.active.home.title,
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
-      orderShow: state => state.home.orderShow,
+      orderShow: state => state.home.orderShow
     }),
-    ...mapGetters(['bc_notshow']),
+    ...mapGetters(["bc_notshow"])
   },
   methods: {
-      ...mapActions(['orderShows']),
-     search_shows(){
-         this.$router.back(-1);
-     },
-     //商品预览
+    ...mapActions(["orderShows"]),
+    search_shows() {
+      this.$router.back(-1);
+    },
+    //商品预览
     ImagePreviews() {
-        ImagePreview(this.preImgs);
+      ImagePreview(this.preImgs);
     },
     //优惠券
-     onChange(index) {
+    onChange(index) {
       this.showList = false;
       this.chosenCoupon = index;
     },
     onExchange(code) {
       this.coupons.push(coupon);
     },
-      onClickMiniBtn() {
-      Toast('系统繁忙 请稍后再试');
+    onClickMiniBtn() {
+      Toast("系统繁忙 请稍后再试");
     },
     onClickBigBtn() {
-      Toast('请选择商品规格');
+      Toast("请选择商品规格");
       this.orderShows();
-      console.log(this.orderShow)
+      console.log(this.orderShow);
     },
     onClickBigBtns() {
-     this.orderShows();
-      Toast('加入成功');
-    },
+      this.orderShows();
+      Toast("加入成功");
+    }
   },
-  watch: {
-
-  },
-  directives: {
-   
-  },
+  watch: {},
+  directives: {},
   beforeCreate() {
-     this.axios.get('./static/data.json').then((res)=>{
-         const buy_id = this.$route.params.id;
-         console.log(buy_id); 
-         //或许商品信息
-          if( res.status == 200 ) {
-              const data = res.data.goods;
-              const preImg = data.id_0.moreImg;
-              this.preImgs = preImg;
-
-
-           } 
-            },(err)=>{
-            this.imageList = this.src;
-            this.broadcast = "暂无消息~~QAQ~"
-    })
-
+    this.axios.get("./static/data.json").then(
+      res => {
+        const buy_id = this.$route.params.id;
+        console.log(buy_id);
+        //或许商品信息
+        if (res.status == 200) {
+          const data = res.data.goods;
+          const preImg = data.id_0.moreImg;
+          this.preImgs = preImg;
+        }
+      },
+      err => {
+        this.imageList = this.src;
+        this.broadcast = "暂无消息~~QAQ~";
+      }
+    );
   },
   created() {
-     console.log(this.buyImg)
-     if(this.buyImg == 'undefined') {
-       this.buyImg = 'https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg';
-     }
+    console.log(this.buyImg);
+    if (this.buyImg == "undefined") {
+      this.buyImg =
+        "https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg";
+    }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import url('../assets/css/buyInfo.less');
+@import url("../assets/css/buyInfo.less");
 </style>
 
 <style scoped>
-.van-cell{
-  text-align: left
-}
-#app >>> .list2 .van-cell__value{
-  color: #000
-}
-#app >>> .van-cell__value{
+.van-cell {
   text-align: left;
-  color: #B8B8B8
 }
-#app >>> .van-sku-header__img-wrap{
-  margin-top: 1px
+#app >>> .list2 .van-cell__value {
+  color: #000;
 }
-#app >>> .van-button--square{
+#app >>> .van-cell__value {
+  text-align: left;
+  color: #b8b8b8;
+}
+#app >>> .van-sku-header__img-wrap {
+  margin-top: 1px;
+}
+#app >>> .van-button--square {
   border-radius: 24px 24px 24px 24px;
 }
-#app >>> .van-button--large{
+#app >>> .van-button--large {
   height: 40px;
   line-height: 40px;
   margin-top: 5px;
   margin-left: 5px;
   margin-right: 5px;
 }
-#app .van-button--warning{
-  background-color: #B39061;
-  border: 1px solid #B39061;
+#app .van-button--warning {
+  background-color: #b39061;
+  border: 1px solid #b39061;
 }
 </style>
 

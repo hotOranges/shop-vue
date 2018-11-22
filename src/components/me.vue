@@ -20,25 +20,25 @@
                      <!-- 订单 -->
                      <van-col span="24" class="headerImg">
                       <van-cell @click="toOrder('0')" style="padding-bottom: 15px;" title="我的订单" value="查看全部订单" icon="location" is-link />
-                     <van-col span='4' offset="1" class="" >
+                     <van-col span='4' offset="1">
                      <div @click="toOrder('1')">
                      <span><img src="../../static/images/icon/icon_9.png"  /></span>  
                      <span>待付款</span>
                      </div>
                      </van-col>
-                     <van-col span='5' offset="1" class="">
+                     <van-col span='5' offset="1">
                      <div @click="toOrder('2')">
                      <span><img src="../../static/images/icon/icon_9.png"  /></span>  
                      <span>待收货</span>
                      </div>
                      </van-col>
-                     <van-col span='5' offset="1" class="" @click="toOrder('3')">
+                     <van-col span='5' offset="1"  @click="toOrder('3')">
                      <div @click="toOrder('3')">
                      <span><img src="../../static/images/icon/icon_9.png"  /></span>  
                      <span>已收货</span>
                      </div>
                      </van-col>
-                     <van-col span='5' offset="1" class="" @click="toOrder('4')">
+                     <van-col span='5' offset="1"  @click="toOrder('4')">
                      <div @click="toOrder('4')">
                      <span><img src="../../static/images/icon/icon_9.png"  /></span>  
                      <span>已取消</span>
@@ -138,8 +138,8 @@ export default {
       this.$router.push("/");
     },
     toOrder(e) {
-      console.log(e)
-      this.$router.push({ path: '/orderForm', query: { activeId: e }});
+      console.log(e);
+      this.$router.push({ path: "/orderForm", query: { activeId: e } });
     },
     onInput(checked) {
       if (this.checked) {

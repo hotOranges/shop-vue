@@ -70,176 +70,156 @@
 </template>
 
 <script>
-import { mapState,mapActions,mapGetters } from 'vuex';
-import { Toast } from 'vant';
-import { Dialog } from'vant';
-
+import { mapState, mapActions, mapGetters } from "vuex";
+import { Toast } from "vant";
+import { Dialog } from "vant";
 
 export default {
-  name: 'login',
-  components:{
-  
-  },
+  name: "login",
+  components: {},
   data() {
     return {
-     
-       password:null,
-       sms:null,
-       time: 180,
-       password2:null,
-       sendMsgDisabled: false,
-       paswldtype:'password',
-       iPhone:'',
-       btnName:'注册',
-       checked:false
-    }
+      password: null,
+      sms: null,
+      time: 180,
+      password2: null,
+      sendMsgDisabled: false,
+      paswldtype: "password",
+      iPhone: "",
+      btnName: "注册",
+      checked: false
+    };
   },
   computed: {
     ...mapState({
-      src : state => state.home.lunbo.src,
+      src: state => state.home.lunbo.src,
       activeTitle: state => state.active.home.activeTitle,
       days: state => state.active.home.days,
       broadcast: state => state.home.broadcast,
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
-      show: state => state.home.show,
+      show: state => state.home.show
     }),
-    ...mapGetters(['bc_notshow','search_show']),
-    
+    ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
-    ...mapActions([
-      'searchA','infoAction'
-    ]),
-    onClickLeft(){
-          this.$router.back(-1);
+    ...mapActions(["searchA", "infoAction"]),
+    onClickLeft() {
+      this.$router.back(-1);
     },
     send() {
-        console.log(this.iPhone.length) 
-       if(this.iPhone.length!=11) return Toast('请输入正确的手机号')
-           
-       
-    let me = this;
-    me.sendMsgDisabled = true;
-    let interval = window.setInterval(function() {
-     if ((me.time--) <= 0) {
-      me.time = 60;
-      me.sendMsgDisabled = false;
-      window.clearInterval(interval);
-     }
-    }, 1000);
-   },
-    passwordview(){
-         if(this.paswldtype ==='password'){
-             this.paswldtype = 'text'
-         }else{
-            this.paswldtype = 'password'
-         }
-        
+      console.log(this.iPhone.length);
+      if (this.iPhone.length != 11) return Toast("请输入正确的手机号");
+
+      let me = this;
+      me.sendMsgDisabled = true;
+      let interval = window.setInterval(function() {
+        if (me.time-- <= 0) {
+          me.time = 60;
+          me.sendMsgDisabled = false;
+          window.clearInterval(interval);
+        }
+      }, 1000);
+    },
+    passwordview() {
+      if (this.paswldtype === "password") {
+        this.paswldtype = "text";
+      } else {
+        this.paswldtype = "password";
+      }
     },
     //密码验证
-    rules(v,choose){
-         if(choose == 'pass') {
-            // let password = this.password.trim();
-            // console.log(password)
-            //最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
-            // let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
-            //  if(!pPattern.test(password)) {
-            //      Toast('密码强度较弱o(╥﹏╥)o');
-            //  }else{
-            //      Toast('密码强度 安全^_^');
-            //  }
-
-        }
+    rules(v, choose) {
+      if (choose == "pass") {
+        // let password = this.password.trim();
+        // console.log(password)
+        //最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
+        // let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+        //  if(!pPattern.test(password)) {
+        //      Toast('密码强度较弱o(╥﹏╥)o');
+        //  }else{
+        //      Toast('密码强度 安全^_^');
+        //  }
+      }
     },
-    submit(iPhone,sms,password) {
-        let data = {
-            iPhone,
-            password,
-            sms
-        }
-      
+    submit(iPhone, sms, password) {
+      let data = {
+        iPhone,
+        password,
+        sms
+      };
 
-        if(this.iPhone ==null || this.password ==null || this.sms ==null ) {
-            Toast('手机号、验证码和密码不能为空 o(╥﹏╥)o')
-        }else if(this.password2!==this.password) {
-         Toast('两次密码输入不相同') 
-        }
-        else{
-            this.axios.post('/login',data).then((res) => {
-                if( res.status == 200 ) {
-                    console.log(res.data);
-                }
-            })
-        }
-        
+      if (this.iPhone == null || this.password == null || this.sms == null) {
+        Toast("手机号、验证码和密码不能为空 o(╥﹏╥)o");
+      } else if (this.password2 !== this.password) {
+        Toast("两次密码输入不相同");
+      } else {
+        this.axios.post("/login", data).then(res => {
+          if (res.status == 200) {
+            console.log(res.data);
+          }
+        });
+      }
     },
     tip() {
-        Toast('该功能正在维护 o(╥﹏╥)o');
-    },
-    
+      Toast("该功能正在维护 o(╥﹏╥)o");
+    }
   },
-  watch: {
-
-  },
-  directives: {
-
-  },
-  beforeCreate() {
-
-  },
-  created() { 
-  }
-}
+  watch: {},
+  directives: {},
+  beforeCreate() {},
+  created() {}
+};
 </script>
 
 <style lang="less" scoped>
-@import url('../assets/css/login.less');
+@import url("../assets/css/login.less");
 </style>
 <style scoped>
-#checkedinit >>>  .van-checkbox__icon--round .van-icon{
-    border-radius: 2px;
-    width: 15px;
-    height: 15px;
+#checkedinit >>> .van-checkbox__icon--round .van-icon {
+  border-radius: 2px;
+  width: 15px;
+  height: 15px;
 }
-#checkedinit >>>  .van-checkbox__icon, .van-checkbox__label{
-    line-height: 15px;
+#checkedinit >>> .van-checkbox__icon,
+.van-checkbox__label {
+  line-height: 15px;
 }
-#checkedinit >>>  .van-checkbox__icon--checked .van-icon{
-    color: #fff;
-    border-color: rgba(179,144,97,1);
-    background-color: rgba(179,144,97,1);
-    background: rgba(179,144,97,1);
+#checkedinit >>> .van-checkbox__icon--checked .van-icon {
+  color: #fff;
+  border-color: rgba(179, 144, 97, 1);
+  background-color: rgba(179, 144, 97, 1);
+  background: rgba(179, 144, 97, 1);
 }
-#checkedinit{
-    text-align: left;
-    padding-left: 15px;
-    width: 40%;
-    display: inline-block;
-    font-size: 12px;
+#checkedinit {
+  text-align: left;
+  padding-left: 15px;
+  width: 40%;
+  display: inline-block;
+  font-size: 12px;
 }
-.van-cell-group{
-    text-align: left;
-    margin-top: 10px;
-    margin-bottom: 15px;
+.van-cell-group {
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
-.van-cell{
-    border-bottom: 1px solid #D8D8D8
+.van-cell {
+  border-bottom: 1px solid #d8d8d8;
 }
-.van-field__control{
-    color: #C1C1C1
+.van-field__control {
+  color: #c1c1c1;
 }
-#apps  >>>  .van-nav-bar__title {
-    color:#323232;
+#apps >>> .van-nav-bar__title {
+  color: #323232;
 }
-#apps  >>>  .van-nav-bar {
-    border-bottom:1px solid #D8D8D8
+#apps >>> .van-nav-bar {
+  border-bottom: 1px solid #d8d8d8;
 }
-#apps >>> .van-nav-bar .van-icon{
-    color:#323232;
+#apps >>> .van-nav-bar .van-icon {
+  color: #323232;
 }
 #apps >>> input::-webkit-input-placeholder {
-    color: #C1C1C1;
+  color: #c1c1c1;
 }
 </style>
 

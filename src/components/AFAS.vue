@@ -15,9 +15,8 @@
 
 <script>
 export default {
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
 
   components: {},
@@ -27,12 +26,11 @@ export default {
   mounted: {},
 
   methods: {
-      onClickLeft(){
-        this.$router.back(-1);  
-      }
+    onClickLeft() {
+      this.$router.back(-1);
+    }
   }
-}
-
+};
 </script>
 <style>
 </style>
