@@ -169,4 +169,7 @@ export default {
 #apps >>> .init-title .van-cell__title {
   color: #000;
 }
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
+}
 </style>

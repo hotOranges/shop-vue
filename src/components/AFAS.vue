@@ -147,4 +147,10 @@ export default {
 #apps >>> .van-actionsheet__header .van-icon-close{
   display: none
 }
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
+}
+#apps >>> .van-nav-bar__text{
+  color: #cf3939
+}
 </style>

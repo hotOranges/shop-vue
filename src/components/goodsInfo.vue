@@ -21,7 +21,7 @@
                             </van-col>
 
                              <van-col span="24" class="lazy-bottom">
-                              <h4>￥{{limit_price.limit_p1[index]}} <span>￥{{original_price.origin_p1[index]}}</span> <div>{{discount.dis_1[index]}}折</div></h4> 
+                              <h4>￥{{limit_price.limit_p1[index]}} <span>￥{{original_price.origin_p1[index]}}</span></h4> 
                             </van-col>
 
                         </van-col>
@@ -35,7 +35,7 @@
                             </van-col>
 
                              <van-col span="24" class="lazy-bottom">
-                              <h4>￥{{limit_price.limit_p2[index]}} <span>￥{{original_price.origin_p2[index]}}</span> <div>{{discount.dis_2[index]}}折</div></h4> 
+                              <h4>￥{{limit_price.limit_p2[index]}} <span>￥{{original_price.origin_p2[index]}}</span></h4> 
                             </van-col>
 
                         </van-col>

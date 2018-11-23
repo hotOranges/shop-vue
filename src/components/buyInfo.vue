@@ -117,7 +117,6 @@ export default {
     onClickBigBtn() {
       Toast("请选择商品规格");
       this.orderShows();
-      console.log(this.orderShow);
     },
     onClickBigBtns() {
       this.orderShows();

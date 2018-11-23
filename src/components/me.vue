@@ -2,7 +2,7 @@
    <!-- 我的 组件 -->
   <div id="app">
   <van-nav-bar title="" @click-left="onClickLeft" left-arrow>
-  <van-icon name="discount" slot="right" />
+  <van-icon name="setting" slot="right" />
 </van-nav-bar>
   <van-row class="col-me" style="background: rgba(242,242,242,1);">            
                     <van-col span='24' class="title">

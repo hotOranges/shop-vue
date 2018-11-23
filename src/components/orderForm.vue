@@ -31,7 +31,7 @@
 <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
   <van-cell-group id="init-border">
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('evaluation')">评价晒单</button>
+      <button @click="redirects('EvaluationList')">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="redirects('aftersalesServer')">申请售后</button>
@@ -238,7 +238,7 @@
       <button>删除订单</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('aftersales')">申请售后</button>
+      <button @click="redirects('aftersalesServer')">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="redirects('/evaluation')">评价晒单</button>
@@ -429,12 +429,13 @@ export default {
 #app >>> .init-clear {
   clear: both;
 }
-#app >>> .van-tab__pane {
-}
 #app >>> .init-border-20 {
   background: rgba(242, 242, 242, 1);
   height: 20px;
   position: relative;
   width: 100%;
+}
+#app >>> .van-nav-bar .van-icon{
+    color: #2c3e50
 }
 </style>

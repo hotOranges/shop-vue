@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="apps">
     <van-nav-bar
   class="init-header"
   title="新增地址"
@@ -10,8 +10,8 @@
 />
       <van-address-edit
         :area-list="areaList"
-        show-postal
-        show-set-default
+        :show-postal="false"
+         show-set-default
         show-search-result
         :search-result="searchResult"
         @save="onSave"
@@ -47,3 +47,16 @@ export default {
   }
 };
 </script>
+<style scoped>
+#apps >>> .van-address-edit__buttons .van-button{
+  border-radius: 4px;
+  border: 1px solid rgb(171, 134, 117);
+  background-color: transparent;
+  color: rgb(171, 134, 117);
+  height: 35px;
+  line-height: 35px;
+}
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
+}
+</style>

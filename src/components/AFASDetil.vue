@@ -16,7 +16,7 @@
         <span>翼贝贝儿童手表T8S</span>
         <span>数量：1 规格：黑色</span>
         <span>￥499.00</span>
-  </van-col>
+  </van-col> 
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>
   </van-col>
@@ -144,5 +144,8 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-top: 15px;
+}
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
 }
 </style>

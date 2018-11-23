@@ -5,6 +5,7 @@
   class="init-header"
   left-arrow
   title="支付失败"
+  @click-left="onClickLeft"
 />
 
 <van-row>
@@ -74,6 +75,9 @@ export default {
   methods: {
     redirects(url) {
       this.$router.push(url);
+    },
+    onClickLeft(){
+      this.$router.back(-1)
     }
   }
 };
@@ -161,8 +165,12 @@ p {
   font-size: 16px;
   height: 65px;
 }
-#apps .van-goods-action {
-  background-color: #fff;
+
+#apps >>> .van-radio .van-icon-checked {
+  color: #cf3939;
+}
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
 }
 </style>
 

@@ -53,6 +53,7 @@ export default {
       this.$router.back(-1);
     },
     redirects(url) {
+      
       this.$router.push(url);
     }
   }
@@ -122,5 +123,8 @@ export default {
   height: 20px;
   position: relative;
   width: 100%;
+}
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
 }
 </style>

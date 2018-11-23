@@ -109,7 +109,7 @@
       <van-cell-group id="init-border" style="">
  
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('evaluation')">评价晒单</button>
+      <button @click="redirects('EvaluationList')">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="canel()">删除订单</button>
@@ -272,6 +272,9 @@ p {
   color: #6b6b6b;
   height: 25px;
   line-height: 25px;
+}
+#apps >>> .van-nav-bar .van-icon{
+    color: #2c3e50
 }
 </style>
 

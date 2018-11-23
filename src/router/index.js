@@ -24,6 +24,7 @@ import aftersalesServer from '@/components/aftersalesServer'
 import AFASDetil from '@/components/AFASDetil'
 import AFAS from '@/components/AFAS'
 import AFASAddress from '@/components/AFASAddress'
+import EvaluationList from '@/components/EvaluationList'
 Vue.use(Router)
 
 export default new Router({
@@ -139,10 +140,14 @@ export default new Router({
       component:Login,
     },
     {
-      name:'/orderForm',
       path:'/orderForm',
       name:'orderForm',
       component:OrderForm,
+    },
+    {
+      name:'EvaluationList',
+      path:'/EvaluationList',
+      component:EvaluationList
     },
     {
       name:'/evaluation',
