@@ -10,21 +10,21 @@
   left-arrow
   @click-left="onClickLeft"
 >
-<van-icon name="chat" slot="right" info="8"/>
+<van-icon name="chat" @click="$toast('chat')" slot="right" info="8"/>
 </van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
       <van-col span="24">
         <van-tabs v-model="active" swipeable v-tab>
-          <van-tab v-for="index in 7" 
+          <van-tab v-for="index in 4" 
           :title="title[index]" 
           :key="index.id" 
           class="tab"
           >
           <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 
-            <!-- 今日推荐版块 -->
-            <div class="contain">
+            <!-- 推荐版块 -->
+            <div v-if="title[index]== '推荐'" class="contain">
                <!-- 轮播 -->
                 <swiper class="swiper"  />
               <!-- 活动版块 -->
@@ -35,10 +35,19 @@
                   <button>销量</button>
                 </span>
               </div>
-                <active  />
+                <active :tabs="title[index]" />
             </div>
 
-         
+            <div v-if="title[index]== '手机'" class="contain">
+                <active :tabs="title[index]" />
+            </div>
+
+            <div v-if="title[index]== '穿戴'" class="contain">
+                <active :tabs="title[index]" />
+            </div>
+            <div v-if="title[index]== '健康'" class="contain">
+                <active :tabs="title[index]" />
+            </div>
              </van-pull-refresh>   
               </van-tab>
          </van-tabs>
@@ -74,6 +83,7 @@ export default {
       tabarActive: 0,
       value: null,
       active: 0,
+      activeTitle:null,
       path: "../../static/images/",
       imageList: [],
       disabled: false,
@@ -142,18 +152,18 @@ export default {
     }
   },
   beforeCreate() {
-    this.axios.get("./static/data.json").then(
-      res => {
-        if (res.status == 200) {
-          const data = res.data.home;
-        } else {
-          this.imageList = this.src;
-        }
-      },
-      err => {
-        this.imageList = this.src;
-      }
-    );
+    // this.axios.get("./static/data.json").then(
+    //   res => {
+    //     if (res.status == 200) {
+    //       const data = res.data.home;
+    //     } else {
+    //       this.imageList = this.src;
+    //     }
+    //   },
+    //   err => {
+    //     this.imageList = this.src;
+    //   }
+    // );
   },
   created() {}
 };

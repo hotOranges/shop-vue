@@ -2,7 +2,7 @@
   <div id="app">
        <van-row class="col-2">
               <div class="preImg" @click="ImagePreviews()">
-                 <img  v-lazy="buyImg" name="adapter" @click="ImagePreviews()"/>
+                 <img  v-lazy="form.productImage" name="adapter" @click="ImagePreviews()"/>
               </div>  
                     <!--导航 -->
       <van-col span='24' class="title">
@@ -15,11 +15,11 @@
 
     <van-row class="col-3">
         <van-col span="24" class="lazy-bottom">
-             <h4>￥509 <span>￥899</span></h4> 
+             <h4>￥{{form.specialPrice}} <span>￥{{form.originalPrice}}</span></h4> 
          </van-col>
 
      <van-col span="24" class="lazy-left">
-           <span>耐克Nike AIR ZOOM PEGASUS 34 男款跑鞋</span>
+           <span>{{form.productName}}</span>
      </van-col>
      <hr/>
      <van-col class="empty"></van-col>
@@ -38,7 +38,7 @@
    <!-- 底部购买 -->
     <van-goods-action>
         <van-goods-action-mini-btn icon="chat" text="客服" @click="onClickMiniBtn" />
-        <van-goods-action-mini-btn icon="cart" text="购物车" @click="onClickMiniBtn" info="5" />
+        <van-goods-action-mini-btn icon="cart" text="购物车" @click="onClickMiniBtn" info="" />
         <van-goods-action-big-btn text="立即购买" @click="onClickBigBtn" primary />
         <van-goods-action-big-btn text="加入购物车" @click="onClickBigBtns" />
         
@@ -52,6 +52,8 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
+import { getProductDetail } from "../../src/api/login";
+
 
 import Order from "./orderList";
 
@@ -77,7 +79,8 @@ export default {
       coupons: [coupon],
       disabledCoupons: [coupon],
       showList: null,
-      oShow: false
+      oShow: false,
+      form:{}
     };
   },
   props: {},
@@ -96,7 +99,7 @@ export default {
   },
   methods: {
     ...mapActions(["orderShows"]),
-    search_shows() {
+    search_shows() {  
       this.$router.back(-1);
     },
     //商品预览
@@ -113,9 +116,11 @@ export default {
     },
     onClickMiniBtn() {
       Toast("系统繁忙 请稍后再试");
+      console.log(this.orderShows())
     },
     onClickBigBtn() {
       Toast("请选择商品规格");
+    
       this.orderShows();
     },
     onClickBigBtns() {
@@ -126,6 +131,18 @@ export default {
   watch: {},
   directives: {},
   beforeCreate() {
+    // let para ={
+    //   productId:this.$route.params.id
+    // }
+    //   getProductDetail(para).then(res => {
+    //     console.log(res.code)
+    //     if (res.code =='200') {
+    //       this.images = res.data; 
+    //       console.log(res.data)
+    //     }else{
+    //       Toast(res.msg)
+    //     }
+    //   })
     this.axios.get("./static/data.json").then(
       res => {
         const buy_id = this.$route.params.id;
@@ -145,10 +162,12 @@ export default {
   },
   created() {
     console.log(this.buyImg);
+    this.form = this.buyImg
     if (this.buyImg == "undefined") {
       this.buyImg =
         "https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg";
     }
+
   }
 };
 </script>

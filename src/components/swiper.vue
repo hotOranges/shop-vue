@@ -7,7 +7,6 @@
             <van-swipe-item v-for="(image, index) in images" :key="index">
                 <!-- <img v-lazy="image" style="width:100%;height:160px;" @click.stop="redirect('/goods/id_0')"/> -->
                 <img v-lazy="image" style="width:100%;height:160px;" />
-
             </van-swipe-item>
         </van-swipe>
       </van-col>
@@ -16,6 +15,9 @@
 </template>
 
 <script>
+import { getBanner } from "../../src/api/login";
+import { Toast } from "vant";
+
 import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
@@ -41,6 +43,16 @@ export default {
   watch: {},
   directives: {},
   beforeCreate() {
+      // console.log(this.tabs)
+      // getBanner().then(res => {
+      //   console.log(res.code)
+      //   if (res.code =='200') {
+      //     this.images = res.data; 
+      //     console.log(res.data)
+      //   }else{
+      //     Toast(res.msg)
+      //   }
+      // })
     this.axios.get("./static/data.json").then(
       res => {
         if (res.status == 200) {

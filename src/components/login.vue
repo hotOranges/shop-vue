@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { login } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
@@ -53,7 +54,7 @@ export default {
     ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
-    ...mapActions(["searchA", "infoAction"]),
+    ...mapActions(["searchA", "newtoken"]),
     //用户名和密码验证
     rules(v, choose) {
       if (choose == "user") {
@@ -88,25 +89,27 @@ export default {
       if (data.username == null || data.password == null) {
         Toast("用户名和密码不能为空 o(╥﹏╥)o");
       } else {
-        this.axios.post("/login", data).then(res => {
-          if (res.status == 200) {
-            console.log(res.data);
-          }
-        });
+       const para = {
+        mobile:username,
+        password:password
+      }
+     
+      login(para).then(res => {
+        console.log(res.code)
+        if (res.code =='200') {
+        localStorage.setItem('token', JSON.stringify(res.data))
+        this.newtoken()
+        this.redirects("/");
+         Toast("登录成功");
+        }else{
+          Toast(res.msg)
+        }
+      })
+        console.log(username,password)
+      
       }
 
-      if (
-        this.$route.name == "login" &&
-        data.username !== null &&
-        data.password !== null
-      ) {
-        this.btnName = "立即登录";
-        this.redirects("/");
-        Toast("登录成功");
-      } else if (this.$route.name == "register") {
-        this.btnName = "立即注册";
-        this.redirects("/login");
-      }
+      
       console.log(username, password);
     },
     redirects(url) {

@@ -48,6 +48,11 @@ export default {
                 id: "1215",
                 name: "黑色",
                 imgUrl: "https://img.yzcdn.cn/2.jpg"
+              },
+               {
+                id: "1315",
+                name: "蓝色",
+                imgUrl: "https://img.yzcdn.cn/2.jpg"
               }
             ],
             k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
@@ -59,26 +64,36 @@ export default {
             id: 1215, // skuId，下单时后端需要
             price: 50900, // 价格（单位分）
             s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "1193", // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
             stock_num: 110 // 当前 sku 组合对应的库存
+          },
+           {
+            id: 30349, // skuId，下单时后端需要
+            price: 50000, // 价格（单位分）
+            s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
+            stock_num: 10 // 当前 sku 组合对应的库存
+          },
+           {
+            id: 1315, // skuId，下单时后端需要
+            price: 40900, // 价格（单位分）
+            s1: "1315", // 规格类目 k_s 为 s1 的对应规格值 id
+            stock_num: 40 // 当前 sku 组合对应的库存
           }
         ],
         price: "509.00", // 默认价格（单位元）
         stock_num: 227, // 商品总库存
         collection_id: 1215, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
         none_sku: false, // 是否无规格商品
-        // messages: [
-        //   {
-        //     // 商品留言
-        //     datetime: '0', // 留言类型为 time 时，是否含日期。'1' 表示包含
-        //     multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
-        //     name: '留言', // 留言名称
-        //     type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-        //     required: '1' // 是否必填 '1' 表示必填
-        //   }
-        // ],
-        hide_stock: false // 是否隐藏剩余库存
+        messages: [
+          // {
+          //   // 商品留言
+          //   datetime: '0', // 留言类型为 time 时，是否含日期。'1' 表示包含
+          //   multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
+          //   name: '留言', // 留言名称
+          //   type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
+          //   required: '1' // 是否必填 '1' 表示必填
+          // }
+        ],
+        hide_stock: true // 是否隐藏剩余库存
       },
 
       goods: {
@@ -92,10 +107,10 @@ export default {
         // 商品 id
         goodsId: "946755",
         // 留言信息
-        messages: {
-          message_0: "12",
-          message_1: ""
-        },
+        // messages: {
+        //   message_0: "12",
+        //   message_1: ""
+        // },
         // 另一种格式的留言，key 不同
         // cartMessages: {
         //   '留言1': 'xxxx',
@@ -107,14 +122,14 @@ export default {
         // 选择的商品数量
         selectedNum: 1,
         // 选择的 sku 组合
-        selectedSkuComb: {
-          id: 2257,
-          price: 100,
-          s1: "30349",
-          s2: "1193",
-          s3: "0",
-          stock_num: 111
-        }
+        // selectedSkuComb: {
+        //   id: 2257,
+        //   price: 100,
+        //   s1: "30349",
+        //   s2: "1193",
+        //   s3: "0",
+        //   stock_num: 111
+        // }
       },
 
       customStepperConfig: {
@@ -154,8 +169,8 @@ export default {
         // }
       },
       goodsId: "946755",
-      quota: 10,
-      quotaUsed: 6,
+      quota: 0,
+      quotaUsed: 0,
       resetStepperOnHide: false,
       resetSelectedSkuOnHide: false,
       closeOnClickOverlay: false,
@@ -187,7 +202,9 @@ export default {
       this.$toast(JSON.stringify(data));
       this.$router.push("/goods/id_0/buy/pay");
     },
-    onAddCartClicked() {}
+    onAddCartClicked() {
+
+    }
   },
   watch: {},
   directives: {
@@ -203,22 +220,8 @@ export default {
     }
   },
   beforeCreate() {
-    this.axios.get("./static/data.json").then(
-      res => {
-        const buy_id = this.$route.params.id;
-        console.log(buy_id);
-        //或许商品信息
-        if (res.status == 200) {
-          const data = res.data.goods;
-          const preImg = data.id_0.moreImg;
-          this.preImgs = preImg;
-        }
-      },
-      err => {
-        this.imageList = this.src;
-        this.broadcast = "暂无消息~~QAQ~";
-      }
-    );
+   this.detial = JSON.parse(localStorage.getItem('detial_s'))
+
   }
 };
 </script>

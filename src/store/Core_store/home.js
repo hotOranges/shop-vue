@@ -2,7 +2,7 @@
 export default {
     state:{    
         tab:{
-            title:['','今日推荐','时尚','美妆','家电','家居','国际','生活'],
+            title:['','推荐','手机','穿戴','健康'],
         },
         badge:{
             icon:['icon_1','icon_2','icon_8','icon_4','icon_5','icon_6','icon_7','icon_10'],
@@ -33,6 +33,9 @@ export default {
             state.buyInfo.img[0] = img;
             console.log(state.buyInfo.img);
         },
+        token_(state,token){
+            state.token = token
+        },
         orderShow_(state) {
             state.orderShow ? state.orderShow = false : state.orderShow = true;
             setTimeout(() => {
@@ -51,7 +54,9 @@ export default {
     actions: {
        searchA(context,e) {
            context.commit('search_');
-          
+       },
+       newtoken(context,token){
+        context.commit('token_',localStorage.getItem('token'));
        },
        buyParam(context,img) {
            context.commit('buySearch',img);

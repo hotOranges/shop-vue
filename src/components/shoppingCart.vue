@@ -129,7 +129,6 @@ export default {
           this.checked[i] = false;
         }
       }
-      console.log(val, this.checked);
     },
     onSubmit() {},
     singleChecked: function(checked, index) {

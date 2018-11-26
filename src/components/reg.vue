@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { getVerifyCode,regist } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
@@ -96,18 +97,26 @@ export default {
       this.$router.back(-1);
     },
     send() {
-      console.log(this.iPhone.length);
       if (this.iPhone.length != 11) return Toast("请输入正确的手机号");
-
-      let me = this;
-      me.sendMsgDisabled = true;
-      let interval = window.setInterval(function() {
+       const para = {
+        mobile: this.iPhone,
+        type:1
+      }
+       let me = this;  
+      getVerifyCode(para).then(res => {
+      console.log(res.code)
+        if (res.code =='200') {
+        me.sendMsgDisabled = true;
+        let interval = window.setInterval(function() {
         if (me.time-- <= 0) {
           me.time = 60;
           me.sendMsgDisabled = false;
           window.clearInterval(interval);
         }
       }, 1000);
+        }
+      })
+     
     },
     passwordview() {
       if (this.paswldtype === "password") {
@@ -136,14 +145,23 @@ export default {
         sms
       };
 
-      if (data.username == null || data.password == null || data.sms == null) {
+      if (data.iPhone == null || data.password == null || data.sms == null) {
         Toast("手机号、验证码和密码不能为空 o(╥﹏╥)o");
       } else {
-        this.axios.post("/login", data).then(res => {
-          if (res.status == 200) {
-            console.log(res.data);
-          }
-        });
+       const para = {
+        mobile: data.iPhone,
+        verifyCode:data.sms,
+        password:data.password
+      }
+     
+      regist(para).then(res => {
+        if (res.code =='1001') {
+          Toast(res.msg)
+          this.$router.back(-1);
+        }else{
+          Toast(res.msg)
+        }
+      })
       }
     },
     tip() {

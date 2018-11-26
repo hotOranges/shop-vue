@@ -9,7 +9,6 @@
   @click-left="onClickLeft"
 />
                 <div class="login" style="width: 90%; margin-left: 5%;">
-                  
                     <div class="login-form">
                         <van-cell-group>
                         <van-field
@@ -56,10 +55,7 @@
                             :type="paswldtype"
                         >
                         </van-field>
-                        </van-cell-group>
-                        <div class="login-inp"><a href="#" @click="submit(iPhone,sms,password,password2)">{{btnName}}</a></div>
-                  
-
+                      <div class="login-inp"><a href="#" @click="submit(iPhone,sms,password,password2)">{{btnName}}</a></div>
                     </div>
                    
                 </div>
@@ -70,12 +66,12 @@
 </template>
 
 <script>
+import { resetPassWord,getVerifyCode } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
 
 export default {
-  name: "login",
   components: {},
   data() {
     return {
@@ -110,16 +106,23 @@ export default {
     send() {
       console.log(this.iPhone.length);
       if (this.iPhone.length != 11) return Toast("请输入正确的手机号");
-
-      let me = this;
-      me.sendMsgDisabled = true;
-      let interval = window.setInterval(function() {
+       const para = {
+        mobile: this.iPhone,
+        type:2
+      }
+       let me = this;  
+      getVerifyCode(para).then(res => {
+        if (res.code =='200') {
+        me.sendMsgDisabled = true;
+        let interval = window.setInterval(function() {
         if (me.time-- <= 0) {
           me.time = 60;
           me.sendMsgDisabled = false;
           window.clearInterval(interval);
         }
       }, 1000);
+        }
+      })
     },
     passwordview() {
       if (this.paswldtype === "password") {
@@ -154,11 +157,20 @@ export default {
       } else if (this.password2 !== this.password) {
         Toast("两次密码输入不相同");
       } else {
-        this.axios.post("/login", data).then(res => {
-          if (res.status == 200) {
-            console.log(res.data);
-          }
-        });
+        const para = {
+        mobile: data.iPhone,
+        verifyCode:data.sms,
+        password:data.password
+      }
+      resetPassWord(para).then(res => {
+        console.log(res.code)
+        if (res.code =='1005') {
+          Toast(res.msg)
+          this.$router.back(-1);
+        }else{
+          Toast(res.msg)
+        }
+      })
       }
     },
     tip() {
