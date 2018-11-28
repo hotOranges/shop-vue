@@ -163,13 +163,6 @@ export default {
         password:data.password
       }
       resetPassWord(para).then(res => {
-        console.log(res.code)
-        if (res.code =='1005') {
-          Toast(res.msg)
-          this.$router.back(-1);
-        }else{
-          Toast(res.msg)
-        }
       })
       }
     },

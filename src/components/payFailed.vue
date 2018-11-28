@@ -57,9 +57,7 @@
 <van-goods-action>
         <van-goods-action-mini-btn text="合计¥499" />
         <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  />
-        <van-goods-action-big-btn text="去支付" primary />
-        
-        
+        <van-goods-action-big-btn text="去支付" primary />  
     </van-goods-action>   
   </div>
 
@@ -69,8 +67,12 @@
 export default {
   data() {
     return {
-      radio3: "1"
+      radio3: "1",
+      placeOrders:'',
     };
+  },
+  mounted(){
+    this.placeOrders = JSON.parse(localStorage.getItem('placeOrders'))[0]
   },
   methods: {
     redirects(url) {

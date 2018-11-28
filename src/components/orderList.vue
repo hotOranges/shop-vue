@@ -27,6 +27,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
+import { addShopCart } from "../../src/api/login";
 
 export default {
   name: "buyInfo",
@@ -187,10 +188,42 @@ export default {
     }),
     ...mapGetters(["bc_notshow"])
   },
+  mounted(){
+    this.detial = JSON.parse(localStorage.getItem('detial_s'))
+    this.setdata()
+  },
   methods: {
     ...mapActions(["orderNum"]),
+    ...mapActions(["orderShows"]),
     search_shows() {
       this.$router.back(-1);
+    },
+    setdata(){
+      this.sku.stock_num = this.detial.saleNum
+      this.sku.price = this.detial.specialPrice
+      this.goods.title = this.detial.productName
+      this.goods.picture = 'http://' + this.detial.productUrl + this.detial.productImage
+      let newv = [];
+      let newlist = [];
+      var str= this.detial.saleColor;
+      var datas= new Array();
+      datas=str.split("，"); 
+      for (var i in datas) {
+        const element = datas[i];
+        newv.push({
+          id:i,
+          imgUrl: this.goods.picture,
+          name:element
+        })
+        newlist.push({
+          id:i,
+          s1:i,
+          price:this.detial.specialPrice*100,
+          stock_num:100
+        })
+      }
+      this.sku.tree[0].v = newv
+      this.sku.list = newlist
     },
     //商品预览
     ImagePreviews() {
@@ -198,21 +231,51 @@ export default {
     },
     onBuyClicked(data) {
       const sel = document.querySelector(".van-stepper__input");
+      const color = document.querySelector(".van-sku-row__item.van-sku-row__item--active")
       this.orderNum(sel.value);
-      this.$toast(JSON.stringify(data));
-      this.$router.push("/goods/id_0/buy/pay");
+      var selIn = [];
+      selIn.push({
+        orderNum:sel.value,
+        color:color.innerHTML
+      })
+      localStorage.setItem('selIn', JSON.stringify(selIn))
+      this.$router.push("/goods/id_2/buy/pay");
     },
-    onAddCartClicked() {
-
+    onAddCartClicked(data) {
+      const sel = document.querySelector(".van-stepper__input");
+      const color = document.querySelector(".van-sku-row__item.van-sku-row__item--active")
+      var selIn = [];
+      selIn.push({
+        orderNum:sel.value,
+        color:color.innerHTML
+      })
+      var shopCart = [];
+       shopCart.push({
+          productId:this.detial.id,
+          productNum:selIn[0].orderNum,
+          price:this.detial.specialPrice,
+          productName:this.detial.productName,
+          productColor:selIn[0].color,
+        })
+        let para = {
+           token:JSON.parse(localStorage.getItem('token')),
+           shopCart:JSON.stringify(shopCart)
+        }
+        addShopCart(para).then(res => {
+          if (res) {
+          Toast('加入成功')
+           this.orderShows()
+          }
+        })
     }
   },
   watch: {},
   directives: {
     order: {
       inserted(el, e) {
+        let data =  JSON.parse(localStorage.getItem('detial_s'))
         const orderImg = el.childNodes[0];
-        const urlImg =
-          "https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg";
+        const urlImg = 'http://' + data.productUrl + data.productImage;
         const orderChoose = el.childNodes[1];
         orderImg.childNodes[0].innerHTML = `<img src=${urlImg}> `;
         orderImg.childNodes[0].childNodes[0].style.width = "100%";
@@ -220,8 +283,6 @@ export default {
     }
   },
   beforeCreate() {
-   this.detial = JSON.parse(localStorage.getItem('detial_s'))
-
   }
 };
 </script>

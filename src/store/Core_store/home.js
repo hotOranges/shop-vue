@@ -16,7 +16,7 @@ export default {
         bc:true,
         show:true,
         sshow:false,
-        shop_info:4,
+        shop_info:0,
         my_info:2,
         buyInfo:{
             img:[],
@@ -31,7 +31,7 @@ export default {
         },
         buySearch(state,img) {
             state.buyInfo.img[0] = img;
-            console.log(state.buyInfo.img);
+            // console.log(state.buyInfo.img);
         },
         token_(state,token){
             state.token = token
@@ -47,8 +47,7 @@ export default {
             console.log(e);
         },
         shopCartInfo(state) {
-            console.log(state.shop_info);
-            state.shop_info+=4;
+            state.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length;
         }
     },
     actions: {

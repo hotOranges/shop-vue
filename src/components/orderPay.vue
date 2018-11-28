@@ -8,52 +8,91 @@
   left-arrow
   @click-left="onClickLeft"
 />
+<van-cell  v-if="list.length>0" @click="redirects('/address')" >
      <van-address-list
   v-model="chosenAddressId"
   :list="list"
-/>     
-<div class="init-10"></div>
+  :switchable ="false"
+/>
+</van-cell>
+<van-cell v-else
+  @click="redirects('/address')"
+  class="addressnone"
+>     
+<span style="padding-top: 55px;">还没有地址信息，请点击添加地址</span> 
+</van-cell>
+
+<!-- <div class="init-10"></div>
   <van-radio-group v-model="radio3">
         <van-cell-group>
-          <van-cell title="支付宝" clickable @click="radio3 = '1'">
+          <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '1'">
             <van-radio name="1" />
           </van-cell>
-          <van-cell title="微信" clickable @click="radio3 = '2'">
+          <van-cell title="微信" icon="wechat" clickable @click="radio3 = '2'">
             <van-radio name="2" />
           </van-cell>
         </van-cell-group>
-      </van-radio-group>
+      </van-radio-group> -->
       <div class="init-10"></div>
      
       <van-panel title="商品详情" >
   <van-row class="shopp_conent">
     <van-col span='6' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img :src=" 'http://'+detial.productUrl +detial.productImage" name="adapter" />
     </van-col>
     <van-col span='11' offset="1" class="goodList">
-      <span>翼贝贝智能儿童手表T8</span>
-      <span>￥499.00</span>
+      <span>{{detial.productName}}</span>
+      <span>￥{{detial.specialPrice}}</span>
     </van-col>
     <van-col span='1' offset="1">
-      <span style="font-size: 12px;">X1</span>
+      <span style="font-size: 15px;">X{{selIn.orderNum}}</span>
     </van-col>
   </van-row>
  <van-cell-group>
   <van-cell title="配送方式" value="快递配送" />
-  <van-cell title="发票类型" value="不开发票" />
-  <van-cell title="买家留言" value="请注意包装包" />
-  <van-cell title="商品总价" value="￥499.00" />
+  <van-cell title="发票类型" :value="bill"  @click="show =!show " />
+  <van-cell>
+    <span>买家留言</span>
+    <van-field v-model="message" placeholder="请输入留言" />
+  </van-cell> 
+  <van-cell title="商品总价" :value="'￥'+detial.specialPrice*selIn.orderNum" />
   <van-cell title="运费" value="+￥0.00" />
 <van-notice-bar :scrollable="false">
-  配送至莲花国际广场1号楼1201
+  配送至 {{deiladdress}}
 </van-notice-bar>
 </van-cell-group>
 </van-panel>
       <van-submit-bar
-        :price="50900*numO"
+        :price="detial.specialPrice*selIn.orderNum*100"
         button-text="提交订单"
         @submit="onSubmit"
         />
+  <van-popup v-model="show" position="bottom" :overlay="true" class="bill">
+  <h3 style="text-align: center; border-bottom: 1px solid #D8D8D8;margin-top: 0;margin-bottom: 0;width: 85%;margin-left: 7.5%;line-height: 39px;font-size: 18px;font-weight: 400;color: #323232;">发票</h3>
+  <van-cell-group>
+  <van-cell>
+    <span class="blord">发票类型</span>
+    <span>普通发票</span>
+  </van-cell> 
+  <van-cell>
+    <span class="blord">发票抬头</span>
+  </van-cell> 
+ <van-tabs type="card" v-model="active">
+  <van-tab title="个人">
+    <h4 style="color: #6B6B6B; font-size: 14px; padding-left: 15px; margin-bottom: 72px;">个人发票将显示详细商品名称和价格信息</h4>
+  </van-tab>
+  <van-tab title="单位">
+<van-cell-group>
+  <van-field v-model="businessLookUp" placeholder="请填写企业抬头" />
+</van-cell-group>
+<van-cell-group>
+  <van-field v-model="taxNumber" placeholder="请填写税号" />
+</van-cell-group>
+  </van-tab>
+ </van-tabs>
+</van-cell-group>
+<van-button round @click="addtaxpayer"  size="large" style="background-color:#CF3939;color:#fff;width: 85%;margin-left: 7.5%;height: 40px;line-height: 40px;margin-bottom: 40px;margin-top: 40px;">确认</van-button>
+</van-popup>      
   </div>
 </template>
 
@@ -61,34 +100,34 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
+import { listShipping,placeOrder,saveInvoice } from "../../src/api/login";
 
 export default {
   name: "pay",
   data() {
     return {
-      chosenAddressId: "1",
+      detial:{},
+      businessLookUp:'',
+      message:'',
+      taxNumber:'',
+      selIn:{},
+      bill:'不开发票',
+      show:false,
+      active:1,
+      isInvoice:0,
+      invoiceId:'',
+      invoiceType:'',
+      chosenAddressId: "",
+      deiladdress:'',
       list: [
-        {
-          id: "1",
-          name: "张三",
-          tel: "13000000000",
-          address: "浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室"
-        },
-        {
-          id: "2",
-          name: "李四",
-          tel: "1310000000",
-          address: "浙江省杭州市拱墅区莫干山路 50 号"
-        },
-        {
-          id: "3",
-          name: "李四",
-          tel: "1310000000",
-          address: "浙江省杭州市拱墅区莫干山路 50 号"
-        }
+        // {
+        //   id: "3",
+        //   name: "李四",
+        //   tel: "1310000000",
+        //   address: "浙江省杭州市拱墅区莫干山路 50 号"
+        // }
       ],
       areaList: {},
-
       radio3: "1",
       searchResult: []
     };
@@ -106,70 +145,128 @@ export default {
     }),
     ...mapGetters(["bc_notshow"])
   },
+  mounted(){
+    this.detial = JSON.parse(localStorage.getItem('detial_s'))
+    this.selIn = JSON.parse(localStorage.getItem('selIn'))[0]
+     let para = {
+       token:JSON.parse(localStorage.getItem('token'))
+     }
+     listShipping(para).then(res => {
+          var datas = [];
+          this.listShippings = res
+          for (var i in res) {
+            var arrs = res[i]
+            if (arrs.isDefault==='1') {
+             datas.push({
+             id:arrs.id,
+             name:arrs.consigneeName,
+             tel:arrs.consigneePhone,
+             address:arrs.region+arrs.address,
+             deiladdress:arrs.address
+            }) 
+            this.deiladdress = arrs.address      
+            }
+          }
+          if (datas.length<=0 && this.listShippings.length>0) {
+          
+            var arrs = res[0]
+             datas.push({
+             id:arrs.id,
+             name:arrs.consigneeName,
+             tel:arrs.consigneePhone,
+             address:arrs.region+arrs.address,
+             deiladdress:arrs.address
+            })
+            this.deiladdress = arrs.address  
+          }
+          this.list = datas  
+          
+      })
+  },
   methods: {
     ...mapActions(["orderShows"]),
     onSubmit(e) {
-      if (this.chosenAddressId.length == 0) {
+      if (this.list.length == 0) {
         Toast("请填写收货信息");
       } else {
-        Toast("提交成功");
-        this.$router.push("/payFailed");
+        var buyDetail = [];
+        buyDetail.push({
+          productId:this.detial.id,
+          productNum:this.selIn.orderNum,
+          price:this.detial.specialPrice,
+          productName:this.detial.productName,
+          productColor:this.selIn.color,
+        })
+        let para = {
+           token:JSON.parse(localStorage.getItem('token')),
+           shippingId:this.detial.id,
+           orderAmount:this.detial.specialPrice*this.selIn.orderNum,
+           buyerMessage:this.message,
+           buyDetail:JSON.stringify(buyDetail),
+           isInvoice:this.isInvoice,
+           invoiceType:this.invoiceType,
+           invoiceId:this.invoiceId
+        }
+        
+        placeOrder(para).then(res => {
+          if (res) {
+             var scopedSlotss = {
+                placeOrder:res,
+                bill:this.bill,
+                name:this.list[0].name,
+                tel:this.list[0].tel,
+                orderAmount:this.detial.specialPrice*this.selIn.orderNum
+        }
+        localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
+        this.$router.push("/paySuccess");
+          }
+        })
+
+        // Toast("提交成功");
+        // this.$router.push("/payFailed");
       }
     },
-    search_shows() {
-      this.$router.push("/");
+    addtaxpayer(){
+      if (this.active==0) {
+        this.bill = '个人发票'
+        this.isInvoice = 1
+        this.invoiceType = 1
+        this.show = false
+      }else{
+        if (this.businessLookUp.length == 0 ) {
+           Toast("企业抬头不能为空");
+           return
+        }
+
+        if (this.taxNumber.length == 0 ) {
+          Toast("税号不能为空");
+           return
+        }
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        businessLookUp:this.businessLookUp,
+        taxNumber:this.taxNumber
+     }
+     saveInvoice(para).then(res => {
+        this.invoiceId = res.id
+        this.bill = '单位发票'
+        this.isInvoice = 1
+        this.invoiceType = 2
+        this.show = false
+      })
+       
+      }
     },
     toggle(index) {
       this.$refs.checkboxes[index].toggle();
     },
+     redirects(url) {
+      this.$router.push(url);
+    },
     onClickLeft() {
       this.$router.back(-1);
     },
-    //商品预览
-    ImagePreviews() {
-      ImagePreview(this.preImgs);
-    },
-    //结算
-    onSave() {
-      Toast("save");
-    },
-    onDelete() {
-      Toast("delete");
-    },
-    onChangeDetail(val) {
-      if (val) {
-        this.searchResult = [
-          {
-            name: "黄龙万科中心",
-            address: "杭州市西湖区"
-          }
-        ];
-      } else {
-        this.searchResult = [];
-      }
-    }
   },
-  watch: {},
-  directives: {},
-  beforeCreate() {
-    this.axios.get("./static/data.json").then(
-      res => {
-        const buy_id = this.$route.params.id;
-        console.log(buy_id);
-        //或许商品信息
-        if (res.status == 200) {
-          const data = res.data.goods;
-          const preImg = data.id_0.moreImg;
-          this.preImgs = preImg;
-        }
-      },
-      err => {
-        this.imageList = this.src;
-        this.broadcast = "暂无消息~~QAQ~";
-      }
-    );
-  },
-  created() {}
 };
 </script>
 
@@ -180,8 +277,8 @@ export default {
 #app >>> .van-address-item .van-cell__value {
   padding-right: 0px;
 }
-#app >>> .van-address-item__edit {
-  display: none;
+#app >>> .van-address-item__edit::before {
+      content: "\F007";
 }
 #app >>> .van-address-list__add {
   display: none;
@@ -210,6 +307,7 @@ export default {
 #app >>> .goodList {
   text-align: left;
   line-height: 35px;
+  display: inline-grid;
 }
 #app >>> .shopp_conent {
   height: 100%;
@@ -242,5 +340,67 @@ export default {
 #app >>> .van-nav-bar .van-icon {
   color: #323232;
 }
+#app >>> .addressnone{
+  padding-top: 50px;
+}
+#app >>> .addressnone .van-cell__value--alone{
+  line-height: 44px;
+  color: #CF3939;
+}
+#app >>> .van-hairline--bottom::after {
+    border-bottom-width: 3px;
+}
+#app >>> .van-icon-alipay::before {
+  color: #108ee9;
+}
+#app >>> .van-icon-wechat::before {
+  color: #00c801;
+}
+#app >>> .bill.van-popup.van-popup--bottom .van-cell .blord{
+  text-align: left ;
+  color: #323232;
+  font-size: 15px;
+  padding-right: 15px;
+}
+#app >>> .bill .van-cell.van-field{
+    float: inherit;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+}
+#app >>> .bill .van-field__control{
+  line-height: 35px;
+  padding-left: 18px;
+  text-align: left;
+  background-color: #F2F2F2;
+ }
+#app >>> .van-field__control{
+  
+  line-height: 35px;
+  padding-left: 18px;
+  text-align: right;
+  background-color: transparent;
+ }
+ #app >>> .van-tabs__nav--card{
+   border: none;
+   width: 60%;
+   margin: 0 15px;
+ }
+ #app >>> .van-tabs__nav--card .van-tab{
+  border: 1px solid #B39061;
+  color: #B39061;
+  margin-right: 15px;
+ }
+  #app >>> .van-tabs__nav--card .van-tab.van-tab--active{
+    background-color:#B39061;
+    border-color:#B39061;
+    color: #fff 
+  }
+  #app >>> .van-cell.van-field{
+    float: right;
+    width: 81%;
+    text-align: right;
+    padding: 0px 15px;
+  }
 </style>
 

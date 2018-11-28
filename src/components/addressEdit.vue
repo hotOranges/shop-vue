@@ -11,12 +11,14 @@
       <van-address-edit
         :area-list="areaList"
         :show-postal="false"
-        show-set-default
+        :show-set-default ="true"
         show-search-result
         :search-result="searchResult"
         @save="onSave"
+        @delete="onDelete"
         :show-delete="deletes"
         @change-detail="onChangeDetail"
+        :address-info="addressInfo"
       />
   </section>
 </template>
@@ -24,6 +26,8 @@
 <script>
 import { Area } from "vant";
 import AreaList from "../assets/area";
+import { editShipping,delShipping } from '../../src/api/login'
+import { Toast } from "vant";
 
 export default {
   name: "addressEdit",
@@ -31,13 +35,75 @@ export default {
     return {
       areaList: AreaList,
       searchResult: [],
-      deletes: false
+      deletes: true,
+      formaddress:'',
+      addressInfo:{
+          name:'',
+          tel:'',
+          county:'',
+          addressDetail:''
+      }
     };
   },
+  mounted(){
+    this.formaddress = this.$route.params
+     if (this.formaddress.consigneeName.length>0) {
+          this.addressInfo.name = this.formaddress.consigneeName
+      }
+      if (this.formaddress.consigneePhone.length>0) {
+          this.addressInfo.tel = this.formaddress.consigneePhone
+      }
+     if (this.formaddress.areaCode.length>0) {
+          this.addressInfo.areaCode =this.formaddress.areaCode
+      }
+       if (this.formaddress.address.length>0) {
+          this.addressInfo.addressDetail = this.formaddress.address
+      }
+      if (this.formaddress.isDefault==='1') {
+        this.addressInfo.isDefault = true
+      }else{
+        this.addressInfo.isDefault = false
+      }
+
+  },
   methods: {
-    onSave() {},
+    onSave(content) {
+    var isDefault = content.isDefault == true ? 1 : 0 ;
+     let para = {
+       token:JSON.parse(localStorage.getItem('token')),
+       consigneeName:content.name,
+       consigneePhone:content.tel,
+       region:content.province+'/'+content.city+'/'+content.county,
+       address:content.addressDetail,
+       isDefault:isDefault,
+       areaCode:content.areaCode,
+        shippingId: this.formaddress.id
+     }
+     editShipping(para).then(res => {
+        this.$router.back(-1);
+      })
+    },
     onClickLeft() {
-      this.$router.push("address");
+      this.$router.back(-1);
+    },
+    onDelete(content){
+
+ let para = {
+       token:JSON.parse(localStorage.getItem('token')),
+       shippingId: this.formaddress.id
+     }
+     delShipping(para).then(res => {
+        if (res.code =='200') {
+            Toast(res.msg)
+            this.$router.back(-1);
+        }else if(res.code =='1008'){
+           Toast(res.msg)
+             this.$router.push('login');
+        }
+        else{
+          Toast(res.msg)
+        }
+      })
     },
     onChangeDetail(val) {}
   }

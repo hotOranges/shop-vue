@@ -1,5 +1,5 @@
 <template>
-  <section id="app">
+  <section id="app" style="    text-align: center;">
     <van-nav-bar
   class="init-header"
   title="我的收货地址"
@@ -25,28 +25,53 @@
   </section>
 </template>
 <script>
+
+import { listShipping } from "../../src/api/login";
+import { Toast } from "vant";
+
 export default {
   data() {
     return {
       chosenAddressId: "1",
+      listShippings:'',
       list: [
-        // {
-        //   id: '1',
-        //   name: '张三',
-        //   tel: '13000000000',
-        //   address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
-        // },
-        // {
-        //   id: '2',
-        //   name: '李四',
-        //   tel: '1310000000',
-        //   address: '浙江省杭州市拱墅区莫干山路 50 号'
-        // }
+        {
+          id: '1',
+          name: '张三',
+          tel: '13000000000',
+          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
+        },
+        {
+          id: '2',
+          name: '李四',
+          tel: '1310000000',
+          address: '浙江省杭州市拱墅区莫干山路 50 号'
+        }
       ],
       add: "新增地址",
       edit: "编辑地址",
       disabledText: "以下地址超出配送范围"
     };
+  },
+  mounted(){
+     let para = {
+       token:JSON.parse(localStorage.getItem('token'))
+     }
+     listShipping(para).then(res => {
+          var datas = [];
+          this.listShippings = res
+          for (var i in res) {
+            var arrs = res[i]
+           datas.push({
+             id:arrs.id,
+             name:arrs.consigneeName,
+             tel:arrs.consigneePhone,
+             address:arrs.region+arrs.address
+           })
+          }
+          this.list = datas  
+       
+      })
   },
   methods: {
     onAdd() {
@@ -56,7 +81,7 @@ export default {
       this.$router.back(-1);
     },
     onEdit(item, index) {
-      this.$router.push("addressEdit");
+      this.$router.push({name: 'addressEdit', params: this.listShippings[index]})
     }
   }
 };

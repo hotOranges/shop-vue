@@ -54,4 +54,78 @@ export function getBanner(params) {
       data: params
     })
   }  
+  export function addShipping(params) {
+    return request({
+      url: `${base}/customerUser/addShipping`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function listShipping(params) {
+    return request({
+      url: `${base}/customerUser/listShipping`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function delShipping(params) {
+    return request({
+      url: `${base}/customerUser/delShipping`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function editShipping(params) {
+    return request({
+      url: `${base}/customerUser/editShipping`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function listImage(params) {
+    return request({
+      url: `${base}/customerUser/listImage`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function placeOrder(params) {
+    return request({
+      url: `${base}/customer/placeOrder`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function saveInvoice(params) {
+    return request({
+      url: `${base}/customer/saveInvoice`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function payMent(params) {
+    return request({
+      url: `${base}/customer/payMent`,
+      method: 'post',
+      data: params
+    })
+  }
+  
+
+  export function addShopCart(params) {
+    return request({
+      url: `${base}/customer/addShopCart`,
+      method: 'post',
+      data: params
+    })
+  }
+
+  export function getShopCart(params) {
+    return request({
+      url: `${base}/customer/getShopCart`,
+      method: 'post',
+      data: params
+    })
+  }
+
   

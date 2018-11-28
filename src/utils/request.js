@@ -2,7 +2,10 @@ import axios from 'axios'
 // import store from '../store'
 // import { getToken } from '@/utils/auth'
 import qs from 'qs'
-
+import {
+  Toast
+} from "vant";
+import router from '../router'
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -12,7 +15,7 @@ const service = axios.create({
 service.interceptors.request.use((config) => {
   config.data = qs.stringify(config.data)
   return config
-}, function(error) {
+}, function (error) {
   return Promise.reject(error)
 })
 // service.interceptors.request.use(config => {
@@ -26,46 +29,34 @@ service.interceptors.request.use((config) => {
 //   Promise.reject(error)
 // })
 
-// respone拦截器
+// 
 service.interceptors.response.use(
   response => {
-  /**
-  * resultresultCode为非20000是抛错 可结合自己业务进行修改
-  */
+    /**
+     * Code为非200是抛错
+     */
     const res = response.data
-   
     // return response
-    // if (res.resultCode !== '0') {
-    //   console.log(res)
-    // }
-    // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-    //   if (res.resultCode === 50008 || res.resultCode === 50012 || res.resultCode === 50014) {
-    //     MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-    //       confirmButtonText: '重新登录',
-    //       cancelButtonText: '取消',
-    //       type: 'warning'
-    //     }).then(() => {
-    //       store.dispatch('FedLogOut').then(() => {
-    //         location.reload()// 为了重新实例化vue-router对象 避免bug
-    //       })
-    //     })
-    //   }
-    //   return Promise.reject('error')
-    // }
-    // else {
-      // console.log(res)
-      return res
-    // }
+    if (res.code !== '200') {
+      Toast(res.msg)
+    }
+    if (res.code === '1008') {
+      Toast(res.msg)
+      router.push({
+        name: 'login'
+      })
+    }
+    if (res.code === '1005') {
+      router.back(-1)
+    } else {
+      return res.data
+    }
   },
-//   error => {
-//     console.log('err' + error)// for debug
-//     Message({
-//       message: error.message,
-//       type: 'error',
-//       duration: 5 * 1000
-//     })
-//     return Promise.reject(error)
-//   }
+  error => {
+    console.log('err' + error) // for debug
+    Toast(error.message)
+    return Promise.reject(error)
+  }
 )
 
 export default service

@@ -104,8 +104,6 @@ export default {
       }
        let me = this;  
       getVerifyCode(para).then(res => {
-      console.log(res.code)
-        if (res.code =='200') {
         me.sendMsgDisabled = true;
         let interval = window.setInterval(function() {
         if (me.time-- <= 0) {
@@ -114,7 +112,6 @@ export default {
           window.clearInterval(interval);
         }
       }, 1000);
-        }
       })
      
     },
@@ -155,12 +152,7 @@ export default {
       }
      
       regist(para).then(res => {
-        if (res.code =='1001') {
-          Toast(res.msg)
-          this.$router.back(-1);
-        }else{
-          Toast(res.msg)
-        }
+         this.onClickLeft()
       })
       }
     },

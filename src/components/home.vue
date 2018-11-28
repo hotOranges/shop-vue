@@ -1,67 +1,58 @@
 <template>
-   <!-- 首页组件 -->
+  <!-- 首页组件 -->
   <div id="app">
-     <!-- 搜索区 -->
-     
-<van-nav-bar
-  class="init-header"
-  title="商城"
-  left-text=""
-  left-arrow
-  @click-left="onClickLeft"
->
-<van-icon name="chat" @click="$toast('chat')" slot="right" info="8"/>
-</van-nav-bar>
+    <!-- 搜索区 -->
+    <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft">
+      <van-icon name="chat" @click="$toast('chat')" slot="right" info="8"/>
+    </van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
       <van-col span="24">
         <van-tabs v-model="active" swipeable v-tab>
-          <van-tab v-for="index in 4" 
-          :title="title[index]" 
-          :key="index.id" 
-          class="tab"
-          >
-          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-
-            <!-- 推荐版块 -->
-            <div v-if="title[index]== '推荐'" class="contain">
-               <!-- 轮播 -->
-                <swiper class="swiper"  />
-              <!-- 活动版块 -->
-              <div class="sort">
-                <span>智能热卖</span>
-                <span class="sort-tab">
-                  <button>价格</button>
-                  <button>销量</button>
-                </span>
+          <van-tab v-for="index in 4" :title="title[index]" :key="index.id" class="tab">
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+              <!-- 推荐版块 -->
+              <div v-if="title[index]== '推荐'" class="contain">
+                <!-- 轮播 -->
+                <swiper class="swiper"/>
+                <!-- 活动版块 -->
+                <div class="sort">
+                  <span>智能热卖</span>
+                  <span class="sort-tab">
+                    <button>价格</button>
+                    <button>销量</button>
+                  </span>
+                </div>
+                <active :tabs="title[index]"/>
               </div>
-                <active :tabs="title[index]" />
-            </div>
 
-            <div v-if="title[index]== '手机'" class="contain">
-                <active :tabs="title[index]" />
-            </div>
+              <div v-if="title[index]== '手机'" class="contain">
+                <active :tabs="title[index]"/>
+              </div>
 
-            <div v-if="title[index]== '穿戴'" class="contain">
-                <active :tabs="title[index]" />
-            </div>
-            <div v-if="title[index]== '健康'" class="contain">
-                <active :tabs="title[index]" />
-            </div>
-             </van-pull-refresh>   
-              </van-tab>
-         </van-tabs>
+              <div v-if="title[index]== '穿戴'" class="contain">
+                <active :tabs="title[index]"/>
+              </div>
+              <div v-if="title[index]== '健康'" class="contain">
+                <active :tabs="title[index]"/>
+              </div>
+            </van-pull-refresh>
+          </van-tab>
+        </van-tabs>
       </van-col>
     </van-row>
 
     <!-- tabBar -->
-      <van-tabbar v-model="tabarActive">
-        <van-tabbar-item  icon="contact" @click="redirects('/Me')"></van-tabbar-item>
-        <van-tabbar-item icon="shopping-cart" info="5" v-infos="shop_info" @click="redirects('/shoppingCart')"></van-tabbar-item>
-        <!-- <van-tabbar-item icon="contact" info="2" v-infos="my_info" @click="redirects('/me')">我的</van-tabbar-item> -->
-      </van-tabbar>
-    </div>
-
+    <van-tabbar v-model="tabarActive">
+      <van-tabbar-item icon="contact" @click="redirects('/Me')"></van-tabbar-item>
+      <van-tabbar-item
+        icon="shopping-cart"
+        :info="info"
+        @click="redirects('/shoppingCart')"
+      ></van-tabbar-item>
+      <!-- <van-tabbar-item icon="contact" info="2" v-infos="my_info" @click="redirects('/me')">我的</van-tabbar-item> -->
+    </van-tabbar>
+  </div>
 </template>
 
 <script>
@@ -71,6 +62,7 @@ import { Waterfall } from "vant";
 import Swiper from "./swiper";
 import Active from "./active";
 import { Toast } from "vant";
+import { getShopCart } from "../../src/api/login";
 
 export default {
   name: "home",
@@ -80,10 +72,12 @@ export default {
   },
   data() {
     return {
+      shop_infos:'',
       tabarActive: 0,
       value: null,
       active: 0,
-      activeTitle:null,
+      info:'0',
+      activeTitle: null,
       path: "../../static/images/",
       imageList: [],
       disabled: false,
@@ -99,9 +93,29 @@ export default {
       src: state => state.home.lunbo.src,
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info
-    })
+    }),
+  },
+  mounted() {
+    if (this.$route.query.opednId !== undefined) {
+      localStorage.setItem(
+        "opednId",
+        JSON.stringify(this.$route.query.opednId)
+      );
+    }
+    this.getShopCart1()
   },
   methods: {
+   ...mapActions(["infoAction"]),
+   getShopCart1(){
+   let para = {
+      token: JSON.parse(localStorage.getItem("token"))
+    };
+    getShopCart(para).then(res => {
+       localStorage.setItem('getShopCarts', JSON.stringify(res.shopCart))
+       this.infoAction()
+       this.info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+    });
+   }, 
     onClickLeft() {
       Toast("返回");
     },
@@ -145,7 +159,7 @@ export default {
     //tabBar 消息通知指令
     infos: {
       inserted(el, obj) {
-        console.log(obj.value);
+        // console.log(obj.value);
         const info = el.childNodes[0].childNodes[1];
         info.innerText = obj.value;
       }

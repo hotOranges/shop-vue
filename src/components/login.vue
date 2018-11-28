@@ -42,19 +42,9 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      src: state => state.home.lunbo.src,
-      activeTitle: state => state.active.home.activeTitle,
-      days: state => state.active.home.days,
-      broadcast: state => state.home.broadcast,
-      shop_info: state => state.home.shop_info,
-      my_info: state => state.home.my_info,
-      show: state => state.home.show
-    }),
-    ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
-    ...mapActions(["searchA", "newtoken"]),
+    ...mapActions(["newtoken"]),
     //用户名和密码验证
     rules(v, choose) {
       if (choose == "user") {
@@ -95,22 +85,13 @@ export default {
       }
      
       login(para).then(res => {
-        console.log(res.code)
-        if (res.code =='200') {
-        localStorage.setItem('token', JSON.stringify(res.data))
+        localStorage.setItem('token', JSON.stringify(res))
         this.newtoken()
         this.redirects("/");
          Toast("登录成功");
-        }else{
-          Toast(res.msg)
-        }
-      })
-        console.log(username,password)
+      }) 
       
-      }
-
-      
-      console.log(username, password);
+    }
     },
     redirects(url) {
       this.$router.push(url);

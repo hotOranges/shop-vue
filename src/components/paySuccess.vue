@@ -1,41 +1,149 @@
 <template>
-   <!--  组件 -->
-  <div id="apps" style="text-align: center;">
-        <van-nav-bar
-  class="init-header"
-  title="支付成功"
-  right-text="完成"
-/>
+  <!--  组件 -->
+  <div id="apps">
+    <van-nav-bar class="init-header" left-arrow title="请选择支付方式" @click-left="onClickLeft"/>
 
-<van-row>
-     <van-col span='24' offset="0" class="payContent">
-  <van-icon name="passed"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>   
- <p>支付方式：微信支付</p>
- <p style="margin-bottom:30px">订单金额：¥499.00</p>
- </van-col>
-  <van-col span='24' offset="0" class="payBack">
-      <van-button type="default">查看订单</van-button>
-      <van-button type="default">返回商城</van-button>
-  </van-col>
+    <van-row>
+      <van-col span="24" offset="0" class="payContent">
+        <van-icon
+          name="passed"
+          size="60px"
+          color="#2BA6B0"
+          style="padding-top:20px;padding-bottom:10px"
+        />
+
+        <!-- <img src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" alt=""> -->
+        <p style="font-size: 22px;">订单提交成功</p>
+        <p style="margin-bottom:30px">超时订单将关闭</p>
+      </van-col>
+
+      <div class="init-10"></div>
+      <van-cell>
+        <template slot="title">
+          <span class="custom-text">订单金额</span>
+          <span class="custom-text">{{placeOrders.orderAmount}}</span>
+        </template>
+      </van-cell>
+      <van-cell>
+        <template slot="title">
+          <span class="custom-text">订单编号</span>
+          <span class="custom-text">{{placeOrders.placeOrder}}</span>
+        </template>
+      </van-cell>
+      <van-cell>
+        <template slot="title">
+          <span class="custom-text">收货地址</span>
+          <span class="custom-text">{{placeOrders.name}}（{{placeOrders.tel}}）</span>
+        </template>
+      </van-cell>
+      <van-cell>
+        <template slot="title">
+          <span class="custom-text">发票类型</span>
+          <span class="custom-text">{{placeOrders.bill}}</span>
+        </template>
+      </van-cell>
+    </van-row>
     <div class="init-10"></div>
-    <van-col span='24' offset="0" class="remark">
-        <p>安全提醒:</p>
-        <p>爱伴随平台及销售商不会以订单异常、系统升级为由要求你点任何 网址链接进行退款操作，或者以各种理由索取你的隐私信息（如 个人身份信息、会员账户信息、银行卡帐号、密码及手机验证码 等）。</p>
-    </van-col>
-</van-row>
+    <van-radio-group v-model="radio3">
+      <van-cell-group>
+        <van-cell title="微信" icon="wechat" clickable @click="radio3 = '1'">
+          <van-radio name="1"/>
+        </van-cell>
+        <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '2'">
+          <van-radio name="2"/>
+        </van-cell>
+      </van-cell-group>
+    </van-radio-group>
+    <van-goods-action>
+      <van-goods-action-mini-btn :text="'合计¥'+placeOrders.orderAmount"/>
+      <!-- <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  /> -->
+      <van-goods-action-big-btn @click="pay" text="去支付" primary/>
+    </van-goods-action>
   </div>
-
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+import { Toast } from "vant";
+import { payMent } from "../../src/api/login";
+
 export default {
   data() {
-    return {};
+    return {
+      radio3: "1",
+      placeOrders: "",
+      opednId: "",
+      datas: ""
+    };
   },
-  methods: {}
+  mounted() {
+    this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
+    console.log(this.placeOrders);
+    console.log(JSON.parse(localStorage.getItem('opednId')))
+    this.opednId = 'onj-X0dKpX7qJMsn3rCXuU9P1o1U'
+  },
+  methods: {
+    pay() {
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        orderNo: this.placeOrders.placeOrder,
+        payMethod: this.radio3,
+        opednId: this.opednId
+      };
+      payMent(para).then(res => {
+        if (res) {
+        this.datas = JSON.stringify(res);
+        var params = this.datas.data;
+        if (typeof WeixinJSBridge == "undefined") {
+          if (document.addEventListener) {
+            document.addEventListener(
+              "WeixinJSBridgeReady",
+              this.onBridgeReady(),
+              false
+            );
+          } else if (document.attachEvent) {
+            document.attachEvent("WeixinJSBridgeReady", this.onBridgeReady());
+            document.attachEvent("onWeixinJSBridgeReady", this.onBridgeReady());
+          }
+        } else {
+          this.onBridgeReady();
+        }
+      }
+      });
+    },
+    onBridgeReady() {
+      var params = this.datas.data;
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: params.appId,
+          timeStamp: params.timeStamp,
+          nonceStr: params.nonceStr,
+          package: params.package,
+          signType: params.signType,
+          paySign: params.paySign
+        },
+        function(res) {
+          if (res.err_msg === "get_brand_wcpay_request:ok") {
+            Toast("微信支付成功");
+            //   this.$router.push('/')
+          } else if (res.err_msg === "get_brand_wcpay_request:cancel") {
+            Toast("用户取消支付"); // window.location.href = 'gift_failview.do?out_trade_no=' + this.orderId
+          } else if (res.err_msg === "get_brand_wcpay_request:fail") {
+            Toast("网络异常，请重试");
+          }
+        }
+      );
+    },
+    redirects(url) {
+      this.$router.push(url);
+    },
+    onClickLeft() {
+      this.$router.back(-1);
+    }
+  }
 };
 </script>
-
 <style lang="less" scoped>
 </style>
 <style scoped>
@@ -48,6 +156,17 @@ export default {
   height: 20px;
   position: relative;
   float: left;
+}
+.van-cell {
+  text-align: left;
+}
+.custom-text {
+  color: rgba(107, 107, 107, 1);
+  font-family: PingFangSC-Medium;
+  padding-right: 10px;
+}
+.payContent {
+  text-align: center;
 }
 .payContent img {
   max-width: 100px;
@@ -81,6 +200,39 @@ p {
   color: rgba(107, 107, 107, 1);
   padding: 0;
   margin: 0;
+}
+#apps >>> .van-button--square {
+  border-radius: 24px 24px 24px 24px;
+}
+#apps >>> .van-button--large {
+  height: 37px;
+  line-height: 37px;
+  margin-top: 15px;
+  margin-left: 65px;
+  margin-right: 5px;
+}
+#apps >>> .van-icon-alipay::before {
+  color: #108ee9;
+}
+#apps >>> .van-icon-wechat::before {
+  color: #00c801;
+}
+#apps .van-button--warning {
+  background-color: #b39061;
+  border: 1px solid #b39061;
+}
+#apps .van-goods-action-mini-btn {
+  width: 38%;
+  color: rgba(207, 57, 57, 1);
+  font-size: 16px;
+  height: 65px;
+}
+
+#apps >>> .van-radio .van-icon-checked {
+  color: #cf3939;
+}
+#apps >>> .van-nav-bar .van-icon {
+  color: #2c3e50;
 }
 </style>
 

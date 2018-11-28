@@ -42,7 +42,7 @@ axios.interceptors.request.use((config) => {
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
     console.log((localStorage.getItem('token')))
-      if ((localStorage.getItem('token')).length!==0) {  // 通过vuex state获取当前的token是否存在 
+      if ((localStorage.getItem('token')).length!==0 && (localStorage.getItem('token'))!=='undefined') {  // 通过vuex state获取当前的token是否存在 
         next();
       }
       else {

@@ -13,7 +13,6 @@
   @click-right="onClickRight"
 />
     </van-row>
-<van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="cartBox">
     <div v-for="(v,index) in shops" :key="index.id" class="shop-cart">
         <!-- 标签区域 -->
         <van-row class="shop-col">
@@ -34,8 +33,7 @@
       <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper v-model="counts[index]"/></span>
     </van-col>
         </div>
-    </div>
- </van-pull-refresh>   
+    </div>  
 <van-submit-bar
   :price="3050"
   button-text="去结算"
@@ -56,6 +54,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
+import { getShopCart } from "../../src/api/login";
 
 const coupon = {
   available: 1,
@@ -111,10 +110,6 @@ export default {
     ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
-    ...mapActions(["searchA", "infoAction"]),
-    search() {
-      this.$router.push("/search");
-    },
     onClickLeft() {
       this.$router.back(-1);
     },
@@ -161,23 +156,7 @@ export default {
         this.cantext = "编辑";
       }
     },
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.isLoading = false;
-        for (let i = 0; i < 3; i++) {
-          this.imageUrl.push(this.imageUrl[i]);
-          this.goodsTitle.push(this.goodsTitle[i]);
-          this.goodsDescription.push(this.goodsDescription[i]);
-          this.shops.push(this.shops[i]);
-          this.prices.push(this.prices[i]);
-        }
-
-        this.infoAction();
-        const infos = document.querySelector(".van-icon__info");
-        // infos.innerText = this.shop_info;
-      }, 500);
-    },
+   
     //优惠券
     onChange(index) {
       this.chosenCoupon = index;
@@ -208,6 +187,13 @@ export default {
     }
   },
   beforeCreate() {
+    let para = {
+      token:JSON.parse(localStorage.getItem('token'))
+    }
+      getShopCart(para).then(res => {
+        console.log(res)  
+          
+      })
     this.axios.get("./static/data.json").then(
       res => {
         if (res.status == 200) {

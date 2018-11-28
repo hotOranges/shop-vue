@@ -2,7 +2,7 @@
   <div id="app">
        <van-row class="col-2">
               <div class="preImg" @click="ImagePreviews()">
-                 <img  v-lazy="form.productImage" name="adapter" @click="ImagePreviews()"/>
+                 <img  v-lazy=" 'http://' + listImages.url +listImages.avatar" name="adapter" @click="ImagePreviews()"/>
               </div>  
                     <!--导航 -->
       <van-col span='24' class="title">
@@ -52,9 +52,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { getProductDetail } from "../../src/api/login";
-
-
+import { getProductDetail,listImage } from "../../src/api/login";
 import Order from "./orderList";
 
 //obj 优惠券
@@ -69,12 +67,12 @@ const coupon = {
   start_at: 1489104000,
   end_at: 1514592000
 };
-
 export default {
   name: "buyInfo",
   data() {
     return {
       preImgs: [],
+      listImages:'',
       chosenCoupon: -1,
       coupons: [coupon],
       disabledCoupons: [coupon],
@@ -104,7 +102,10 @@ export default {
     },
     //商品预览
     ImagePreviews() {
-      ImagePreview(this.preImgs);
+      ImagePreview({
+        images:this.preImgs,
+        startPosition: 0,
+        });
     },
     //优惠券
     onChange(index) {
@@ -115,17 +116,16 @@ export default {
       this.coupons.push(coupon);
     },
     onClickMiniBtn() {
-      Toast("系统繁忙 请稍后再试");
-      console.log(this.orderShows())
+      this.$router.push('/shoppingCart')
     },
     onClickBigBtn() {
       Toast("请选择商品规格");
-    
       this.orderShows();
     },
     onClickBigBtns() {
+      Toast("请选择商品规格");
       this.orderShows();
-      Toast("加入成功");
+      
     }
   },
   watch: {},
@@ -143,31 +143,42 @@ export default {
     //       Toast(res.msg)
     //     }
     //   })
-    this.axios.get("./static/data.json").then(
-      res => {
-        const buy_id = this.$route.params.id;
-        console.log(buy_id);
-        //或许商品信息
-        if (res.status == 200) {
-          const data = res.data.goods;
-          const preImg = data.id_0.moreImg;
-          this.preImgs = preImg;
-        }
-      },
-      err => {
-        this.imageList = this.src;
-        this.broadcast = "暂无消息~~QAQ~";
-      }
-    );
+    // this.axios.get("./static/data.json").then(
+    //   res => {
+    //     const buy_id = this.$route.params.id;
+    //     console.log(buy_id);
+    //     //或许商品信息
+    //     if (res.status == 200) {
+    //       const data = res.data.goods;
+    //       const preImg = data.id_0.moreImg;
+    //       this.preImgs = preImg;
+    //     }
+    //   },
+    //   err => {
+    //     this.imageList = this.src;
+    //     this.broadcast = "暂无消息~~QAQ~";
+    //   }
+    // );
+  },
+  mounted(){
+       this.form = JSON.parse(localStorage.getItem('detial_s'))
+        let para ={
+         productId:this.form.id
+       }
+      listImage(para).then(res => {
+      
+          this.listImages = res[0];
+          for (var i in res) {
+             var imgs= 'http://'+res[i].url + res[i].avatar;
+          this.preImgs.push(imgs)
+          }
+        
+      })
+       
   },
   created() {
-    console.log(this.buyImg);
+    // console.log(this.buyImg);
     this.form = this.buyImg
-    if (this.buyImg == "undefined") {
-      this.buyImg =
-        "https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg";
-    }
-
   }
 };
 </script>

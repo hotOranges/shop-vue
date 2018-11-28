@@ -24,6 +24,8 @@
 <script>
 import { Area } from 'vant';
 import AreaList  from '../assets/area';
+import { addShipping } from '../../src/api/login'
+import { Toast } from "vant";
 
 export default {
   name: 'addressEdit',
@@ -35,14 +37,27 @@ export default {
     };
   },
   methods: {
-    onSave() {
-    
+    onSave(content) {
+      console.log(content)
+      var isDefault = content.isDefault == true ? 1 : 0 ;
+     let para = {
+       token:JSON.parse(localStorage.getItem('token')),
+       consigneeName:content.name,
+       consigneePhone:content.tel,
+       region:content.province+'/'+content.city+'/'+content.county,
+       address:content.addressDetail,
+       isDefault:isDefault,
+       areaCode:content.areaCode
+     }
+     addShipping(para).then(res => {
+        this.$router.back(-1);
+      })
     },
     onClickLeft(){
       this.$router.back(-1);
     },
     onChangeDetail(val) {
-     
+     console.log(val)
     }
   }
 };

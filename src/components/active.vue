@@ -10,7 +10,7 @@
                     <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
                         <van-col span='8' offset="1" class="goods_list">
                             <div class="imgList" @click.stop="buy(img)">
-                               <img  v-lazy="img.productImage" name="adapter" />
+                               <img  v-lazy="'http://'+img.productUrl+img.productImage" name="adapter" />
                             </div>
                             <van-col span="24" class="lazy-left">
                               <span>{{img.productName}}</span>
@@ -112,15 +112,14 @@ export default {
   },
   beforeCreate() {
     getProduct().then(res => {
-      if (res.code == "200") {
         // console.log(res.data);
         switch (this.tabs) {
           case "推荐":
-            this.imageList = res.data;
+            this.imageList = res;
             break;
           case "手机":
             var productType =  '1';
-             var mockUsers = res.data.filter(user => {
+             var mockUsers = res.filter(user => {
             if (productType && user.productType.indexOf(productType) == -1) return false;
             return true;
              });
@@ -128,7 +127,7 @@ export default {
             break;
           case "穿戴":
             var productType =  '2';
-             var mockUsers = res.data.filter(user => {
+             var mockUsers = res.filter(user => {
             if (productType && user.productType.indexOf(productType) == -1) return false;
             return true;
              });
@@ -136,7 +135,7 @@ export default {
             break;
           case "健康":
             var productType =  '3';
-             var mockUsers = res.data.filter(user => {
+             var mockUsers = res.filter(user => {
             if (productType && user.productType.indexOf(productType) == -1) return false;
             return true;
              });
@@ -145,9 +144,7 @@ export default {
           default:
             break;
         }
-      } else {
-        Toast(res.msg);
-      }
+     
     });
   },
   created() {
@@ -161,8 +158,9 @@ export default {
 </style>
 <style scoped>
 #app >>> .van-row {
-  width: 33.33333333%;
-  float: left;
+    width: 30.333333%;
+    float: left;
+    margin-left: 2%;
 }
 #app >>> .van-col--8 {
   width: 100%;
