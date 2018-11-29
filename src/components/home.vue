@@ -130,6 +130,7 @@ export default {
         this.count++;
       }, 500);
     },
+    
     // 瀑布流方法
     loadMore() {
       this.disabled = true;

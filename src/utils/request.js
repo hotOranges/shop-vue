@@ -1,7 +1,8 @@
 import axios from 'axios'
-// import store from '../store'
+import store from '../store'
 // import { getToken } from '@/utils/auth'
 import qs from 'qs'
+// console.log(getToken())
 import {
   Toast
 } from "vant";
@@ -19,8 +20,8 @@ service.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 service.interceptors.request.use(config => {
-  if (store.getters.token) {
-    config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  if (localStorage.getItem('token')) {
+    config.headers['X-Token'] = JSON.parse(localStorage.getItem('token'))  // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   return config
 }, error => {

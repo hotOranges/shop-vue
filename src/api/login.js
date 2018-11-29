@@ -127,5 +127,12 @@ export function getBanner(params) {
       data: params
     })
   }
+  export function listOrder(params) {
+    return request({
+      url: `${base}/customer/listOrder`,
+      method: 'post',
+      data: params
+    })
+  }
 
   

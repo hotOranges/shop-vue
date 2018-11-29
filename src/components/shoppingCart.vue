@@ -54,7 +54,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
-import { getShopCart } from "../../src/api/login";
+import { getShopCart,addShopCart } from "../../src/api/login";
 
 const coupon = {
   available: 1,
@@ -113,7 +113,14 @@ export default {
     onClickLeft() {
       this.$router.back(-1);
     },
-    onSubmit2() {},
+    onSubmit2() {
+      // let para= {
+      //   token:JSON.parse(localStorage.getItem('token'))
+      // }
+      // addShopCart(para).then(res => {
+      //   console.log(res)      
+      //  })
+    },
     allCheck(val) {
       console.log(this.shops.danxuan);
       for (var i = 0; i < this.checked.length; i++) {
@@ -191,8 +198,10 @@ export default {
       token:JSON.parse(localStorage.getItem('token'))
     }
       getShopCart(para).then(res => {
-        console.log(res)  
-          
+        var data  = res.data;
+         return this.list.filter(function (number) { 
+           return number.id < num
+          }) 
       })
     this.axios.get("./static/data.json").then(
       res => {
@@ -226,7 +235,7 @@ export default {
         }
       },
       err => {
-        this.imageList = this.src;
+          this.imageList = this.src;
       }
     );
   },

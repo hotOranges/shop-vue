@@ -13,19 +13,19 @@
   </van-cell-group>
   <div class="init-soller-list">
   <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>
   <van-col span='5' offset="1" class="imgList">
       <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>  
   <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>
   <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>
    <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>
   </div>
 <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
@@ -187,7 +187,7 @@
   </van-cell-group>
   <div class="init-soller-list2">
   <van-col span='5' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
       <span>翼贝贝儿童手表T8S</span>
@@ -283,6 +283,7 @@
   </div>
 <!--已取消完成-->
 
+  <h5 @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
 
 <!--查看物流-->
 <van-actionsheet
@@ -311,22 +312,39 @@
 </template>
 
 <script>
+import {listOrder} from '../api/login'
+import { Toast } from "vant";
 export default {
   data() {
     return {
       show: false,
       active: 0,
+      page:0,
       Tabtext: ["全部订单", "待付款", "待收货", "已收货", "已取消"]
     };
   },
   created() {
     this.active = this.$route.query.activeId;
   },
-  //   mounted: {
-
-  //   },
-
+  mounted(){
+     this.initData()
+  },
   methods: {
+    initData(){
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        currentPage:this.page,
+        pageSize:10,
+        orderStatus:this.active == 0 ? '':this.active
+      }
+      console.log(para)
+      // listOrder(para).then(res=>{
+      //   console.log(res)
+      // })
+    },
+    more(){
+      alert(this.active)
+    },
     onClickLeft() {
       this.$router.back(-1);
     },
@@ -369,6 +387,25 @@ export default {
 }
 #app >>> .imgList img {
   width: 100%;
+}
+#app >>> .more{
+  text-align: center;
+  line-height: 30px;
+  position: relative;
+}
+
+#app >>> .more .van-icon.van-icon-add-o{
+  font-size: 15px;
+  margin-right: 2px;
+  /* margin-top: 0px; */
+  /* line-height: 28px; */
+  position: absolute;
+  top: 6px;
+  padding-right: 24px;
+}
+#app >>> .more .text{
+  font-style: unset;
+  padding-left: 21px;
 }
 #app >>> .init-soller-list {
   /*display: flex;*/
