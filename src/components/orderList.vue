@@ -85,14 +85,6 @@ export default {
         collection_id: 1215, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
         none_sku: false, // 是否无规格商品
         messages: [
-          // {
-          //   // 商品留言
-          //   datetime: '0', // 留言类型为 time 时，是否含日期。'1' 表示包含
-          //   multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
-          //   name: '留言', // 留言名称
-          //   type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-          //   required: '1' // 是否必填 '1' 表示必填
-          // }
         ],
         hide_stock: true // 是否隐藏剩余库存
       },
@@ -107,30 +99,8 @@ export default {
       skuData: {
         // 商品 id
         goodsId: "946755",
-        // 留言信息
-        // messages: {
-        //   message_0: "12",
-        //   message_1: ""
-        // },
-        // 另一种格式的留言，key 不同
-        // cartMessages: {
-        //   '留言1': 'xxxx',
-        //   '留言1': 'xxxx',
-        //   '留言1': 'xxxx',
-        //   '留言1': 'xxxx',
-        //   '留言1': 'xxxx'
-        // },
-        // 选择的商品数量
         selectedNum: 1,
-        // 选择的 sku 组合
-        // selectedSkuComb: {
-        //   id: 2257,
-        //   price: 100,
-        //   s1: "30349",
-        //   s2: "1193",
-        //   s3: "0",
-        //   stock_num: 111
-        // }
+      
       },
 
       customStepperConfig: {
@@ -155,19 +125,6 @@ export default {
       },
 
       messageConfig: {
-        // 图片上传回调，需要返回一个promise，promise正确执行的结果需要是一个图片url
-        // uploadImg: () => {
-        //   return new Promise((resolve) => {
-        //     setTimeout(() => resolve('https://img.yzcdn.cn/upload_files/2017/02/21/FjKTOxjVgnUuPmHJRdunvYky9OHP.jpg!100x100.jpg'), 1000);
-        //   });
-        // },
-        // // 最大上传体积 (MB)
-        // uploadMaxSize: 3,
-        // // placehold配置
-        // placeholderMap: {
-        //   text: '买家请留言 ',
-        //   tel: 'xxx',
-        // }
       },
       goodsId: "946755",
       quota: 0,

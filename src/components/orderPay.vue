@@ -168,7 +168,6 @@ export default {
             }
           }
           if (datas.length<=0 && this.listShippings.length>0) {
-          
             var arrs = res[0]
              datas.push({
              id:arrs.id,
