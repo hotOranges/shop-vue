@@ -1,33 +1,30 @@
 <template>
- <!-- 购买信息组件  大部分都是一样的 所以数据方面 我就用同一个 作为展示作用-->
+  <!-- 购买信息组件  大部分都是一样的 所以数据方面 我就用同一个 作为展示作用-->
   <div id="app">
-     
     <van-sku
-  v-model="orderShow"
-  :sku="sku"
-  :goods="goods"
-  :goods-id="goodsId"
-  :hide-stock="sku.hide_stock"
-  :quota="quota"
-  :quota-used="quotaUsed"
-  :reset-stepper-on-hide="resetStepperOnHide"
-  :reset-selected-sku-on-hide="resetSelectedSkuOnHide"
-  :close-on-click-overlay="closeOnClickOverlay"
-  :disable-stepper-input="disableStepperInput"
-  :message-config="messageConfig"
-  @buy-clicked="onBuyClicked"
-  @add-cart="onAddCartClicked"
-  v-order = 'this'
-/>
-
+      v-model="orderShow"
+      :sku="sku"
+      :goods="goods"
+      :goods-id="goodsId"
+      :hide-stock="sku.hide_stock"
+      :quota="quota"
+      :quota-used="quotaUsed"
+      :reset-stepper-on-hide="resetStepperOnHide"
+      :reset-selected-sku-on-hide="resetSelectedSkuOnHide"
+      :close-on-click-overlay="closeOnClickOverlay"
+      :disable-stepper-input="disableStepperInput"
+      :message-config="messageConfig"
+      @buy-clicked="onBuyClicked"
+      @add-cart="onAddCartClicked"
+      v-order="this"
+    />
   </div>
 </template>
-
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { addShopCart } from "../../src/api/login";
+import { addShopCart,getShopCart } from "../../src/api/login";
 
 export default {
   name: "buyInfo",
@@ -50,7 +47,7 @@ export default {
                 name: "黑色",
                 imgUrl: "https://img.yzcdn.cn/2.jpg"
               },
-               {
+              {
                 id: "1315",
                 name: "蓝色",
                 imgUrl: "https://img.yzcdn.cn/2.jpg"
@@ -67,13 +64,13 @@ export default {
             s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
             stock_num: 110 // 当前 sku 组合对应的库存
           },
-           {
+          {
             id: 30349, // skuId，下单时后端需要
             price: 50000, // 价格（单位分）
             s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
             stock_num: 10 // 当前 sku 组合对应的库存
           },
-           {
+          {
             id: 1315, // skuId，下单时后端需要
             price: 40900, // 价格（单位分）
             s1: "1315", // 规格类目 k_s 为 s1 的对应规格值 id
@@ -84,8 +81,7 @@ export default {
         stock_num: 227, // 商品总库存
         collection_id: 1215, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
         none_sku: false, // 是否无规格商品
-        messages: [
-        ],
+        messages: [],
         hide_stock: true // 是否隐藏剩余库存
       },
 
@@ -99,8 +95,7 @@ export default {
       skuData: {
         // 商品 id
         goodsId: "946755",
-        selectedNum: 1,
-      
+        selectedNum: 1
       },
 
       customStepperConfig: {
@@ -124,8 +119,7 @@ export default {
         // }
       },
 
-      messageConfig: {
-      },
+      messageConfig: {},
       goodsId: "946755",
       quota: 0,
       quotaUsed: 0,
@@ -142,45 +136,46 @@ export default {
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
       orderShow: state => state.home.orderShow
-    }),
-    ...mapGetters(["bc_notshow"])
+    })
   },
-  mounted(){
-    this.detial = JSON.parse(localStorage.getItem('detial_s'))
-    this.setdata()
+  mounted() {
+    this.detial = JSON.parse(localStorage.getItem("detial_s"));
+    this.setdata();
   },
   methods: {
     ...mapActions(["orderNum"]),
     ...mapActions(["orderShows"]),
+    ...mapActions(["infoAction"]),
     search_shows() {
       this.$router.back(-1);
     },
-    setdata(){
-      this.sku.stock_num = this.detial.saleNum
-      this.sku.price = this.detial.specialPrice
-      this.goods.title = this.detial.productName
-      this.goods.picture = 'http://' + this.detial.productUrl + this.detial.productImage
+    setdata() {
+      this.sku.stock_num = this.detial.saleNum;
+      this.sku.price = this.detial.specialPrice;
+      this.goods.title = this.detial.productName;
+      this.goods.picture =
+        "http://" + this.detial.productUrl + this.detial.productImage;
       let newv = [];
       let newlist = [];
-      var str= this.detial.saleColor;
-      var datas= new Array();
-      datas=str.split("，"); 
+      var str = this.detial.saleColor;
+      var datas = new Array();
+      datas = str.split("，");
       for (var i in datas) {
         const element = datas[i];
         newv.push({
-          id:i,
+          id: i,
           imgUrl: this.goods.picture,
-          name:element
-        })
+          name: element
+        });
         newlist.push({
-          id:i,
-          s1:i,
-          price:this.detial.specialPrice*100,
-          stock_num:100
-        })
+          id: i,
+          s1: i,
+          price: this.detial.specialPrice * 100,
+          stock_num: 100
+        });
       }
-      this.sku.tree[0].v = newv
-      this.sku.list = newlist
+      this.sku.tree[0].v = newv;
+      this.sku.list = newlist;
     },
     //商品预览
     ImagePreviews() {
@@ -188,59 +183,74 @@ export default {
     },
     onBuyClicked(data) {
       const sel = document.querySelector(".van-stepper__input");
-      const color = document.querySelector(".van-sku-row__item.van-sku-row__item--active")
+      const color = document.querySelector(
+        ".van-sku-row__item.van-sku-row__item--active"
+      );
       this.orderNum(sel.value);
       var selIn = [];
       selIn.push({
-        orderNum:sel.value,
-        color:color.innerHTML
-      })
-      localStorage.setItem('selIn', JSON.stringify(selIn))
+        orderNum: sel.value,
+        color: color.innerHTML
+      });
+      localStorage.setItem("selIn", JSON.stringify(selIn));
       this.$router.push("/goods/id_2/buy/pay");
     },
     onAddCartClicked(data) {
       const sel = document.querySelector(".van-stepper__input");
-      const color = document.querySelector(".van-sku-row__item.van-sku-row__item--active")
+      const color = document.querySelector(
+        ".van-sku-row__item.van-sku-row__item--active"
+      );
       var selIn = [];
       selIn.push({
-        orderNum:sel.value,
-        color:color.innerHTML
-      })
-      var shopCart = [];
-       shopCart.push({
-          productId:this.detial.id,
-          productNum:selIn[0].orderNum,
-          price:this.detial.specialPrice,
-          productName:this.detial.productName,
-          productColor:selIn[0].color,
-        })
-        let para = {
-           token:JSON.parse(localStorage.getItem('token')),
-           shopCart:JSON.stringify(shopCart)
-        }
-        addShopCart(para).then(res => {
-          if (res) {
-          Toast('加入成功')
-           this.orderShows()
-          }
-        })
-    }
+        orderNum: sel.value,
+        color: color.innerHTML
+      });
+      var str = selIn[0].color.replace(/\s+/g,"");
+      var addShopData = {
+        productId: this.detial.id,
+        productNum: selIn[0].orderNum,
+        price: this.detial.specialPrice,
+        productName: this.detial.productName,
+        productColor: str,
+        productImage:this.goods.picture
+      } 
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        shopCart: JSON.stringify(addShopData)
+      };
+      addShopCart(para).then(res => {
+         this.getShopCart1()
+          Toast("加入成功");
+          this.orderShows();
+      });
+    },
+    getShopCart1(){
+   let para = {
+      token: JSON.parse(localStorage.getItem("token"))
+    };
+    getShopCart(para).then(res => {
+       localStorage.setItem('getShopCarts', JSON.stringify(res.shopCart))
+       this.infoAction()
+       this.info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+    });
+   }
+    
   },
+     
   watch: {},
   directives: {
     order: {
       inserted(el, e) {
-        let data =  JSON.parse(localStorage.getItem('detial_s'))
+        let data = JSON.parse(localStorage.getItem("detial_s"));
         const orderImg = el.childNodes[0];
-        const urlImg = 'http://' + data.productUrl + data.productImage;
+        const urlImg = "http://" + data.productUrl + data.productImage;
         const orderChoose = el.childNodes[1];
         orderImg.childNodes[0].innerHTML = `<img src=${urlImg}> `;
         orderImg.childNodes[0].childNodes[0].style.width = "100%";
       }
     }
   },
-  beforeCreate() {
-  }
+  beforeCreate() {}
 };
 </script>
 <style scoped>

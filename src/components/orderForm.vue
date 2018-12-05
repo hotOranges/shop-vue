@@ -3,288 +3,102 @@
   <div id="app">
       <van-nav-bar title="我的订单" @click-left="onClickLeft" left-arrow>
 </van-nav-bar>
-<van-tabs v-model="active">
+<van-tabs v-model="active" @change="changeTab">
   <van-tab v-for="index in Tabtext" :key="index+1" :title="' ' + index" >
-    <!--全部订单-->
-  <div v-if="index=='全部订单'">
-  <div class="init-list">
-  <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="已完成" />
-  </van-cell-group>
-  <div class="init-soller-list">
-  <van-col span='5' offset="1" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>  
-  <van-col span='5' offset="1" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  <van-col span='5' offset="1" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='5' offset="1" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  </div>
-<h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
-  <van-cell-group id="init-border">
-  <div span='4' offset="1" class="btn">
-      <button @click="redirects('EvaluationList')">评价晒单</button>
-  </div>
-  <div span='4' offset="1" class="btn">
-      <button @click="redirects('aftersalesServer')">申请售后</button>
-  </div>
-  <div span='4' offset="1" class="btn">
-      <button  @click="delOrder()">删除订单</button>
-  </div>
-  </van-cell-group>
-  <div class="init-clear"></div>
-  </div>
-  <div class="init-border-20"></div>
+  <div  v-for="i in fromData"> 
+  <div v-if="i.displayType=='0'">
    <div class="init-list">
   <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="已完成" />
+  <van-cell :title="i.time" :value="typeText(i.status)"/>
   </van-cell-group>
-  <div class="init-soller-list2">
+  <div class="init-soller-list2" @click="orderDeil(i)">
   <van-col span='5' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  :src="'http://'+'106.15.44.76/image/'+i.avatar[0]" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
-      <span>翼贝贝儿童手表T8S</span>
+      <span>{{i.productName}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥499</span>
-      <span style="font-size: 11px;">X1</span>
+      <span>¥{{i.productPrice}}</span>
+      <span style="font-size: 11px;">X{{i.num}}</span>
   </van-col>
   </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
-  <van-cell-group id="init-border">
-  <div span='4' offset="1" class="btn">
-      <button>评价晒单</button>
+   </div>
   </div>
-  <div span='4' offset="1" class="btn">
-     <button @click="redirects('aftersales')">申请售后</button>
-  </div>
-  <div span='4' offset="1" class="btn">
-      <button>删除订单</button>
-  </div>
-  </van-cell-group>
-  
-  <div class="init-clear"></div>
-  
-  </div>
-  <div class="init-border-20"></div>
-  </div>
-  <!--全部订单结束-->
-  <!--待付款-->
-  <div v-if="index=='待付款'">
-        <div class="init-list">
-            <van-cell-group>
-            <van-cell title="2018-11-03 12:56" value="待付款" />
-            </van-cell-group>
-            <div class="init-soller-list">
-            <van-col span='5' offset="1" class="imgList">
-                <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-            </van-col>
-            <van-col span='5' offset="1" class="imgList">
-                <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-            </van-col>  
-            <van-col span='5' offset="1" class="imgList">
-                <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-            </van-col>
-            <van-col span='5' offset="1" class="imgList">
-                <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-            </van-col>
-            <van-col span='5' offset="1" class="imgList">
-                <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-            </van-col>
-            </div>
-            <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
-            <van-cell-group id="init-border">
-             <div span='4' offset="1" class="btn">
-                <button @click="pay()">去支付</button>
-            </div>
-            <div span='4' offset="1" class="btn">
-                <button @click="canel()">取消订单</button>
-            </div>
-            </van-cell-group>
-            
-            <div class="init-clear"></div>
-        </div>
-         <div class="init-border-20"></div>
-         <div class="init-list">
+  <div v-else>
+   <div class="init-list">
   <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="待付款" />
+  <van-cell :title="i.time" :value="typeText(i.status)" />
   </van-cell-group>
-  <div class="init-soller-list2">
-  <van-col span='5' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
-      <span>翼贝贝儿童手表T8S</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥499</span>
-      <span style="font-size: 11px;">X1</span>
+  <div class="init-soller-list"   @click="orderDeil(i)">
+  <van-col span='5' offset="1" class="imgList" v-for="adx in i.avatar">
+    <img  :src="'http://'+'106.15.44.76/image/'+i.avatar[0]" name="adapter" />
   </van-col>
   </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
-  <van-cell-group id="init-border">
- 
-  <div span='4' offset="1" class="btn">
-      <button @click="pay()">去支付</button>
+   </div>
+     </div>
+    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共 {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)">¥{{i.num*i.productPrice}}</span></h5>
+   <!--全部订单-->
+  <van-cell-group id="init-border" v-if="active==0">
+  <!-- <div span='4' offset="1" class="btn">
+      <button @click="Evaluation()">评价晒单</button>
+  </div> -->
+  <div span='4' offset="1" class="btn" v-if="i.afterSale">
+     <button @click="orderDeil(i)">申请售后</button>
   </div>
   <div span='4' offset="1" class="btn">
-      <button @click="canel()">取消订单</button>
+      <button @click="del(i)">删除订单</button>
   </div>
   </van-cell-group>
-  
-  <div class="init-clear"></div>
-  
-  </div>
-  </div>
-  <!--待付款完成-->
-  <!--待收货-->
-   <div v-if="index=='待收货'">
-    <div class="init-list">
-        <van-cell-group>
-        <van-cell title="2018-11-03 12:56" value="待收货" />
-        </van-cell-group>
-        <div class="init-soller-list">
-  <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>  
-  <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='5' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-  </div>
-  <h5 style="text-align: right;color:rgba(153,153,153,1);padding-right: 25px;font-size: 12px;margin-top: 0;">共五件商品<span style="color:rgba(50,50,50,1);padding-left: 15px;font-size: 13px">¥1999</span></h5>
-<van-cell-group id="init-border">
- 
-  <div span='4' offset="1" class="btn">
-      <button @click="confirm()">确认收货</button>
+<!--待付款--> 
+   <van-cell-group id="init-border" v-if="active==1">
+ <div span='4' offset="1" class="btn">
+  <button @click="pay(i)">去支付</button>
   </div>
   <div span='4' offset="1" class="btn">
+  <button @click="canel(i)">取消订单</button>
+</div>
+  </van-cell-group>
+
+ <!--待收货-->
+ <van-cell-group id="init-border" v-if="active==2">
+  <div span='4' offset="1" class="btn">
+      <button @click="confirm(i)">确认收货</button>
+  </div>
+  <!-- <div span='4' offset="1" class="btn">
       <button @click="logistics()">查看物流</button>
-  </div>
+  </div> -->
   </van-cell-group>
-   <div class="init-clear"></div>
-   <div class="init-border-20"></div>
-   <div class="init-list">
-  <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="待付款" />
-  </van-cell-group>
-  <div class="init-soller-list2">
-  <van-col span='5' offset="2" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
-      <span>翼贝贝儿童手表T8S</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥499</span>
-      <span style="font-size: 11px;">X1</span>
-  </van-col>
-  </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
-  <van-cell-group id="init-border">
- 
+
+   <!--已收货-->
+ <van-cell-group id="init-border" v-if="active==3">
   <div span='4' offset="1" class="btn">
-      <button>确认收货</button>
+      <button @click="del(i)">删除订单</button>
   </div>
-  <div span='4' offset="1" class="btn">
-      <button>查看物流</button>
+  <div span='4' offset="1" class="btn" v-if="i.afterSale">
+      <button @click="orderDeil(i)">申请售后</button>
   </div>
-  </van-cell-group>
-  
-  <div class="init-clear"></div>
-   </div>
-    </div>
-   </div>
-  <!--待收货完成-->
-<!--已收货-->
-  <div v-if="index=='已收货'">
-       <div class="init-list">
-  <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="已收货" />
-  </van-cell-group>
-  <div class="init-soller-list2">
-  <van-col span='5' offset="2" class="imgList">
-      <img  src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
-      <span>翼贝贝儿童手表T8S</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥499</span>
-      <span style="font-size: 11px;">X1</span>
-  </van-col>
-  </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
-  <van-cell-group id="init-border">
- 
-  <div span='4' offset="1" class="btn">
-      <button>删除订单</button>
-  </div>
-  <div span='4' offset="1" class="btn">
-      <button @click="redirects('aftersalesServer')">申请售后</button>
-  </div>
-  <div span='4' offset="1" class="btn">
+  <!-- <div span='4' offset="1" class="btn">
       <button @click="redirects('/evaluation')">评价晒单</button>
-  </div>
+  </div> -->
   </van-cell-group>
-  
-  <div class="init-clear"></div>
-   </div>
-  </div>   
-<!--已收货完成-->
+
 <!--已取消-->
-<div v-if="index=='已取消'">
-     <div class="init-list">
-  <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="已取消" />
-  </van-cell-group>
-  <div class="init-soller-list2">
-  <van-col span='5' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
-      <span>翼贝贝儿童手表T8S</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥499</span>
-      <span style="font-size: 11px;">X1</span>
-  </van-col>
-  </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共1件商品,总金额<span style="color:rgba(50,50,50,1)">¥1999</span></h5>
-  <van-cell-group id="init-border">
- 
+ <van-cell-group id="init-border" v-if="active==4">
   <div span='4' offset="1" class="btn">
-      <button>删除订单</button>
+      <button @click="del(i)">删除订单</button>
   </div>
-  <div span='4' offset="1" class="btn">
-      <button>再次购买</button>
-  </div>
+  <!-- <div span='4' offset="1" class="btn">
+      <button @click="buy(i)">再次购买</button>
+  </div> -->
   </van-cell-group>
-  
   <div class="init-clear"></div>
-   </div>
+  <div class="init-border-20"></div>
   </div>
-<!--已取消完成-->
-
-  <h5 @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
-
+  <div>
+  <h5 v-if="fromData.length<=0" style="color:#8C8C8C;text-align: center;padding-top: 200px;">目前还没有订单哦～</h5>
+</div>
+  <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
 <!--查看物流-->
 <van-actionsheet
   v-model="show"
@@ -312,7 +126,7 @@
 </template>
 
 <script>
-import {listOrder} from '../api/login'
+import {listOrder,delOrder,updateOrderStatus} from '../api/login'
 import { Toast } from "vant";
 export default {
   data() {
@@ -320,6 +134,8 @@ export default {
       show: false,
       active: 0,
       page:0,
+      shows:true,
+      fromData:[],
       Tabtext: ["全部订单", "待付款", "待收货", "已收货", "已取消"]
     };
   },
@@ -334,34 +150,112 @@ export default {
       let para = {
         token:JSON.parse(localStorage.getItem('token')),
         currentPage:this.page,
-        pageSize:10,
+        pageSize:5,
         orderStatus:this.active == 0 ? '':this.active
       }
-      console.log(para)
-      // listOrder(para).then(res=>{
-      //   console.log(res)
-      // })
+      listOrder(para).then(res=>{
+        this.fromData = res ? res:'';
+      })
+    },
+    changeTab(e){
+       this.page = 0
+       this.shows =true
+       this.initData()
+    },
+    Evaluation(){
+      Toast('暂无')
     },
     more(){
-      alert(this.active)
+      ++this.page
+     let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        currentPage:this.page,
+        pageSize:5,
+        orderStatus:this.active == 0 ? '':this.active
+      }
+      listOrder(para).then(res=>{
+        if (res.length>0) {
+          for (var i in res) {
+          this.fromData.push(res[i])
+          }
+        }else{
+          this.shows =false
+        }
+
+      })
     },
     onClickLeft() {
       this.$router.back(-1);
     },
+    typeText(e){
+      var text;
+       switch(e){
+            case '1' :
+              text = "未支付"      
+            break;
+            case '2' :
+              text = "待收货"      
+             break;
+            case '3' :
+              text = "已收货"      
+            break;
+            case '4' :
+              text = "已取消"      
+            break;
+            default:
+            break; 
+       }
+       return text
+    },
     redirects(url) {
       this.$router.push(url);
     },
-    delOrder() {
-      alert("删除订单");
+    buy(i){
+      // console.log(i)
+      // localStorage.setItem('detial_s', JSON.stringify(i.avatar[0]))
+      // this.$router.push('/goods/'+img.id +'/buy');
     },
-    pay() {
-      alert("去支付");
+    del(i){
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        orderNo:i.orderNo
+      }
+      delOrder(para).then(res=>{
+           Toast('删除成功')
+           this.initData()
+      })
     },
-    canel() {
-      alert("取消订单");
+    orderDeil(i){
+      if (this.active!==1) {
+        this.$router.push({ path: '/aftersalesServer', query: { orderNo: i.orderNo }});
+      }
     },
-    confirm() {
-      alert("确认收货");
+    pay(i) {
+      this.$router.push({ path: '/orderpaySuccess', query: { orderNo: i.orderNo }});
+    },
+    canel(i) {
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        orderNo:i.orderNo,
+        orderStatus:4
+      }
+      updateOrderStatus(para).then(res=>{
+           Toast('取消订单')
+           this.initData()
+      })
+    },
+    confirm(i) {
+       let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        orderNo:i.orderNo,
+        orderStatus:3
+      }
+   
+      updateOrderStatus(para).then(res=>{
+           Toast('订单已完成')
+           this.initData()
+      })
+     
     },
     onSelect(item) {
       // 点击选项时默认不会关闭菜单，可以手动关闭

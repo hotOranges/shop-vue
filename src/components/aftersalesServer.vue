@@ -16,64 +16,64 @@
     <p style="font-size: 22px;margin-bottom:30px">订单已完成</p>
     </van-col>
     <div class="init-10"></div>
-<van-cell title="喵酱" value="188****8888" />
-<van-cell title="上海市闵行区梅陇镇莲花国际广场1号楼1201室" />
+<van-cell :title="formdata.consigneeName" :value="formdata.consigneePhone" />
+<van-cell :title="formdata.consigneeAddress" />
  <div class="init-10"></div>
- <van-cell>
+ <van-cell v-for="(item, index) in formdata.detailList" :key="index">
  <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+     <img  :src="'http://'+'106.15.44.76/image/'+item.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
+        <span>{{item.productName}}</span>
+        <span>数量：{{item.productNum}} 规格：{{item.productColor}}</span>
+        <span>￥{{item.paymentAmount}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>
   </van-col>
   </div>
-    <van-cell-group id="init-border">
+    <van-cell-group id="init-border" v-if="item.afterSale">
       <div span='4' offset="1" class="btn">
-      <button @click="redirects('/AFAS')">申请售后</button>
+      <button @click="continueApply(item)">申请售后</button>
   </div>
   </van-cell-group>
  </van-cell>  
 <van-cell>
   <template slot="title">
    <span class="custom-text">订单编号</span>
-   <span class="custom-text">2132184732</span>
+   <span class="custom-text">{{formdata.orderNo}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">下单日期</span>
-   <span class="custom-text">2018-11-11 11：11</span>
+   <span class="custom-text">{{formdata.orderTime}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">支付方式</span>
-   <span class="custom-text">在线支付</span>
+   <span class="custom-text">{{formdata.payMethod |filterwhet}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">支付时间</span>
-   <span class="custom-text">2018-11-11 12:54</span>
+   <span class="custom-text">{{formdata.payMentTime}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">发票类型</span>
-   <span class="custom-text">个人电子发票</span>
+   <span class="custom-text">{{formdata.invoiceType | filterwhet2}}</span>
    <van-button round  size="small">查看发票</van-button>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">买家留言</span>
-   <span class="custom-text">请注意包装</span>
+   <span class="custom-text">{{formdata.buyerMessage}}</span>
   </template>
 </van-cell>
 <van-cell>
@@ -82,37 +82,17 @@
    <span class="custom-text">中通快递</span>
   </template>
 </van-cell>
-<van-cell>
-  <template slot="title">
-   <span class="custom-text">买家留言</span>
-   <span class="custom-text">请注意包装</span>
-  </template>
-</van-cell>
-
-<van-cell>
-  <template slot="title">
-   <span class="custom-text">收货地址</span>
-   <span class="custom-text">喵酱家（188****8888）</span>
-  </template>
-</van-cell>
-<van-cell>
-  <template slot="title">
-   <span class="custom-text">发票类型</span>
-   <span class="custom-text">个人电子发票</span>
-  </template>
-</van-cell>
 </van-row>
   <div class="init-10"></div>
-    <van-cell title="商品总价" value="￥499.00"  />
+    <van-cell title="商品总价" :value="'￥'+formdata.orderAmount"  />
     <van-cell title="运费" value="￥0.00"  />
-     <van-cell class="init-table" title="" value="实付款：¥499"  />  
+     <van-cell class="init-table" title="" :value="'实付款：¥'+formdata.orderAmount"  />  
       <van-cell-group id="init-border" style="">
- 
-  <div span='4' offset="1" class="btn">
+  <!-- <div span='4' offset="1" class="btn">
       <button @click="redirects('EvaluationList')">评价晒单</button>
-  </div>
+  </div> -->
   <div span='4' offset="1" class="btn">
-      <button @click="canel()">删除订单</button>
+      <button @click="canel">删除订单</button>
   </div>
   </van-cell-group>
   <div style="clear: both;"></div>
@@ -126,21 +106,72 @@
 </template>
 
 <script>
+import {delOrder,getOrderDetail} from '../api/login'
+import { Toast } from "vant";
 export default {
   data() {
     return {
-      radio3: "1"
+      radio3: "1",
+      orderNo:'',
+      formdata:''
     };
   },
+  mounted(){
+    this.orderNo =  this.$route.query.orderNo;
+    this.inits()
+  },
+  filters:{
+    filterwhet(e){
+      var text;
+      if (e=='1') {
+        text ='微信'
+      }else if(e=='2'){
+        text = '支付宝'
+      }else{
+        text = '无支付'
+      }
+    return text
+    },
+    filterwhet2(e){
+      var text;
+      if (e=='1') {
+        text = '个人发票'
+      }else if(e=='2'){
+        text = '单位发票'
+      }
+      return text
+    }
+  },
   methods: {
+    inits(){
+      let para = {
+        orderNo:this.orderNo,
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      getOrderDetail(para).then(res =>{
+       if (res) {
+         this.formdata = res
+        }
+      })
+    },
     redirects(url) {
       this.$router.push(url);
     },
     onClickLeft() {
       this.$router.back(-1);
     },
+    continueApply(e){
+       this.$router.push({ path: '/AFAS', query: { id: e.id }});
+    },
     canel(){
-      alert('删除订单')
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        orderNo:this.formdata.orderNo
+      }
+      delOrder(para).then(res=>{
+           Toast('删除成功')
+           this.onClickLeft()
+      })
     }
   }
 };

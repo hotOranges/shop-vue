@@ -48,6 +48,9 @@ export default {
         },
         shopCartInfo(state) {
             state.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+        },
+        shopCartInfo2(state) {
+            state.shop_info =state.shop_info + 1 ;
         }
     },
     actions: {
@@ -67,7 +70,10 @@ export default {
          context.commit('addNum',e);
        },
        infoAction(context) {
-            context.commit('shopCartInfo');
+         context.commit('shopCartInfo');
+       },
+       addInfoAction(context){
+         context.commit('shopCartInfo2');
        }
     },
     getters: {

@@ -10,21 +10,21 @@
 />
       <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img  :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
+        <span>{{formdata.productName}}</span>
+        <span>数量：{{formdata.productNum}} 规格：{{formdata.productColor}}</span>
+        <span>￥{{formdata.price}}</span>
   </van-col> 
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>
   </van-col>
   </div>
   <van-cell-group id="init-border">
-       <van-cell title="" value="申请数量：1" />
+       <van-cell title=""  :value="'申请数量'+formdata.saleNum" />
   </van-cell-group>
-   <van-cell title="申请原因" value="不想要" class="custom-text" />
+   <van-cell title="申请原因" :value="formdata.saleReason" class="custom-text" />
    <van-cell>
   <template slot="title">
    <span>退货方式 :</span>
@@ -49,24 +49,37 @@
         </van-row>
 </template>
 </van-cell>
-<van-cell title="收货地址"  @click="redirects('AFASAddress')" is-link />
-<van-cell-group>
-<van-cell value="" class="">
-   <template>
-    <p><span>{{formaddress.name}}</span><span style="float:right">{{formaddress.iphone}}</span></p>
-    <p>{{formaddress.county}}{{formaddress.addressDetail }}</p>
-   </template>
-</van-cell>  
+<van-cell v-if="list.length>0" @click="redirects('/address')" >
+     <h5 style="font-weight: 400; padding: 0;margin: 0;color: #333;font-size: 14px;">收货地址</h5>
+     <van-address-list
+  v-model="chosenAddressId"
+  :list="list"
+  :switchable ="false"
+/>
+</van-cell> 
 </van-cell-group>
 <van-button size="large" @click="submit">提交</van-button>
   </div>
 </template>
 
 <script>
+import {listShipping,applyService} from '../api/login'
+import { Toast } from "vant";
+
 export default {
   data () {
     return {
         value:'',
+        formdata:'',
+        chosenAddressId: "",
+        list: [
+        // {
+        //   id: "3",
+        //   name: "李四",
+        //   tel: "1310000000",
+        //   address: "浙江省杭州市拱墅区莫干山路 50 号"
+        // }
+      ],
         formaddress:{
             name:'',
             iphone:'',
@@ -75,21 +88,47 @@ export default {
         }
     };
   },
-
   components: {},
 
   computed: {},
 
   mounted(){
-      console.log(JSON.parse(localStorage.getItem('mydatas')))
-      if (JSON.parse(localStorage.getItem('mydatas'))==null) {
-          this.formaddress.name =''
-          this.formaddress.iphone =''
-          this.formaddress.county =''
-          this.formaddress.addressDetail =''
-      }else{
-          this.formaddress = JSON.parse(localStorage.getItem('mydatas'))
-      }
+       
+      console.log(JSON.parse(localStorage.getItem('applyServiceData')))
+   this.formdata = JSON.parse(localStorage.getItem('applyServiceData'))[0]
+    let para = {
+       token:JSON.parse(localStorage.getItem('token'))
+     }
+     listShipping(para).then(res => {
+          var datas = [];
+          this.listShippings = res
+          for (var i in res) {
+            var arrs = res[i]
+            if (arrs.isDefault==='1') {
+             datas.push({
+             id:arrs.id,
+             name:arrs.consigneeName,
+             tel:arrs.consigneePhone,
+             address:arrs.region+arrs.address,
+             deiladdress:arrs.address
+            }) 
+            this.deiladdress = arrs.address      
+            }
+          }
+          if (datas.length<=0 && this.listShippings.length>0) {
+            var arrs = res[0]
+             datas.push({
+             id:arrs.id,
+             name:arrs.consigneeName,
+             tel:arrs.consigneePhone,
+             address:arrs.region+arrs.address,
+             deiladdress:arrs.address
+            })
+            this.deiladdress = arrs.address  
+          }
+          this.list = datas  
+          
+      })
   },
 
   methods: {
@@ -101,7 +140,31 @@ export default {
       this.$router.push(url);
     },
     submit(){
-        alert('提交成功')
+         var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if (this.value.length<=0) {
+          Toast('手机号不能为空')
+          return
+        }
+        if (!reg.test(this.value)){
+            Toast("手机格式不正确")
+            return
+        }
+      let para = {
+          token:JSON.parse(localStorage.getItem('token')),
+          productId:this.formdata.productId,
+          productNum:this.formdata.saleNum,
+          saleReason:this.formdata.saleReason,
+          saleType:this.formdata.saleType,
+          shippingId:this.list[0].id,
+          senderPhone:this.value,
+          productColor:this.formdata.productColor,
+          detailId:this.formdata.detailId
+      }
+
+      applyService(para).then(res =>{
+           window.history.go(-3)
+      })
+      
     }
   }
 }
@@ -111,7 +174,24 @@ export default {
 #apps >>> .imgList img {
   width: 100%;
 }
-
+#apps >>> .van-address-item .van-cell__value {
+  padding-right: 0px;
+}
+#apps >>> .van-cell.van-address-item.van-address-item--unswitchable{
+    padding-left: 0;
+    padding-right: 0;
+}
+#apps >>> .van-address-item__edit::before {
+      content: "\F007";
+}
+#apps >>> .van-address-list__add {
+  display: none;
+}
+#apps >>> .van-address-list {
+  height: auto;
+  padding-bottom: 0px;
+  padding-top: 5px;
+}
 #apps >>> .init-soller-list2 {
   padding-bottom: 0px;
   justify-content: center;

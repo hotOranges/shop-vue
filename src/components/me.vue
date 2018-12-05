@@ -2,16 +2,15 @@
    <!-- 我的 组件 -->
   <div id="app">
   <van-nav-bar title="" @click-left="onClickLeft" left-arrow>
-  <van-icon name="setting" slot="right" />
+  <van-icon name="setting" slot="right" @click= "redirects('/editme')" />
 </van-nav-bar>
   <van-row class="col-me" style="background: rgba(242,242,242,1);">            
                     <van-col span='24' class="title">
                          <van-col span='6' offset="1" class="imgList">
-                          <img src="../../static/images/icon/icon_9.png" name="adapter" />
+                          <img :src='form.avatar' name="adapter" />
                         </van-col>
                         <van-col span='9' offset="1" class="goodList">
-                          <span>init</span>
-               
+                          <span>{{form.nickName}}</span>
                         </van-col>
                         <van-col span='6' offset="1" class="goodIntegral">
                           <span style="font-size: 12px;"><van-icon name="points" />积分12</span>
@@ -76,15 +75,14 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
-
+import { Uploader } from 'vant';
+import {getUser} from '../api/login'
 export default {
   name: "Me",
   components: {},
   data() {
     return {
       tabarActive: 3,
-      img:
-        "http://img3.duitang.com/uploads/item/201511/14/20151114125146_LXHzE.jpeg",
       menu: ["我的信用评分", "物流信息", "联系人管理", "密码设置"],
       currentRate: 0,
       login: ["立即登录"],
@@ -93,6 +91,10 @@ export default {
       xinyong: false,
       wuliu: false,
       contact: false,
+      form:{
+        nickName:'未设置',
+        avatar:'http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg'
+      },
       pass: false,
       value: 5,
       active: 3,
@@ -135,10 +137,28 @@ export default {
       return id !== null ? this.list.filter(item => item.id === id)[0] : {};
     }
   },
+  mounted(){
+    this.inits()
+  },
   methods: {
     ...mapActions(["searchA", "infoAction"]),
     redirects(url) {
       this.$router.push(url);
+    },
+    inits(){
+      let para = {
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      getUser(para).then(res =>{
+        if (res) {
+          if (res.nickName.length>0) {
+            this.form.nickName = res.nickName
+          }
+          if (res.avatar.length>0) {
+            this.form.avatar = res.avatar
+          }
+        }
+      })
     },
     onClickLeft() {
       this.$router.push("/");

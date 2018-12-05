@@ -38,15 +38,19 @@ service.interceptors.response.use(
      */
     const res = response.data
     // return response
-    if (res.code !== '200') {
-      Toast(res.msg)
-    }
+    // if (res.code !== '200') {
+    //   Toast(res.msg)
+    // }
     if (res.code === '1008') {
       Toast(res.msg)
       router.push({
         name: 'login'
       })
     }
+    if (res.code =='1006') {
+      Toast(res.msg)
+      return
+    } 
     if (res.code === '1005') {
       router.back(-1)
     } else {

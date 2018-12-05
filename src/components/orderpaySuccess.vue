@@ -21,30 +21,30 @@
       <van-cell>
         <template slot="title">
           <span class="custom-text">订单金额</span>
-          <span class="custom-text">{{placeOrders.orderAmount}}</span>
+          <span class="custom-text">{{formdata.orderAmount}}</span>
         </template>
       </van-cell>
       <van-cell>
         <template slot="title">
           <span class="custom-text">订单编号</span>
-          <span class="custom-text">{{placeOrders.placeOrder}}</span>
+          <span class="custom-text">{{formdata.orderNo}}</span>
         </template>
       </van-cell>
       <van-cell>
         <template slot="title">
           <span class="custom-text">收货地址</span>
-          <span class="custom-text">{{placeOrders.name}}（{{placeOrders.tel}}）</span>
+          <span class="custom-text">{{formdata.consigneeName}}（{{formdata.consigneePhone}}）</span>
         </template>
       </van-cell>
       <van-cell>
         <template slot="title">
           <span class="custom-text">发票类型</span>
-          <span class="custom-text">{{placeOrders.bill}}</span>
+          <span class="custom-text">{{formdata.invoiceType | filterwhet2}}</span>
         </template>
       </van-cell>
     </van-row>
     <div class="init-10"></div>
-    <van-radio-group v-model="radio3">
+    <van-radio-group v-model="formdata.payMethod">
       <van-cell-group>
         <van-cell title="微信" icon="wechat" clickable @click="radio3 = '1'">
           <van-radio name="1"/>
@@ -55,7 +55,7 @@
       </van-cell-group>
     </van-radio-group>
     <van-goods-action>
-      <van-goods-action-mini-btn :text="'合计¥'+placeOrders.orderAmount"/>
+      <van-goods-action-mini-btn :text="'合计¥'+formdata.orderAmount"/>
       <!-- <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  /> -->
       <van-goods-action-big-btn @click="pay" text="去支付" primary/>
     </van-goods-action>
@@ -65,28 +65,63 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
-import { payMent } from "../../src/api/login";
+import { payMent,getOrderDetail } from "../../src/api/login";
 
 export default {
   data() {
     return {
       radio3: "1",
-      placeOrders: "",
+      formdata: "",
       opednId: "",
+      orderNo:'',
       datas: ""
     };
   },
   mounted() {
-    this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
-    console.log(this.placeOrders);
+  this.orderNo =  this.$route.query.orderNo;
+    this.inits()
     console.log(JSON.parse(localStorage.getItem('opednId')))
     this.opednId = 'onj-X0dKpX7qJMsn3rCXuU9P1o1U'
   },
+  filters:{
+    filterwhet(e){
+      var text;
+      if (e=='1') {
+        text ='微信'
+      }else if(e=='2'){
+        text = '支付宝'
+      }else{
+        text = '无支付'
+      }
+    return text
+    },
+    filterwhet2(e){
+      var text;
+      if (e=='1') {
+        text = '个人发票'
+      }else if(e=='2'){
+        text = '单位发票'
+      }
+      return text
+    }
+  },
   methods: {
+   inits(){
+      let para = {
+        orderNo:this.orderNo,
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      getOrderDetail(para).then(res =>{
+       if (res) {
+           console.log(res)
+         this.formdata = res
+        }
+      })
+    },
     pay() {
       let para = {
         token: JSON.parse(localStorage.getItem("token")),
-        orderNo: this.placeOrders.placeOrder,
+        orderNo: this.formdata.orderNo,
         payMethod: this.radio3,
         opednId: this.opednId
       };
@@ -233,9 +268,6 @@ p {
 }
 #apps >>> .van-nav-bar .van-icon {
   color: #2c3e50;
-}
-#apps >>> .van-goods-action{
-      background-color: #fff;
 }
 </style>
 

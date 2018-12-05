@@ -13,48 +13,69 @@
   @click-right="onClickRight"
 />
     </van-row>
+  <div v-if="shops.length>0">
+        <van-row class="shop-col">
+    <p class="init-checkd">
+     <div class="checkedBox van-checkbox">
+       <div v-model="checkAll" @click="choiceAll" :class="checkAll?'van-checkbox__icon van-checkbox__icon--round van-checkbox__icon--checked':'van-checkbox__icon van-checkbox__icon--round' ">
+         <i class="van-icon van-icon-success" style="margin-left: 0px;"><!----></i></div><!----></div>
+         <i  class="van-checkbox__icon van-checkbox__icon--round"><i style="margin-left: 38px;">新翔自营  &nbsp;></i></i></p>
+        </van-row>
     <div v-for="(v,index) in shops" :key="index.id" class="shop-cart">
         <!-- 标签区域 -->
-        <van-row class="shop-col">
-            <van-col span="10" class="check" offset="1">
-                <van-checkbox v-model="checkeds[index]">{{shops[index]}} &nbsp;></van-checkbox>
-            </van-col>
-        </van-row>
         <div class="shopp_conent">
         <van-col span='2' offset="1" class="">
-          <van-checkbox v-model="v.danxuan" class="checkedBox"  @change="singleChecked(item.danxuan,index)"></van-checkbox>
+          <van-checkbox v-model="v.danxuan" class="checkedBox"  @change="singleChecked(v.danxuan,index)"></van-checkbox>
         </van-col>
         <van-col span='6' offset="1" class="imgList">
-      <img  :src="imageUrl[index]" name="adapter" />
+      <img  :src="v.productImage" name="adapter" />
     </van-col>
     <van-col span='15' offset="1" class="goodList">
-      <span>{{goodsTitle[index].slice(0,16)}}</span>
-      <span>￥{{prices[index]}}</span>
-      <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper v-model="counts[index]"/></span>
+      <span>{{v.productName}}</span>
+      <span>￥{{v.price}}</span>
+      <span>{{v.productColor}}</span>
+      <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper @plus="subShopCarts2(v)" @minus="subShopCarts(v)" v-model="v.productNum"/></span>
     </van-col>
         </div>
-    </div>  
+    </div>
+    <div style="padding-bottom:50px"></div>  
 <van-submit-bar
-  :price="3050"
+  :price="total"
   button-text="去结算"
   @submit="onSubmit"
   v-if="canel==false">
-  <van-checkbox v-model="allchecked" @change="allCheck">全选</van-checkbox>
+   <p class="init-checkd">
+     <div class="checkedBox van-checkbox">
+       <div v-model="checkAll" @click="choiceAll" :class="checkAll?'van-checkbox__icon van-checkbox__icon--round van-checkbox__icon--checked':'van-checkbox__icon van-checkbox__icon--round' ">
+         <i class="van-icon van-icon-success"><!----></i></div><!----></div>
+          <i class="van-checkbox__icon van-checkbox__icon--round">全选</i>
+   </p>
 </van-submit-bar>
 <van-submit-bar
  
   button-text="删除"
   @submit="onSubmit2"
   v-else >
-  <van-checkbox v-model="allchecked">全选</van-checkbox>
+   <p class="init-checkd">
+     <div class="checkedBox van-checkbox">
+       <div v-model="checkAll" @click="choiceAll" :class="checkAll?'van-checkbox__icon van-checkbox__icon--round van-checkbox__icon--checked':'van-checkbox__icon van-checkbox__icon--round' ">
+         <i class="van-icon van-icon-success"><!----></i></div><!----></div>
+          <i class="van-checkbox__icon van-checkbox__icon--round">全选</i>
+   </p>
+  <!-- <van-checkbox v-model="checkAll">全选</van-checkbox> -->
 </van-submit-bar>
+  </div>
+  <div v-else style="text-align: center;margin-top: 50%;">
+    <h5 style="color: #6B6B6B;">购物车还没有商品</h5>
+    <button @click="redirects('/')" style="border: 1px solid #B39061; background-color: transparent;color: #B39061; border-radius: 2px;font-size: 14px;padding: 8px 25px;">去逛逛</button>
+  </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
-import { getShopCart,addShopCart } from "../../src/api/login";
+import { getShopCart,addShopCart,subShopCart,delShopCart } from "../../src/api/login";
 
 const coupon = {
   available: 1,
@@ -76,6 +97,7 @@ export default {
       tabarActive: 2,
       value: null,
       active: 0,
+      total:0,
       path: "../../static/images/",
       imageList: [],
       disabled: false,
@@ -86,6 +108,7 @@ export default {
       allchecked: false,
       checked: [],
       checkeds: [],
+      checkAll:false,
       chosenCoupon: -1,
       coupons: [coupon],
       disabledCoupons: [coupon],
@@ -114,42 +137,115 @@ export default {
       this.$router.back(-1);
     },
     onSubmit2() {
-      // let para= {
-      //   token:JSON.parse(localStorage.getItem('token'))
-      // }
-      // addShopCart(para).then(res => {
-      //   console.log(res)      
-      //  })
+     var datas =  this.shops.filter(function (vals) {
+          return vals.danxuan == true
+        })
+       var  addShopData = [];
+       for(var i in datas){
+         addShopData.push({
+            productId: datas[i].productId,
+            productColor: datas[i].productColor.replace(/\s+/g,""),
+         })
+       }
+         let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        shopCart: JSON.stringify(addShopData)
+      }
+     delShopCart(para).then(res => {
+            this.inits()
+      });
     },
-    allCheck(val) {
-      console.log(this.shops.danxuan);
-      for (var i = 0; i < this.checked.length; i++) {
-        // this.checked[i] = val ==true ? false:true
-        if (val == true) {
-          this.checked[i] = true;
-        } else {
-          this.checked[i] = false;
+    
+    subShopCarts(item){
+       var addShopData = {
+        productId: item.productId,
+        productNum: 1,
+        price: item.price,
+        productName: item.productName,
+        productColor: item.productColor.replace(/\s+/g,""),
+        productImage:item.productImage
+      } 
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        shopCart: JSON.stringify(addShopData)
+      }
+     subShopCart(para).then(res => {
+      this.inits()
+      });
+    },
+     subShopCarts2(item){
+       var addShopData = {
+        productId: item.productId,
+        productNum: 1,
+        price: item.price,
+        productName: item.productName,
+        productColor: item.productColor.replace(/\s+/g,""),
+        productImage:item.productImage
+      } 
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        shopCart: JSON.stringify(addShopData)
+      }
+     addShopCart(para).then(res => {
+        this.inits()
+      });
+    },
+    choiceAll:function(checkAll){
+      this.checkAll = !this.checkAll;
+      if (this.checkAll) {
+        for(let val of this.shops){
+            val['danxuan'] = true;
+        }
+      }else{
+        for(let val of this.shops){
+            val['danxuan'] = false;
         }
       }
+   },
+    onSubmit() {
+         var datas =  this.shops.filter(function (vals) {
+          return vals.danxuan == true
+        })
+        if (datas.length<=0) {
+          Toast('请选择商品')
+          return
+        }
+        localStorage.setItem("detial_s", JSON.stringify(datas));
+        localStorage.setItem("total",this.total); 
+        this.$router.push('/orderPays')
+        
+
     },
-    onSubmit() {},
+    inits(){
+        let para = {
+          token:JSON.parse(localStorage.getItem('token'))
+          }
+      getShopCart(para).then(res => {
+        var data  = res.shopCart;
+        this.shops = data
+        if (data.length<=0) {
+          this.cantext = ''
+        }
+      })
+    },
     singleChecked: function(checked, index) {
       let p =
-        parseFloat(this.cart[index]["pro_price"]) *
-        parseFloat(this.cart[index]["buyNum"]);
-
+        parseFloat(this.shops[index]["price"]) *
+        parseFloat(this.shops[index]["productNum"]);
       if (!checked) {
-        this.checked -= 1;
-        this.cart[index].danxuan = false;
-        this.total -= p * 100;
+        // this.checked -= 1;
+        this.shops[index].danxuan = false;
+        this.total -= p*100;
       } else {
-        this.checked += 1;
-        this.cart[index].danxuan = true;
-        this.total += p * 100;
+        // this.checked += 1;
+        this.shops[index].danxuan = true;
+        this.total += p*100 ;
+       
       }
-      console.log("this.checked = " + this.checked);
-      // 判断checked的值是否还等于商品种类数目，
-      if (this.checked == this.cart.length) {
+      var check =  this.shops.filter(function (vals) {
+          return vals.danxuan == true
+        }) 
+      if (check.length == this.shops.length) {
         this.checkAll = true;
       } else {
         this.checkAll = false;
@@ -193,51 +289,8 @@ export default {
       }
     }
   },
-  beforeCreate() {
-    let para = {
-      token:JSON.parse(localStorage.getItem('token'))
-    }
-      getShopCart(para).then(res => {
-        var data  = res.data;
-         return this.list.filter(function (number) { 
-           return number.id < num
-          }) 
-      })
-    this.axios.get("./static/data.json").then(
-      res => {
-        if (res.status == 200) {
-          const data = res.data.goods;
-          const preImg = data.id_0.imgList[0];
-          const title = data.id_0.title[0];
-          const price = data.id_0.limit_price[0];
-          const count = data.id_0.count;
-          const description = data.id_0.description;
-          const shops = data.id_0.shops;
-          //  for(let value of data.id_0){
-          //   console.log(value)
-          //   value['danxuan'] = true;
-
-          // }
-
-          // console.log(this.checked)
-          this.imageUrl = preImg;
-          this.goodsTitle = title;
-          this.prices = price;
-          this.checked = shops.length;
-
-          this.goodsDescription = description;
-          this.shops = shops;
-          this.counts = count;
-
-          // console.log(this.newcons)
-        } else {
-          this.imageList = this.src;
-        }
-      },
-      err => {
-          this.imageList = this.src;
-      }
-    );
+  mounted(){
+    this.inits()
   },
   created() {
     Toast("仅展示作用  ^_^");
@@ -258,6 +311,8 @@ export default {
 #app >>> .imgList img {
   width: 100%;
   height: 100%;
+  padding-left: 10px;
+  padding-top: 8px;
 }
 #app >>> .shopp_conent {
   height: 100%;
@@ -322,6 +377,11 @@ export default {
 #app >>> .van-nav-bar__text {
   color: #cf3939;
 }
+
+  i{
+    font-style: inherit;
+    margin-left: 12px;
+  }
 #app >>> .van-nav-bar .van-icon {
   color: #1f1212;
 }

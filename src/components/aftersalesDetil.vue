@@ -10,23 +10,21 @@
 <van-steps
   :active="active"
   icon=""
-  title="退款成功"
+  :title="typeTexts"
   description=""
 >
-  <van-step>提交申请</van-step>
-  <van-step>卖家收货</van-step>
-  <van-step>退款</van-step>
+  <van-step v-for="(item, index) in items" :key="index">{{item.val}}</van-step>
 </van-steps>
 <van-cell-group>
   <van-cell title="商品信息" />
 </van-cell-group>
 <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img   :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
+        <span>{{formdata.productName}}</span>
+        <span>数量：{{formdata.productNum}} 规格：{{formdata.productColor}}</span>
         <span>￥499.00</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
@@ -34,36 +32,39 @@
   </van-col>
   </div>
   <van-cell-group id="init-border">
-       <van-cell title="" value="申请数量：1" />
+       <van-cell title="" :value="'申请数量：'+formdata.productNum" />
   </van-cell-group>
   <div class="init-border-20"></div>
   <van-cell-group id="table">
-  <van-cell title="服务单号：xxxxxxxxx"  />
-  <van-cell title="申请时间：2018-11-11 18:58"  />
-  <van-cell title="售后类型：退货"  />
-  <van-cell title="售后原因：不想要了"  />
+  <van-cell :title="'服务单号：'+formdata.saleServiceNo"  />
+  <van-cell :title="'申请时间：'+formdata.applyTime"  />
+  <van-cell :title="'售后类型：'+typeText(formdata.saleType)"  />
+  <van-cell :title="'售后原因：'+formdata.saleReason"  />
   <van-cell title="退款方式：原返"  />
   <van-cell title="退货方式：快递到新翔"  />
   <van-cell title="商家" class="init-title" />
   <van-cell title="吴先生" value="021-3468-3561" />
   <van-cell value="上海市闵行区沪闵路7866弄莲花国际广场1号楼1201室" />
-  <van-cell title="寄件人手机号：18888888888"  />
+  <van-cell :title="'寄件人手机号：'+formdata.senderPhone"  />
   <van-cell title="自己" class="init-title" />
-  <van-cell title="喵酱" value="1888888888888" />
-  <van-cell value="上海市闵行区沪闵路7866弄莲花国际广场1号楼1201室" />
-
-
-
-
+  <van-cell :title="formdata.consigneeName" :value="formdata.consigneePhone" />
+  <van-cell :value="formdata.consigneeAddress" />
 </van-cell-group>
   </div>
 </template>
 
 <script>
+import {saleDetail} from '../api/login'
+import { Toast } from "vant";
 export default {
   data() {
     return {
-      active: ""
+      active:0,
+      saleId:'',
+      typeTitle:'',
+      formdata:'',
+      typeTexts:'',
+      items:''
     };
   },
 
@@ -72,8 +73,114 @@ export default {
   //   computed: {},
 
   //   mounted: {},
-
+  mounted(){
+    this.saleId =  this.$route.query.saleId;
+    this.inits()
+  },
   methods: {
+    inits(){
+       let para = {
+        saleId:this.saleId,
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      saleDetail(para).then(res =>{
+       if (res) {
+         this.formdata = res
+         if (res.saleType=='1') {
+           if (res.saleStatus=='1') {
+              this.items = [
+              {val:'提交申请'},
+              {val:'卖家收货'},
+            ]
+            this.typeTexts ='正在进行中…'
+             this.active =0
+           }else if(res.saleStatus=='2'){
+           
+              this.items = [
+              {val:'提交申请'},
+              {val:'卖家收货'},
+              {val:'退款'}
+              ]
+              this.active =1
+              this.typeTexts ='正在进行中…'
+           } else if(res.saleStatus=='3'){
+              this.items = [
+              {val:'提交申请'},
+              {val:'卖家收货'},
+              {val:'退款'}
+              ]
+              this.active =2
+              this.typeTexts ='退款成功'
+           }
+         }else if(res.saleType=='2'){
+            if (res.saleStatus=='1') {
+             
+              this.items = [
+              {val:'提交申请'},
+              {val:'换货'},
+            ]
+            this.typeTexts ='正在进行中…'
+             this.active =0
+           }else if(res.saleStatus=='2'){
+             
+              this.items = [
+              {val:'提交申请'},
+              {val:'换货'},
+              {val:'退款'}
+              ]
+              this.active =1
+              this.typeTexts ='正在进行中…'
+           } else if(res.saleStatus=='3'){
+              this.items = [
+              {val:'提交申请'},
+              {val:'换货'},
+              {val:'退款'}
+              ]
+              this.active =2
+              this.typeTexts ='换货成功'
+           }
+         }else if(res.saleType=='3'){
+            if (res.saleStatus=='1') {
+           
+              this.items = [
+              {val:'提交申请'},
+              {val:'收货'},
+            ]
+            this.typeTexts ='正在进行中…'
+             this.active =0
+           }else if(res.saleStatus=='2'){
+             
+              this.items = [
+              {val:'提交申请'},
+              {val:'收货'},
+              {val:'维修'}
+              ]
+              this.active =1
+              this.typeTexts ='正在进行中…'
+           } else if(res.saleStatus=='3'){
+              this.items = [
+              {val:'提交申请'},
+              {val:'收货'},
+              {val:'维修'}
+              ]
+              this.active =2
+              this.typeTexts ='换货成功'
+           }
+         }
+        }
+      })
+    },
+     typeText(i){
+      var text;
+      if (i=='1') {
+        text = '退货'
+      }else if (i=='2') {
+        text = '换货'
+      }else{
+        text = '维修'
+      }
+      return text
+    },
     onClickLeft() {
       this.$router.back(-1);
     }
@@ -81,7 +188,8 @@ export default {
 };
 </script>
 <style scoped>
-#apps >>> .van-steps__title {
+
+ #apps >>> .van-steps__title {
   color: #fff;
   font-size: 16px;
 }
@@ -93,31 +201,27 @@ export default {
   background-color: #f8a330;
 }
 #apps >>> .van-step--horizontal .van-step__circle-container {
-  background-color: transparent;
+  background-color: #f8a330;
 }
 #apps >>> .van-step--horizontal .van-step__circle-container {
-  padding: 0;
-  left: 0;
   top: 13px;
-  /* right: 0; */
+  
 }
-#apps >>> .van-step .van-step__circle {
-  background-color: #fff;
-  width: 7px;
-  height: 7px;
-}
+
 #apps >>> .van-step--horizontal.van-step--process .van-icon {
   top: -3px;
+  
 }
 #apps >>> .van-step--horizontal .van-step__line {
   top: 15px;
-  height: 2px;
 }
-#apps >>> .van-step--horizontal:last-child {
-  right: 0px;
+
+#apps >>> .van-step .van-step__circle{
+  background-color: #fff
 }
 #apps >>> .van-step--horizontal:last-child .van-step__title {
-  margin-left: -17px;
+
+  color: #fff !important
 }
 #apps >>> .van-steps__items {
   width: 80%;
@@ -126,7 +230,9 @@ export default {
 #apps >>> .imgList img {
   width: 100%;
 }
-
+#apps >>> .van-step--horizontal.van-step--finish .van-step__circle, .van-step--horizontal.van-step--finish .van-step__line{
+      background-color: #4b0 !important;
+}
 #apps >>> .init-soller-list2 {
   padding-bottom: 0px;
   justify-content: center;
@@ -172,4 +278,8 @@ export default {
 #apps >>> .van-nav-bar .van-icon{
     color: #2c3e50
 }
+#apps >>> .van-step--horizontal:last-child .van-step__circle-container {
+    left: auto;
+    right: -10px;
+} 
 </style>

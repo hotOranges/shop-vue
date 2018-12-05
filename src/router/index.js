@@ -5,6 +5,7 @@ import Search from '@/components/search'
 import GoodsInfo from '@/components/goodsInfo'
 import Buy from '@/components/buyInfo'
 import Pay from '@/components/orderPay'
+import pays from '@/components/orderPays'
 import ShopingCart from '@/components/shoppingCart'
 import Me from '@/components/me'
 import Login from '@/components/login'
@@ -25,6 +26,9 @@ import AFASDetil from '@/components/AFASDetil'
 import AFAS from '@/components/AFAS'
 import AFASAddress from '@/components/AFASAddress'
 import EvaluationList from '@/components/EvaluationList'
+import orderpaySuccess from '@/components/orderpaySuccess'
+import editme from '@/components/editme'
+import editname from '@/components/editname'
 Vue.use(Router)
 
 export default new Router({
@@ -95,6 +99,22 @@ export default new Router({
       component:AFASDetil
     },
     {
+      path:'/editme',
+      name:'editme',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      component:editme
+    },
+    {
+      path:'/editname',
+      name:'editname',
+      meta:{
+        requireAuth:true
+      },
+      component:editname
+    },
+    {
       path:'/AFASAddress',
       name:'AFASAddress',
       component:AFASAddress
@@ -117,7 +137,22 @@ export default new Router({
       },
       component:Pay,
     },
-    
+    {
+      path:'/orderPays',
+      name:'orderPays',
+      meta:{
+        requireAuth: true,
+      },
+      component:pays
+    },
+    {
+      path:'/orderpaySuccess',
+      name:'orderpaySuccess',
+      meta:{
+        requireAuth:true
+      },
+      component:orderpaySuccess
+    },
     {
       path:'/shoppingCart',
       name:'shoppingCart',

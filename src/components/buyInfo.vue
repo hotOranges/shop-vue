@@ -9,7 +9,6 @@
          <div class="back">
             <a href="javaScript:;" @click.prevent="search_shows">{{'<'}}</a>
          </div>
-          <!-- <span>{{actives[2]}}</span> -->
      </van-col>
        </van-row>
 
@@ -23,25 +22,59 @@
      </van-col>
      <hr/>
      <van-col class="empty"></van-col>
+      <van-cell-group  class="lists list2" >
+      <van-cell value="七天无理由退换货（激活后不支持）" />
+    </van-cell-group>
+    <van-cell-group class="lists">
+      <van-cell title="规格：" is-link value="请选择颜色 型号 数量" @click="orderShows"/>
+    </van-cell-group>
+    <div class="init-border-20"></div>
+    <van-cell-group>
+      <van-cell title="综合评分" />
+      <van-cell class="pf">
+         <span style="color:#FF4747;font-size: 24px;font-size: 32px;font-weight: 600;">{{avgScore}}</span>
+        <van-rate :size="13" v-model="avgScore" disabled disabled-color="#FF4747"  void-color="#FF4747"/>
+         <span>{{commentSize}}评论</span>
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group class="pl">
+      <van-cell :title="'全部点评('+commentSize +')'" />
+      <van-cell v-for="(item, index) in fromData" :key="index">
+       <span class="imgss"><img class="initimg" src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt=""><i>{{item.nickName}}</i></span>
+       <span class="pls"><van-rate :size="13" v-model="item.score" disabled disabled-color="#B39061"  void-color="#B39061"/></span>
+       <span class="text">{{item.comment}}</span>
+      </van-cell>
+      <!-- <van-cell>
+       <span class="imgss"><img class="initimg" src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt=""><i>Rainy</i></span>
+       <span class="pls"><van-rate :size="13" v-model="value1" disabled disabled-color="#B39061"  void-color="#B39061"/></span>
+       <span class="text">很不错，推荐大家使用</span>
+       <span class="imglsit">
+         <img src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt="">
+         <img src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt="">
+         <img src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt="">
+         <img src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt="">
+       </span>
+      </van-cell> -->
+    </van-cell-group>
+       <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
     </van-row>
 
     <!-- 优惠券单元格 -->
-    <van-cell-group  class="lists list2" style="top:490px">
+    <!-- <van-cell-group  class="lists list2" style="top:490px">
       <van-cell value="七天无理由退换货（激活后不支持）" />
     </van-cell-group>
     <van-cell-group class="lists" style="top:520px">
       <van-cell title="规格：" is-link value="请选择颜色 型号 数量" @click="orderShows"/>
-    </van-cell-group>
+    </van-cell-group> -->
     <order class="order" />
 
 
    <!-- 底部购买 -->
     <van-goods-action>
         <van-goods-action-mini-btn icon="chat" text="客服" @click="onClickMiniBtn" />
-        <van-goods-action-mini-btn icon="cart" text="购物车" @click="onClickMiniBtn" info="" />
+        <van-goods-action-mini-btn icon="cart" text="购物车" @click="onClickMiniBtn" :info="shop_info" />
         <van-goods-action-big-btn text="立即购买" @click="onClickBigBtn" primary />
         <van-goods-action-big-btn text="加入购物车" @click="onClickBigBtns" />
-        
     </van-goods-action>    
      
 
@@ -49,10 +82,11 @@
 </template>
 
 <script>
+import { Rate } from 'vant';
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { getProductDetail,listImage } from "../../src/api/login";
+import { getProductDetail,listImage,getProductComment } from "../../src/api/login";
 import Order from "./orderList";
 
 //obj 优惠券
@@ -74,6 +108,11 @@ export default {
       preImgs: [],
       listImages:'',
       chosenCoupon: -1,
+      avgScore:5,
+      commentSize:'',
+      page:0,
+      shows:true,
+      fromData:{},
       coupons: [coupon],
       disabledCoupons: [coupon],
       showList: null,
@@ -93,12 +132,57 @@ export default {
       my_info: state => state.home.my_info,
       orderShow: state => state.home.orderShow
     }),
-    ...mapGetters(["bc_notshow"])
   },
   methods: {
     ...mapActions(["orderShows"]),
     search_shows() {  
       this.$router.back(-1);
+    },
+    more(){
+     ++this.page
+     let para = {
+          token:JSON.parse(localStorage.getItem('token')),
+          currentPage:this.page,
+          pageSize:5
+      }
+      getProductComment(para).then(res=>{
+        let data = res.commentList
+        if (data>0) {
+          for (var i in data) {
+          this.fromData.push(data[i])
+          }
+        }else{
+          this.shows =false
+        }
+
+      })
+    },
+    inits(){
+       this.form = JSON.parse(localStorage.getItem('detial_s'))
+        let para ={
+         productId:this.form.id
+       }
+      listImage(para).then(res => {
+          this.listImages = res[0];
+          for (var i in res) {
+             var imgs= 'http://'+res[i].url + res[i].avatar;
+              this.preImgs.push(imgs)
+          }
+          this.getProductComments()
+        
+      })
+    },
+    getProductComments(){
+       let para ={
+         productId:this.form.id,
+         pageSize:this.page,
+         pageSize:5
+       }
+      getProductComment(para).then(res => {
+        this.commentSize = res.commentSize
+        this.avgScore = res.avgScore
+        this.fromData = res.commentList
+      })
     },
     //商品预览
     ImagePreviews() {
@@ -125,55 +209,14 @@ export default {
     onClickBigBtns() {
       Toast("请选择商品规格");
       this.orderShows();
-      
     }
   },
   watch: {},
   directives: {},
   beforeCreate() {
-    // let para ={
-    //   productId:this.$route.params.id
-    // }
-    //   getProductDetail(para).then(res => {
-    //     console.log(res.code)
-    //     if (res.code =='200') {
-    //       this.images = res.data; 
-    //       console.log(res.data)
-    //     }else{
-    //       Toast(res.msg)
-    //     }
-    //   })
-    // this.axios.get("./static/data.json").then(
-    //   res => {
-    //     const buy_id = this.$route.params.id;
-    //     console.log(buy_id);
-    //     //或许商品信息
-    //     if (res.status == 200) {
-    //       const data = res.data.goods;
-    //       const preImg = data.id_0.moreImg;
-    //       this.preImgs = preImg;
-    //     }
-    //   },
-    //   err => {
-    //     this.imageList = this.src;
-    //     this.broadcast = "暂无消息~~QAQ~";
-    //   }
-    // );
   },
   mounted(){
-       this.form = JSON.parse(localStorage.getItem('detial_s'))
-        let para ={
-         productId:this.form.id
-       }
-      listImage(para).then(res => {
-      
-          this.listImages = res[0];
-          for (var i in res) {
-             var imgs= 'http://'+res[i].url + res[i].avatar;
-          this.preImgs.push(imgs)
-          }
-        
-      })
+      this.inits()
        
   },
   created() {
@@ -194,8 +237,15 @@ export default {
 #app >>> .list2 .van-cell__value {
   color: #000;
 }
+#app >>> .van-goods-action{
+  background-color: #fff;
+}
 #app >>> .van-cell__value {
   text-align: left;
+  color: #b8b8b8;
+}
+#app >>> .pf .van-cell__value {
+  text-align: center;
   color: #b8b8b8;
 }
 #app >>> .van-sku-header__img-wrap {
@@ -214,6 +264,63 @@ export default {
 #app .van-button--warning {
   background-color: #b39061;
   border: 1px solid #b39061;
+}
+#app >>> .init-border-20 {
+  background: rgba(242, 242, 242, 1);
+  height: 20px;
+  position: relative;
+  width: 100%;
+}
+#app .col-3{
+  width: 100%;
+}
+#app >>> .pl .initimg{
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+#app >>> .pl .pls{
+      float: right;
+    margin-top: 5px;
+}
+#app >>> .pl .text{
+    width: 86%;
+    position: relative;
+    display: inline-block;
+    color: #424242;
+    padding-left: 46px;
+}
+#app >>> .pl .imglsit img{
+ float: left;
+ width: 20%;
+ height: auto;
+ padding: 2%;
+
+}
+#app >>> .imgss i{
+  font-style: inherit;
+  position: absolute;
+  top: 10px;
+  left: 48px;
+  color: #424242
+}
+#app >>> .more{
+  text-align: center;
+  line-height: 30px;
+  position: relative;
+}
+#app >>> .more .text{
+  font-style: unset;
+  padding-left: 21px;
+}
+#app >>> .more .van-icon.van-icon-add-o{
+  font-size: 15px;
+  margin-right: 2px;
+  /* margin-top: 0px; */
+  /* line-height: 28px; */
+  position: absolute;
+  top: 6px;
+  padding-right: 24px;
 }
 </style>
 

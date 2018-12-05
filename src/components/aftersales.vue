@@ -7,24 +7,25 @@
   @click-left="onClickLeft"
 >
 </van-nav-bar>
- <div class="init-list">
+
+ <div class="init-list" v-for="i in fromData">
   <van-cell-group>
-  <van-cell title="2018-11-03 12:56" value="退货" />
+  <van-cell :title="i.applyTime" :value="typeText(i.saleType)" />
   </van-cell-group>
   <div class="init-soller-list2">
   <van-col span='5' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+     <img  :src="'http://'+'106.15.44.76/image/'+i.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-      <span>翼贝贝儿童手表T8S</span>
+      <span>{{i.productName}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
-      <span style="font-size: 11px;">X1</span>
+      <span style="font-size: 11px;">X{{i.productNum}}</span>
   </van-col>
   </div>
   <van-cell-group id="init-border">
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('aftersalesDetil')">查看详情</button>
+      <button @click="detial(i.id)">查看详情</button>
   </div>
  
   </van-cell-group>
@@ -33,28 +34,74 @@
   
   </div>
   <div class="init-border-20"></div>
+  <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
   </div>
 </template>
 
 <script>
+import {listSale} from '../api/login'
+import { Toast } from "vant";
 export default {
   data() {
-    return {};
+    return {
+      page:0,
+      show: false,
+      shows:true,
+      fromData:{}
+    };
   },
 
   components: {},
 
   computed: {},
-
-  mounted: {},
-
+  mounted () {
+    this.inits()
+  },
   methods: {
     onClickLeft() {
       this.$router.back(-1);
     },
-    redirects(url) {
-      
-      this.$router.push(url);
+    typeText(i){
+      var text;
+      if (i=='1') {
+        text = '退货'
+      }else if (i=='2') {
+        text = '换货'
+      }else{
+        text = '维修'
+      }
+      return text
+    },
+    inits(){
+      let para = {
+              token:JSON.parse(localStorage.getItem('token')),
+              currentPage:this.page,
+              pageSize:5
+            }
+            listSale(para).then(res=>{
+              this.fromData = res ? res:'';
+            })
+    },
+    more(){
+      ++this.page
+     let para = {
+          token:JSON.parse(localStorage.getItem('token')),
+          currentPage:this.page,
+          pageSize:5
+      }
+      listSale(para).then(res=>{
+        if (res.length>0) {
+          for (var i in res) {
+          this.fromData.push(res[i])
+          }
+        }else{
+          this.shows =false
+        }
+
+      })
+    },
+    detial(id) {
+      this.$router.push({ path: '/aftersalesDetil', query: { saleId: id }});
     }
   }
 };
@@ -126,5 +173,23 @@ export default {
 }
 #apps >>> .van-nav-bar .van-icon{
     color: #2c3e50
+}
+#apps >>> .more{
+  text-align: center;
+  line-height: 30px;
+  position: relative;
+}
+#apps >>> .more .text{
+  font-style: unset;
+  padding-left: 21px;
+}
+#apps >>> .more .van-icon.van-icon-add-o{
+  font-size: 15px;
+  margin-right: 2px;
+  /* margin-top: 0px; */
+  /* line-height: 28px; */
+  position: absolute;
+  top: 6px;
+  padding-right: 24px;
 }
 </style>

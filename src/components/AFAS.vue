@@ -5,19 +5,17 @@
   class="init-header"
   title="申请售后"
   left-text=""
-  right-text="提交"
   left-arrow
   @click-left="onClickLeft"
-  @click-right="onClickRight"
 />
 <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+       <img  :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
+        <span>{{formdata.productName}}</span>
+        <span>数量：{{formdata.productSumNum}} 规格：{{formdata.productColor}}</span>
+        <span>￥{{formdata.price}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>
@@ -27,7 +25,7 @@
       <span style="float:left;line-height: 35px;font-size: 14px">申请数量</span>
       <van-stepper v-model="value" integer
   :min="1"
-  :max="40"
+  :max="formdata.productSumNum"
   :step="1" />
   </van-cell-group>
   <van-cell class="custom-text">
@@ -35,10 +33,22 @@
    <span>售后类型</span>
   </template>
 </van-cell>
-<van-cell @click="Actionsheet">
+<van-cell @click="Actionsheet(1)">
   <template slot="title" >
    <span class="init-text-1">退货</span>
    <span class="init-text">{{Returns}}</span>
+  </template>
+</van-cell>
+<van-cell @click="Actionsheet(2)">
+  <template slot="title" >
+   <span class="init-text-1">换货</span>
+   <span class="init-text">{{Returns2}}</span>
+  </template>
+</van-cell>
+<van-cell @click="Actionsheet(3)">
+  <template slot="title" >
+   <span class="init-text-1">换货</span>
+   <span class="init-text">{{Returns3}}</span>
   </template>
 </van-cell>
 <van-actionsheet v-model="show" title="申请原因" >
@@ -55,13 +65,19 @@
 </template>
 
 <script>
+import {applyPage} from '../api/login'
 export default {
   data() {
     return {
       value:1,
+      sheet:'',
       show:false,
       radio:1,
+      formdata:'',
+      id:'',
       Returns:'已收货，需要退回该商品',
+      Returns2:'已收货，需要退回该商品',
+      Returns3:'已收货，需要退回该商品',
       reason:[
         { value: 1, label: "商品损坏" },
         { value: 2, label: "质量问题" },
@@ -76,13 +92,49 @@ export default {
 
   computed: {},
 
-  mounted(){},
+  mounted(){
+     this.id =  this.$route.query.id;
+     this.inits()
+  },
 
   methods: {
     onClickLeft() {
       this.$router.back(-1);
     },
-    Actionsheet(){
+    inits(){
+      let para = {
+        detailId:this.id,
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      applyPage(para).then(res =>{
+        console.log(res)
+        this.formdata = res
+      })
+    },
+    Actionsheet(e){
+      this.sheet = e
+      if (e==1) {
+        this.reason = [
+            { value: 1, label: "商品损坏" },
+            { value: 2, label: "质量问题" },
+            { value: 3, label: "发错货" },
+            { value: 4, label: "不想要了" },
+            { value: 5, label: "七天无理由退换货" },
+          ]
+      } else if(e==2){
+         this.reason = [
+            { value: 1, label: "商品损坏" },
+            { value: 2, label: "质量问题" },
+            { value: 3, label: "发错货" },
+            { value: 4, label: "缺少件" },
+            { value: 5, label: "七天无理由退换货" },
+          ]
+      }else{
+         this.reason = [
+            { value: 1, label: "商品故障" },
+            { value: 2, label: "其他" },
+          ]
+      }
       this.show = true
     },
     confirm(){
@@ -91,12 +143,35 @@ export default {
            return item
          }
       })
-      this.Returns = filters[0].label
+      var saleReason;
+      if (this.sheet == 1) {
+        this.Returns = filters[0].label
+        saleReason = filters[0].label
+      }else if(this.sheet == 2){
+        this.Returns2 = filters[0].label
+        saleReason = filters[0].label
+      }else {
+        this.Returns3 = filters[0].label
+        saleReason = filters[0].label
+      }
       this.show = false
-    },
-    onClickRight(){
+      var applyServiceData = []
+      applyServiceData.push({
+        productId:this.formdata.productId,
+        productNum:this.formdata.productSumNum,
+        saleNum:this.value,
+        saleReason:saleReason,
+        saleType:this.sheet,
+        price:this.formdata.price,
+        productImage:this.formdata.productImage,
+        productName:this.formdata.productName,
+        productColor:this.formdata.productColor,
+        detailId:this.id
+      })
+       localStorage.setItem("applyServiceData",JSON.stringify(applyServiceData));
       this.$router.push('/AFASDetil')
     }
+    
   }
 };
 </script>

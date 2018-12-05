@@ -134,5 +134,97 @@ export function getBanner(params) {
       data: params
     })
   }
-
+  export function subShopCart(params) {
+    return request({
+      url: `${base}/customer/subShopCart`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function delShopCart(params) {
+    return request({
+      url: `${base}/customer/delShopCart`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function delOrder(params) {
+    return request({
+      url: `${base}/customer/delOrder`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function updateOrderStatus(params) {
+    return request({
+      url: `${base}/customer/updateOrderStatus`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function getOrderDetail(params) {
+    return request({
+      url: `${base}/customer/getOrderDetail`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function applyPage(params) {
+    return request({
+      url: `${base}/saleService/applyPage`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function applyService(params) {
+    return request({
+      url: `${base}/saleService/applyService`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function listSale(params) {
+    return request({
+      url: `${base}/saleService/listSale`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function saleDetail(params) {
+    return request({
+      url: `${base}/saleService/saleDetail`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function upload(params) {
+    return request({
+      url: `${base}/customerUser/upload`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function getUser(params) {
+    return request({
+      url: `${base}/customerUser/getUser`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function editUser(params) {
+    return request({
+      url: `${base}/customerUser/editUser`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function getProductComment(params) {
+    return request({
+      url: `${base}/customerUser/getProductComment`,
+      method: 'post',
+      data: params
+    })
+  }
+  
+  
   

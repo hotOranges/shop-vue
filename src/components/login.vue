@@ -48,17 +48,12 @@ export default {
     //用户名和密码验证
     rules(v, choose) {
       if (choose == "user") {
-        let username = v.trim();
-        let uPattern = /^[a-zA-Z0-9_]{4,12}$/g;
-
-        if (username.split("").length > 12) {
-          return false;
+      var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+       if (!reg.test(username)){
+            Toast("手机格式不正确")
+            return
         }
-
-        if (!uPattern.test(username)) {
-          Toast("请输入11位手机号");
-        }
-        console.log(username, v.trim());
+       
       } else if (choose == "pass") {
         let password = v.trim();
         //最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
@@ -85,10 +80,14 @@ export default {
       }
      
       login(para).then(res => {
+        if (res) {
         localStorage.setItem('token', JSON.stringify(res))
         this.newtoken()
         this.redirects("/");
          Toast("登录成功");
+        }
+        
+       
       }) 
       
     }
@@ -148,6 +147,9 @@ export default {
 }
 .van-field__control {
   color: #c1c1c1;
+}
+.van-hairline--top-bottom:after{
+  border-width: 0
 }
 </style>
 

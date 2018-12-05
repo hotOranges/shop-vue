@@ -102,7 +102,12 @@ export default {
         JSON.stringify(this.$route.query.opednId)
       );
     }
-    this.getShopCart1()
+    if (localStorage.getItem("token").length>3) {
+      this.getShopCart1()
+    }else{
+      this.infoAction()
+    }
+    
   },
   methods: {
    ...mapActions(["infoAction"]),
@@ -110,11 +115,21 @@ export default {
    let para = {
       token: JSON.parse(localStorage.getItem("token"))
     };
-    getShopCart(para).then(res => {
-       localStorage.setItem('getShopCarts', JSON.stringify(res.shopCart))
-       this.infoAction()
-       this.info = JSON.parse(localStorage.getItem('getShopCarts')).length;
-    });
+     let thisss= this
+      this.$ajax 
+        .post("http://106.15.44.76/iwings-manager/customer/getShopCart",para)
+        .then(function(res) {
+           console.log(res.data)
+           if (res.data.code == '1008') {
+              thisss.infoAction()
+           }else{
+            localStorage.setItem('getShopCarts', JSON.stringify(res.data.data.shopCart))
+            thisss.info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+           }
+        })
+        .catch(function(res) {
+          thisss.infoAction()
+        });
    }, 
     onClickLeft() {
       Toast("返回");
