@@ -264,10 +264,12 @@ export default {
   margin-left: 5px;
   margin-right: 5px;
 }
-#app
-  .van-button.van-button--default.van-button--normal.van-button--bottom-action {
+#app .van-button.van-button--default.van-button--normal.van-button--bottom-action {
   background-color: #b39061;
   border: 1px solid #b39061;
+}
+#app >>> .van-sku-header{
+  padding-top: 12px
 }
 </style>
 

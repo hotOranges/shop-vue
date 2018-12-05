@@ -167,107 +167,7 @@ export default {
       console.log(e);
       this.$router.push({ path: "/orderForm", query: { activeId: e } });
     },
-    onInput(checked) {
-      if (this.checked) {
-        Dialog.confirm({
-          title: "提醒",
-          message: "关闭安全模式可能给您带来风险，是否确认关闭"
-        }).then(() => {
-          this.checked = checked;
-        });
-      } else {
-        Toast("正在为您护驾~~");
-        this.checked = true;
-      }
-    },
-    listCover(v) {
-      this.shows = true;
-
-      switch (v) {
-        case "我的信用评分":
-          this.wuliu = false;
-          this.contact = false;
-          this.pass = false;
-          this.xinyong = true;
-          break;
-        case "物流信息":
-          this.contact = false;
-          this.pass = false;
-          this.xinyong = false;
-          this.wuliu = true;
-          break;
-        case "联系人管理":
-          this.pass = false;
-          this.xinyong = false;
-          this.wuliu = false;
-          this.contact = true;
-          break;
-        case "密码设置":
-          this.xinyong = false;
-          this.wuliu = false;
-          this.contact = false;
-          this.pass = true;
-          break;
-        default:
-          this.shows = false;
-          break;
-      }
-    },
-    // 添加联系人
-    onAdd() {
-      this.editingContact = { id: this.list.length };
-      this.isEdit = false;
-      this.showEdit = true;
-    },
-
-    // 编辑联系人
-    onEdit(item) {
-      this.isEdit = true;
-      this.showEdit = true;
-      this.editingContact = item;
-    },
-
-    // 选中联系人
-    onSelect() {
-      this.showList = false;
-    },
-
-    // 保存联系人
-    onSave(info) {
-      this.showEdit = false;
-      this.showList = false;
-
-      if (this.isEdit) {
-        this.list = this.list.map(item => (item.id === info.id ? info : item));
-      } else {
-        this.list.push(info);
-      }
-      this.chosenContactId = info.id;
-    },
-
-    // 删除联系人
-    onDelete(info) {
-      this.showEdit = false;
-      this.list = this.list.filter(item => item.id !== info.id);
-      if (this.chosenContactId === info.id) {
-        this.chosenContactId = null;
-      }
-    },
-    onInputs(key) {
-      this.value = (this.value + key).slice(0, 6);
-      if (this.value.split("").length >= 6) {
-        Toast("密码设置成功 ^_^");
-        this.shows = false;
-      }
-    },
-    onDelete() {
-      this.value = this.value.slice(0, this.value.length - 1);
-    },
-    onRead(file) {
-      console.log(file);
-      this.img = file.content;
-      Toast("头像上传成功 ^_^");
-    }
+  
   },
   watch: {},
   directives: {
@@ -279,28 +179,6 @@ export default {
         info.innerText = obj.value;
       }
     }
-  },
-  beforeCreate() {
-    this.axios.get("./static/data.json").then(
-      res => {
-        if (res.status == 200) {
-          const data = res.data.goods;
-        } else {
-          this.imageList = this.src;
-          this.broadcast = "暂无消息~~QAQ~";
-        }
-      },
-      err => {
-        this.imageList = this.src;
-        this.broadcast = "暂无消息~~QAQ~";
-      }
-    );
-  },
-  created() {
-    Toast("预估完成  ^_^");
-    setTimeout(function() {
-      Toast("今日表现不错 ^_^ ");
-    }, 1500);
   }
 };
 </script>
@@ -324,6 +202,7 @@ export default {
 }
 #app >>> .van-hairline--bottom::after {
   border-bottom-width: 0px;
+  border:0 solid #ef9e3e
 }
 #app >>> .van-cell__title {
   text-align: left;
@@ -335,5 +214,11 @@ export default {
 }
 #app >>> .van-col--5 {
     width: 20%;
+}
+#app >>>  .headerImg img{
+  width: 100%
+}
+#app >>> .headerImg .van-cell:not(:last-child)::after{
+  border-bottom: 0px solid #eee;
 }
 </style>

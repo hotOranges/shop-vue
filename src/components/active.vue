@@ -148,7 +148,7 @@ export default {
     });
   },
   created() {
-    Toast("加载完毕 ^_^");
+    // Toast("加载完毕 ^_^");
   }
 };
 </script>

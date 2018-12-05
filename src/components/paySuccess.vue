@@ -80,7 +80,7 @@ export default {
     this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
     console.log(this.placeOrders);
     console.log(JSON.parse(localStorage.getItem('opednId')))
-    this.opednId = 'onj-X0dKpX7qJMsn3rCXuU9P1o1U'
+    this.opednId =  JSON.parse(localStorage.getItem('opednId'))
   },
   methods: {
     pay() {

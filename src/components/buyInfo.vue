@@ -1,22 +1,25 @@
 <template>
   <div id="app">
-       <van-row class="col-2">
-              <div class="preImg" @click="ImagePreviews()">
-                 <img  v-lazy=" 'http://' + listImages.url +listImages.avatar" name="adapter" @click="ImagePreviews()"/>
-              </div>  
-                    <!--导航 -->
+              <!--导航 -->
       <van-col span='24' class="title">
          <div class="back">
-            <a href="javaScript:;" @click.prevent="search_shows">{{'<'}}</a>
+           <van-icon name="arrow-left" color="#fff" size='25' @click.prevent="search_shows"/>
          </div>
+          <!-- <span><van-icon name="arrow-left" color="#fff" size='25' @click.prevent="search_shows"/></span> -->
      </van-col>
+         
+       <van-row class="col-2">
+        <van-swipe :autoplay="3000">
+          <van-swipe-item v-for="image in images"  class="preImg" >
+            <img :src="'http://'+image.url + image.avatar"  @click="ImagePreviews()" />
+          </van-swipe-item>
+        </van-swipe>
        </van-row>
-
+       
     <van-row class="col-3">
         <van-col span="24" class="lazy-bottom">
              <h4>￥{{form.specialPrice}} <span>￥{{form.originalPrice}}</span></h4> 
          </van-col>
-
      <van-col span="24" class="lazy-left">
            <span>{{form.productName}}</span>
      </van-col>
@@ -37,7 +40,7 @@
          <span>{{commentSize}}评论</span>
       </van-cell>
     </van-cell-group>
-    <van-cell-group class="pl">
+    <van-cell-group class="pl" v-if="commentSize>0">
       <van-cell :title="'全部点评('+commentSize +')'" />
       <van-cell v-for="(item, index) in fromData" :key="index">
        <span class="imgss"><img class="initimg" src="http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg" alt=""><i>{{item.nickName}}</i></span>
@@ -56,7 +59,10 @@
        </span>
       </van-cell> -->
     </van-cell-group>
-       <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
+    <div v-else style="color: rgb(140, 140, 140); text-align: center;padding-bottom: 20px;padding-top: 10px;">
+      目前还没有评论哦～
+    </div>
+       <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*4" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
     </van-row>
 
     <!-- 优惠券单元格 -->
@@ -111,13 +117,20 @@ export default {
       avgScore:5,
       commentSize:'',
       page:0,
+      images: [
+        'https://img.yzcdn.cn/1.jpg',
+        'https://img.yzcdn.cn/2.jpg'
+      ],
       shows:true,
       fromData:{},
       coupons: [coupon],
       disabledCoupons: [coupon],
       showList: null,
       oShow: false,
-      form:{}
+      form:{
+        specialPrice:'',
+        productName:'',
+      }
     };
   },
   props: {},
@@ -141,13 +154,14 @@ export default {
     more(){
      ++this.page
      let para = {
-          token:JSON.parse(localStorage.getItem('token')),
+          productId:this.form.id,
           currentPage:this.page,
-          pageSize:5
+          pageSize:4
       }
       getProductComment(para).then(res=>{
         let data = res.commentList
-        if (data>0) {
+       
+        if (data.length>0) {
           for (var i in data) {
           this.fromData.push(data[i])
           }
@@ -158,16 +172,20 @@ export default {
       })
     },
     inits(){
-       this.form = JSON.parse(localStorage.getItem('detial_s'))
+       
+       console.log(this.form)
         let para ={
          productId:this.form.id
        }
       listImage(para).then(res => {
           this.listImages = res[0];
+          this.images= res
           for (var i in res) {
              var imgs= 'http://'+res[i].url + res[i].avatar;
               this.preImgs.push(imgs)
+             
           }
+
           this.getProductComments()
         
       })
@@ -175,8 +193,8 @@ export default {
     getProductComments(){
        let para ={
          productId:this.form.id,
-         pageSize:this.page,
-         pageSize:5
+         currentPage:this.page,
+         pageSize:4
        }
       getProductComment(para).then(res => {
         this.commentSize = res.commentSize
@@ -211,11 +229,9 @@ export default {
       this.orderShows();
     }
   },
-  watch: {},
-  directives: {},
-  beforeCreate() {
-  },
+
   mounted(){
+      this.form = JSON.parse(localStorage.getItem('detial_s'))
       this.inits()
        
   },
@@ -273,6 +289,11 @@ export default {
 }
 #app .col-3{
   width: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+#app >>> .van-goods-action-mini-btn{
+  border-width:0
 }
 #app >>> .pl .initimg{
   border-radius: 50%;
@@ -295,7 +316,13 @@ export default {
  width: 20%;
  height: auto;
  padding: 2%;
-
+}
+#app >>> .van-swipe__indicator{
+  background-color: #fff;
+  border:1px solid #AB8675
+}
+#app >>> .van-swipe__indicator--active{
+  background:rgba(171,134,117,1);
 }
 #app >>> .imgss i{
   font-style: inherit;

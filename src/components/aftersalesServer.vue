@@ -88,9 +88,9 @@
     <van-cell title="运费" value="￥0.00"  />
      <van-cell class="init-table" title="" :value="'实付款：¥'+formdata.orderAmount"  />  
       <van-cell-group id="init-border" style="">
-  <!-- <div span='4' offset="1" class="btn">
+  <div span='4' offset="1" class="btn" v-if="formdata.orderStatus =='3'">
       <button @click="redirects('EvaluationList')">评价晒单</button>
-  </div> -->
+  </div>
   <div span='4' offset="1" class="btn">
       <button @click="canel">删除订单</button>
   </div>

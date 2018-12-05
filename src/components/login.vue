@@ -2,7 +2,7 @@
    <!-- 登录注册 组件 -->
   <div id="apps">
          <div class="login" style="width: 90%; margin-left: 5%;">
-            <div class="welcome"><img src="../../static/images/welcome.png"></div>
+            <!-- <div class="welcome"></div> -->
             <div class="login-form">
                 <van-cell-group>
                 <van-field clearable  style="box-shadow: 0 0 0 60px #fff inset;-webkit-text-fill-color: #000;" placeholder="请输入手机号" type="number" v-model="username" @keydown="rules(username,'user')"/>

@@ -1,16 +1,16 @@
 <!--  -->
 <template>
   <div id="app">
-      <van-nav-bar title="晒单评论" right-text="提交"  @click-left="onClickLeft" left-arrow>
+      <van-nav-bar title="晒单评论" right-text="提交" @click-right="sub"  @click-left="onClickLeft" left-arrow>
       </van-nav-bar>
     <van-row class="shopp_conent">
       <van-col span='6' offset="1" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
     </van-col>
     <van-col span='15' offset="1">
       <span>商品评分</span>
           <van-rate
-      v-model="value"
+      v-model="score"
       :size="20"
       :count="5"
       color="#B39061"
@@ -42,7 +42,7 @@
  </van-col>
 <van-col span='15' offset="1">
           <van-rate
-      v-model="value"
+      v-model="logistics1"
       :size="20"
       :count="5"
       color="#B39061"
@@ -57,7 +57,7 @@
  </van-col>
 <van-col span='15' offset="1">
           <van-rate
-      v-model="value"
+      v-model="logistics2"
       :size="20"
       :count="5"
       color="#B39061"
@@ -70,23 +70,45 @@
 </template>
 
 <script>
+import {comment} from '../api/login'
+import { Toast } from "vant";
 export default {
   data() {
     return {
-      value: 3,
+      score: 4,
       message:'',
+      logistics1:0,
+      logistics2:0,
+      formdata:'',
+      orderNo:'',
       textareaH: { maxHeight: 150, minHeight: 60 },
-      checked: true
+      checked: false
     };
   },
-
-  //   mounted: {
-
-  //   },
+  mounted(){
+    this.orderNo =  this.$route.query.orderNo;
+    this.formdata = JSON.parse(localStorage.getItem('Evaluationdetial_s'))
+  },
 
   methods: {
     onClickLeft() {
       this.$router.back(-1);
+    },
+    sub(){
+        let para = {
+          orderNo:this.orderNo,
+          token:JSON.parse(localStorage.getItem('token')),
+          productId:this.formdata.productId,
+          score:this.score,
+          isAnonymous:this.checked == true ? '1':'0',
+          comment:this.message,
+          detailId:this.formdata.id
+        }
+        comment(para).then(res =>{
+          this.onClickLeft() 
+        })  
+      
+        
     }
   }
 };
@@ -95,6 +117,8 @@ export default {
 #app >>> .imgList img {
   width: 100%;
   height: 100%;
+  padding-top: 8px;
+  padding-bottom: 10px;
 }
 #app >>> .shopp_conent {
   height: 100%;
@@ -115,7 +139,7 @@ export default {
   background-color: #fff;
 }
 #app >>> textarea {
-  color: #d8d8d8;
+  /* color: #d8d8d8; */
   font-size: 12px;
 }
 #app >>> .van-checkbox {

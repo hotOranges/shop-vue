@@ -37,10 +37,11 @@ service.interceptors.response.use(
      * Code为非200是抛错
      */
     const res = response.data
+    
     // return response
-    // if (res.code !== '200') {
-    //   Toast(res.msg)
-    // }
+    if (res.code !== '200') {
+      Toast(res.msg)
+    }
     if (res.code === '1008') {
       Toast(res.msg)
       router.push({

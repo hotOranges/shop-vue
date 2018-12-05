@@ -7,15 +7,15 @@
   left-arrow
   @click-left="onClickLeft"
  />
- <div>
-      <div class="init-soller-list2">
+ <div v-for="(item, index) in formdata" :key="index">
+    <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
+      <img :src="'http://'+'106.15.44.76/image/'+item.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
+        <span>{{item.productName}}</span>
+        <span>数量：{{item.productNum}} 规格：{{item.productColor}}</span>
+        <span>￥{{item.paymentAmount}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>
@@ -23,53 +23,7 @@
   </div>
   <van-cell-group id="init-border">
   <div span='4' offset="1" class="btn">
-      <button @click="redirects('Evaluation')">评价晒单</button>
-  </div>
-  </van-cell-group>
-  <div class="init-clear"></div>
-   <div class="init-border-20"></div>
-   </div>
-
-
-   <div>
-      <div class="init-soller-list2">
-  <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList">
-      <span style="font-size: 11px;"></span>
-  </van-col>
-  </div>
-  <van-cell-group id="init-border">
-  <div span='4' offset="1" class="btn">
-      <button @click="redirects('Evaluation')">评价晒单</button>
-  </div>
-  </van-cell-group>
-  <div class="init-clear"></div>
-   <div class="init-border-20"></div>
-   </div>
-   <div>
-      <div class="init-soller-list2">
-  <van-col span='7' offset="2" class="imgList">
-      <img   src="https://a4.vimage1.com/upload/merchandise/pdc/544/548/464510208477548544/0/880555-001-5_218x274_70.jpg" name="adapter" />
-  </van-col>
-   <van-col span='11' offset="2" class="imgList">
-        <span>翼贝贝儿童手表T8S</span>
-        <span>数量：1 规格：黑色</span>
-        <span>￥499.00</span>
-  </van-col>
-  <van-col span='4' offset="2" class="imgList">
-      <span style="font-size: 11px;"></span>
-  </van-col>
-  </div>
-  <van-cell-group id="init-border">
-  <div span='4' offset="1" class="btn">
-      <button @click="redirects('Evaluation')">评价晒单</button>
+      <button @click="Evaluations(item)">评价晒单</button>
   </div>
   </van-cell-group>
   <div class="init-clear"></div>
@@ -79,9 +33,13 @@
 </template>
 
 <script>
+import {reviews} from '../api/login'
+import { Toast } from "vant";
 export default {
   data () {
     return {
+        orderNo:'',
+        formdata:''
     };
   },
 
@@ -89,11 +47,36 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  mounted() {
+      this.orderNo =  this.$route.query.orderNo;
+      this.inits()
+  },
 
   methods: {
-       onClickLeft() {
+    inits(){
+
+       let para = {
+        orderNo:this.orderNo,
+        token:JSON.parse(localStorage.getItem('token'))
+      }
+      reviews(para).then(res =>{
+       if (res) {
+         this.formdata = res
+        }
+      })  
+
+    },
+     onClickLeft() {
       this.$router.back(-1);
+    },
+    Evaluations(i){
+        if (i.isReview=='0') {
+            localStorage.setItem('Evaluationdetial_s', JSON.stringify(i))
+            this.$router.push({ path: '/Evaluation', query: { orderNo: this.orderNo }});
+        }else{
+            Toast('您已经评论过了~')
+        }
+       
     },
      redirects(url) {
       this.$router.push(url);

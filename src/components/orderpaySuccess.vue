@@ -81,7 +81,7 @@ export default {
   this.orderNo =  this.$route.query.orderNo;
     this.inits()
     console.log(JSON.parse(localStorage.getItem('opednId')))
-    this.opednId = 'onj-X0dKpX7qJMsn3rCXuU9P1o1U'
+    this.opednId = JSON.parse(localStorage.getItem('opednId'))
   },
   filters:{
     filterwhet(e){

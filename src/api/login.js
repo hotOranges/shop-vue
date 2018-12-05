@@ -225,6 +225,17 @@ export function getBanner(params) {
       data: params
     })
   }
-  
-  
-  
+  export function comment(params) {
+    return request({
+      url: `${base}/customerUser/comment`,
+      method: 'post',
+      data: params
+    })
+  }  
+  export function reviews(params) {
+    return request({
+      url: `${base}/customer/reviews`,
+      method: 'post',
+      data: params
+    })
+  }  

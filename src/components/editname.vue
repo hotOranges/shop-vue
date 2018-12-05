@@ -63,7 +63,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import url("../assets/css/login.less");
 </style>
 <style scoped>
 .initsimg{

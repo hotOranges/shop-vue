@@ -32,7 +32,7 @@
   </van-cell-group>
   <div class="init-soller-list"   @click="orderDeil(i)">
   <van-col span='5' offset="1" class="imgList" v-for="adx in i.avatar">
-    <img  :src="'http://'+'106.15.44.76/image/'+i.avatar[0]" name="adapter" />
+    <img  :src="'http://'+'106.15.44.76/image/'+adx" name="adapter" />
   </van-col>
   </div>
    </div>
@@ -40,9 +40,9 @@
     <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共 {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)">¥{{i.num*i.productPrice}}</span></h5>
    <!--全部订单-->
   <van-cell-group id="init-border" v-if="active==0">
-  <!-- <div span='4' offset="1" class="btn">
-      <button @click="Evaluation()">评价晒单</button>
-  </div> -->
+  <div span='4' offset="1" class="btn" v-if="i.status =='3'">
+      <button @click="Evaluation(i)">评价晒单</button>
+  </div>
   <div span='4' offset="1" class="btn" v-if="i.afterSale">
      <button @click="orderDeil(i)">申请售后</button>
   </div>
@@ -78,9 +78,9 @@
   <div span='4' offset="1" class="btn" v-if="i.afterSale">
       <button @click="orderDeil(i)">申请售后</button>
   </div>
-  <!-- <div span='4' offset="1" class="btn">
-      <button @click="redirects('/evaluation')">评价晒单</button>
-  </div> -->
+  <div span='4' offset="1" class="btn" v-if="i.status =='3'">
+      <button @click="Evaluation(i)">评价晒单</button>
+  </div>
   </van-cell-group>
 
 <!--已取消-->
@@ -162,8 +162,8 @@ export default {
        this.shows =true
        this.initData()
     },
-    Evaluation(){
-      Toast('暂无')
+    Evaluation(i){
+       this.$router.push({ path: '/EvaluationList', query: { orderNo: i.orderNo }});
     },
     more(){
       ++this.page
@@ -314,6 +314,7 @@ export default {
   padding-bottom: 5px;
   /* justify-content: center; */
   /* align-items: center; */
+  padding-top: 10px;
   display: -webkit-flex;
 }
 #app >>> .van-col--offset-1 {

@@ -3,7 +3,7 @@
   <div id="app">
     <!-- 搜索区 -->
     <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft">
-      <van-icon name="chat" @click="$toast('chat')" slot="right" info="8"/>
+      <van-icon name="chat" slot="right" info=""/>
     </van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
@@ -101,6 +101,7 @@ export default {
         "opednId",
         JSON.stringify(this.$route.query.opednId)
       );
+      console.log(this.$route.query.opednId)
     }
     if (localStorage.getItem("token").length>3) {
       this.getShopCart1()
@@ -132,11 +133,11 @@ export default {
         });
    }, 
     onClickLeft() {
-      Toast("返回");
+      // Toast("返回");
     },
 
     onClickRight() {
-      Toast("客服");
+      // Toast("暂无");
     },
     onRefresh() {
       setTimeout(() => {

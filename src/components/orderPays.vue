@@ -317,6 +317,7 @@ export default {
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
+  padding-top: 5px; 
 }
 #app >>> .van-submit-bar__text {
   text-align: left;
