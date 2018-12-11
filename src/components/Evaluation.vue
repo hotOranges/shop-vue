@@ -5,7 +5,7 @@
       </van-nav-bar>
     <van-row class="shopp_conent">
       <van-col span='6' offset="1" class="imgList">
-      <img :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
+      <img :src="'http://'+ host +'/image/'+formdata.productImage" name="adapter" />
     </van-col>
     <van-col span='15' offset="1">
       <span>商品评分</span>
@@ -25,8 +25,9 @@
     v-model="message"
     :autosize="textareaH"
     type="textarea"
-    placeholder="请输入留言"
+    placeholder="评论一下商品吧，60字以内"
     rows="1"
+    maxlength="60"
   />
 </van-cell-group>
 <van-checkbox v-model="checked" checked-color="#CF3939">匿名评论</van-checkbox> 
@@ -79,6 +80,7 @@ export default {
       message:'',
       logistics1:0,
       logistics2:0,
+      host:'pay.iwingscom.com',
       formdata:'',
       orderNo:'',
       textareaH: { maxHeight: 150, minHeight: 60 },
@@ -103,6 +105,9 @@ export default {
           isAnonymous:this.checked == true ? '1':'0',
           comment:this.message,
           detailId:this.formdata.id
+        }
+        if(this.message.length>60){
+          Toast('不能大于60个字符')
         }
         comment(para).then(res =>{
           this.onClickLeft() 

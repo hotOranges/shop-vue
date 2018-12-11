@@ -8,13 +8,11 @@ export default {
             icon:['icon_1','icon_2','icon_8','icon_4','icon_5','icon_6','icon_7','icon_10'],
             title:['鞋包馆','运动馆','母婴馆','超市','女装馆','美妆馆','男装馆','更多'],
         },
-        lunbo:{
-            src:['../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg','../../static/images/lunbo/err.jpg'],
-        },
         imageList:[],
         broadcast:[],
         bc:true,
         show:true,
+        avgScore:0,
         sshow:false,
         shop_info:0,
         my_info:2,
@@ -40,7 +38,16 @@ export default {
             state.orderShow ? state.orderShow = false : state.orderShow = true;
             setTimeout(() => {
                 state.orderShow = false;
-              }, 22000);
+              }, 220000);
+        },
+        orderShow_2(state) {
+            state.orderShow ? state.orderShow = false : state.orderShow = true;
+            setTimeout(() => {
+                state.orderShow = false;
+              }, 220000);
+        },
+        avgScoreNum_(state,e){
+            state.avgScore = e;
         },
         addNum(state,e) {
             state.numO = e;
@@ -66,9 +73,15 @@ export default {
        orderShows(context) {
            context.commit('orderShow_');
        },
+       orderShowss(context){
+            context.commit('orderShow_2');  
+       },
        orderNum(context,e) {
          context.commit('addNum',e);
        },
+       avgScoreNum(context,e) {
+        context.commit('avgScoreNum_',e);
+      },
        infoAction(context) {
          context.commit('shopCartInfo');
        },

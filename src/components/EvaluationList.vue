@@ -10,7 +10,7 @@
  <div v-for="(item, index) in formdata" :key="index">
     <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img :src="'http://'+'106.15.44.76/image/'+item.productImage" name="adapter" />
+      <img :src="'http://'+ host +'/image/'+item.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
         <span>{{item.productName}}</span>
@@ -39,6 +39,7 @@ export default {
   data () {
     return {
         orderNo:'',
+        host:'pay.iwingscom.com',
         formdata:''
     };
   },

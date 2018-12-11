@@ -16,8 +16,9 @@
 />
 </van-cell>
 <van-cell v-else
-  @click="redirects('/address')"
+  @click="address"
   class="addressnone"
+  style="padding-top: 44px;"
 >     
 <span style="padding-top: 55px;">还没有地址信息，请点击添加地址</span> 
 </van-cell>
@@ -151,6 +152,22 @@ export default {
      let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
+    this.LocalAdrrss = JSON.parse(localStorage.getItem('LocalAdrrss'))
+    if (this.LocalAdrrss !== null) {
+        var datas = [];
+       this.deiladdress = this.LocalAdrrss.address
+       var arrs2 = this.LocalAdrrss
+        datas.push({
+             id:arrs2.id,
+             name:arrs2.name,
+             tel:arrs2.tel,
+             address:arrs2.address
+            })
+        this.deiladdress =arrs2.address 
+      //  console.log(this.deiladdress) 
+       this.list =datas
+      
+     }else{
      listShipping(para).then(res => {
           var datas = [];
           this.listShippings = res
@@ -183,6 +200,7 @@ export default {
          
           
       })
+     }
   },
   methods: {
     ...mapActions(["orderShows"]),
@@ -210,7 +228,12 @@ export default {
            invoiceType:this.invoiceType,
            invoiceId:this.invoiceId
         }
-        console.log(para)
+         Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
         placeOrder(para).then(res => {
           if (res) {
              var scopedSlotss = {
@@ -221,8 +244,9 @@ export default {
                 orderAmount:this.total/100
         }
         localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
-        this.$router.push("/paySuccess");
-          }
+        Toast.clear();
+       this.$router.push("/paySuccess");
+        }
         })
 
         // Toast("提交成功");
@@ -405,6 +429,18 @@ export default {
     width: 81%;
     text-align: right;
     padding: 0px 15px;
+  }
+  #app >>> .van-hairline--top-bottom::after{
+    border-width:0
+  }
+  #app >>> .van-submit-bar{
+    position: relative;
+    margin-top: 40px;
+  }
+  #app >>> .van-notice-bar{
+    background:rgba(0,0,0,1);
+    opacity:0.1997;
+    color:#fff
   }
 </style>
 

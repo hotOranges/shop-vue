@@ -21,30 +21,30 @@
 <van-cell>
   <template slot="title">
    <span class="custom-text">订单金额</span>
-   <span class="custom-text">499.00</span>
+   <span class="custom-text">{{placeOrders.orderAmount}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">订单编号</span>
-   <span class="custom-text">2132184732</span>
+    <span class="custom-text">{{placeOrders.orderNo}}</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">收货地址</span>
-   <span class="custom-text">喵酱家（188****8888）</span>
+   <span class="custom-text">{{placeOrders.consigneeName}}（{{placeOrders.consigneePhone}}）</span>
   </template>
 </van-cell>
 <van-cell>
   <template slot="title">
    <span class="custom-text">发票类型</span>
-   <span class="custom-text">个人电子发票</span>
+   <span class="custom-text">{{formdata.invoiceType | filterwhet2}}</span>
   </template>
 </van-cell>
 </van-row>
  <div class="init-10"></div>
- <van-radio-group v-model="radio3">
+ <van-radio-group v-model="radio3" style="padding-bottom:80px">
         <van-cell-group>
           <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '1'">
             <van-radio name="1" />
@@ -55,31 +55,127 @@
         </van-cell-group>
       </van-radio-group>
 <van-goods-action>
-        <van-goods-action-mini-btn text="合计¥499" />
-        <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  />
-        <van-goods-action-big-btn text="去支付" primary />  
+<van-goods-action-mini-btn :text="'合计¥'+placeOrders.orderAmount"/>     
+        <van-goods-action-big-btn text="去支付" primary @click="pay" />  
     </van-goods-action>   
   </div>
 
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+import { Toast } from "vant";
+import { payMent } from "../../src/api/login";
 export default {
   data() {
     return {
       radio3: "1",
-      placeOrders:'',
+      placeOrders: "",
+      opednId: "",
+      datas: "",
+      show: true
     };
   },
+   filters:{
+    filterwhet2(e){
+      var text;
+      if (e=='1') {
+        text = '个人发票'
+      }else if(e=='2'){
+        text = '单位发票'
+      }
+      return text
+    }
+  },
   mounted(){
-    this.placeOrders = JSON.parse(localStorage.getItem('placeOrders'))[0]
+    this.placeOrders = JSON.parse(localStorage.getItem('placeOrders'))
+   this.opednId = JSON.parse(localStorage.getItem("opednId"));
   },
   methods: {
+     pay() {
+      let vm = this;
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        orderNo: this.placeOrders.placeOrder,
+        payMethod: this.radio3,
+        // opednId:'onj-X0QtDCJJjbK4EulmN7rTimJk'
+        opednId: this.opednId
+      };
+      if (this.radio3 == "1") {
+        payMent(para).then(res => {
+          if (res) {
+            this.datas = JSON.stringify(res);
+          var params = JSON.parse(this.datas);
+
+            function onBridgeReady() {
+               console.log(WeixinJSBridge)
+              WeixinJSBridge.invoke(
+                "getBrandWCPayRequest",
+                {
+                  appId: params.appId,
+                  timeStamp: params.timeStamp,
+                  nonceStr: params.nonceStr,
+                  package: params.package,
+                  signType: params.signType,
+                  paySign: params.paySign
+                },
+                function(res) {
+                  if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    Toast("支付成功");
+                    this.$router.push({ path: '/aftersalesDetil', query: { orderNo: this.placeOrders.placeOrder,orderAmount:this.placeOrders.orderAmount }});
+                  } else {
+                    Toast("支付失败");
+                    this.$router.push({ path: '/payFailed', query: { orderNo: this.placeOrders.placeOrder,orderAmount:this.placeOrders.orderAmount }});
+                  }
+                }
+              );
+            }
+
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                document.addEventListener(
+                  "WeixinJSBridgeReady",
+                  onBridgeReady,
+                  false
+                );
+              } else if (document.attachEvent) {
+                document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+              }
+            } else {
+              onBridgeReady();
+            }
+          }
+        });
+      } else {
+        this.httpPost(
+          "http://test2.uwhere.net/iwings-manager/customer/payMent",
+          para
+        );
+      }
+    },
+    httpPost(URL, PARAMS) {
+      var temp = document.createElement("form");
+      temp.action = URL;
+      temp.method = "post";
+      temp.style.display = "none";
+
+      for (var x in PARAMS) {
+        var opt = document.createElement("textarea");
+        opt.name = x;
+        opt.value = PARAMS[x];
+        temp.appendChild(opt);
+      }
+
+      document.body.appendChild(temp);
+      temp.submit();
+      return temp;
+    },
     redirects(url) {
       this.$router.push(url);
     },
     onClickLeft(){
-      this.$router.back(-1)
+      this.$router.push('/')
     }
   }
 };

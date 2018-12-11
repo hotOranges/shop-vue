@@ -10,7 +10,7 @@
 />
       <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img  :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
+      <img  :src="'http://'+host+'/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
         <span>{{formdata.productName}}</span>
@@ -49,13 +49,19 @@
         </van-row>
 </template>
 </van-cell>
-<van-cell v-if="list.length>0" @click="redirects('/address')" >
+<van-cell v-if="list.length>0" @click="address" >
      <h5 style="font-weight: 400; padding: 0;margin: 0;color: #333;font-size: 14px;">收货地址</h5>
      <van-address-list
   v-model="chosenAddressId"
   :list="list"
   :switchable ="false"
 />
+</van-cell>
+<van-cell v-else
+  @click="address"
+  class="addressnone"
+>     
+<span>还没有地址信息，请点击添加地址</span> 
 </van-cell> 
 </van-cell-group>
 <van-button size="large" @click="submit">提交</van-button>
@@ -72,6 +78,7 @@ export default {
         value:'',
         formdata:'',
         chosenAddressId: "",
+        host:'pay.iwingscom.com',
         list: [
         // {
         //   id: "3",
@@ -93,12 +100,26 @@ export default {
   computed: {},
 
   mounted(){
-       
-      console.log(JSON.parse(localStorage.getItem('applyServiceData')))
    this.formdata = JSON.parse(localStorage.getItem('applyServiceData'))[0]
     let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
+      this.LocalAdrrss = JSON.parse(localStorage.getItem('LocalAdrrss'))
+       if (this.LocalAdrrss !== null) {
+        var datas = [];
+       this.deiladdress = this.LocalAdrrss.address
+       var arrs2 = this.LocalAdrrss
+        datas.push({
+             id:arrs2.id,
+             name:arrs2.name,
+             tel:arrs2.tel,
+             address:arrs2.address
+            })
+        this.deiladdress =arrs2.address 
+      //  console.log(this.deiladdress) 
+       this.list =datas
+      
+     }else{
      listShipping(para).then(res => {
           var datas = [];
           this.listShippings = res
@@ -129,11 +150,15 @@ export default {
           this.list = datas  
           
       })
+     }
   },
 
   methods: {
       onClickLeft() {
       this.$router.back(-1);
+    },
+      address(){
+       this.$router.push({ path: '/address', query: { edit: 'true' }});
     },
     redirects(url) {
       localStorage.setItem('mydatas', JSON.stringify(this.formaddress))
@@ -157,11 +182,18 @@ export default {
           saleType:this.formdata.saleType,
           shippingId:this.list[0].id,
           senderPhone:this.value,
+          orderNo:this.formdata.orderNo,
           productColor:this.formdata.productColor,
           detailId:this.formdata.detailId
       }
-
+        Toast.loading({ 
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
       applyService(para).then(res =>{
+        Toast.clear()
            window.history.go(-3)
       })
       
@@ -227,5 +259,12 @@ export default {
 }
 #apps >>> .van-nav-bar .van-icon{
     color: #2c3e50
+}
+#apps >>> .addressnone{
+  padding-top: 50px;
+}
+#apps >>> .addressnone .van-cell__value--alone{
+  line-height: 44px;
+  color: #CF3939;
 }
 </style>

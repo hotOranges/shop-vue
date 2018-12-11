@@ -37,7 +37,10 @@ service.interceptors.response.use(
      * Code为非200是抛错
      */
     const res = response.data
-    
+    if (res.data == '200') {
+      Toast(res.msg)
+      return res.data
+    }
     // return response
     if (res.code !== '200') {
       Toast(res.msg)

@@ -5,17 +5,18 @@
   class="init-header"
   title="支付成功"
   right-text="完成"
+   @click-right="goHome"
 />
 
 <van-row>
      <van-col span='24' offset="0" class="payContent">
   <van-icon name="passed"  size="60px" color="#2BA6B0" style="padding-top:20px;padding-bottom:10px"/>   
  <p>支付方式：微信支付</p>
- <p style="margin-bottom:30px">订单金额：¥499.00</p>
+ <p style="margin-bottom:30px">订单金额：¥{{orderAmount}}</p>
  </van-col>
   <van-col span='24' offset="0" class="payBack">
-      <van-button type="default">查看订单</van-button>
-      <van-button type="default">返回商城</van-button>
+      <van-button type="default" @click="gorder">查看订单</van-button>
+      <van-button type="default" @click="goHome">返回商城</van-button>
   </van-col>
     <div class="init-10"></div>
     <van-col span='24' offset="0" class="remark">
@@ -30,9 +31,23 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      orderNo:'',
+      orderAmount:''
+    };
   },
-  methods: {}
+  mounted(){
+     this.orderNo =  this.$route.query.orderNo;
+     this.orderAmount  = this.$route.query.orderAmount;
+  },
+  methods: {
+    gorder(){
+      this.$router.push({ path: '/aftersalesServer', query: { orderNo: this.orderNo }});
+    },
+    goHome(){
+      this.$router.push('/')
+    }
+  }
 };
 </script>
 

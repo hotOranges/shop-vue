@@ -8,7 +8,7 @@
   left-arrow
   @click-left="onClickLeft"
 />
-<van-cell  v-if="list.length>0" @click="redirects('/address')" >
+<van-cell  v-if="list.length>0" @click="address"  style="padding-top:20px">
      <van-address-list
   v-model="chosenAddressId"
   :list="list"
@@ -16,8 +16,9 @@
 />
 </van-cell>
 <van-cell v-else
-  @click="redirects('/address')"
+  @click="address"
   class="addressnone"
+  style="padding-top: 44px;"
 >     
 <span style="padding-top: 55px;">还没有地址信息，请点击添加地址</span> 
 </van-cell>
@@ -72,14 +73,14 @@
   <van-cell-group>
   <van-cell>
     <span class="blord">发票类型</span>
-    <span>普通发票</span>
+    <span style="color:#6B6B6B">普通发票</span>
   </van-cell> 
   <van-cell>
     <span class="blord">发票抬头</span>
   </van-cell> 
  <van-tabs type="card" v-model="active">
   <van-tab title="个人">
-    <h4 style="color: #6B6B6B; font-size: 14px; padding-left: 15px; margin-bottom: 72px;">个人发票将显示详细商品名称和价格信息</h4>
+    <h4 style="color: #6B6B6B;font-weight: 400;font-size: 14px; padding-left: 15px; margin-bottom: 72px;">个人发票将显示详细商品名称和价格信息</h4>
   </van-tab>
   <van-tab title="单位">
 <van-cell-group>
@@ -117,6 +118,7 @@ export default {
       isInvoice:0,
       invoiceId:'',
       invoiceType:'',
+      LocalAdrrss:[],
       chosenAddressId: "",
       deiladdress:'',
       list: [
@@ -148,9 +150,26 @@ export default {
   mounted(){
     this.detial = JSON.parse(localStorage.getItem('detial_s'))
     this.selIn = JSON.parse(localStorage.getItem('selIn'))[0]
+    
      let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
+      this.LocalAdrrss = JSON.parse(localStorage.getItem('LocalAdrrss'))
+       if (this.LocalAdrrss !== null) {
+        var datas = [];
+       this.deiladdress = this.LocalAdrrss.address
+       var arrs2 = this.LocalAdrrss
+        datas.push({
+             id:arrs2.id,
+             name:arrs2.name,
+             tel:arrs2.tel,
+             address:arrs2.address
+            })
+        this.deiladdress =arrs2.address 
+      //  console.log(this.deiladdress) 
+       this.list =datas
+      
+     }else{
      listShipping(para).then(res => {
           var datas = [];
           this.listShippings = res
@@ -181,9 +200,13 @@ export default {
           this.list = datas  
           
       })
-  },
+  }
+},
   methods: {
     ...mapActions(["orderShows"]),
+    address(){
+       this.$router.push({ path: '/address', query: { edit: 'true' }});
+    },
     onSubmit(e) {
       if (this.list.length == 0) {
         Toast("请填写收货信息");
@@ -198,7 +221,7 @@ export default {
         })
         let para = {
            token:JSON.parse(localStorage.getItem('token')),
-           shippingId:this.detial.id,
+           shippingId:this.list[0].id,
            orderAmount:this.detial.specialPrice*this.selIn.orderNum,
            buyerMessage:this.message,
            buyDetail:JSON.stringify(buyDetail),
@@ -206,7 +229,12 @@ export default {
            invoiceType:this.invoiceType,
            invoiceId:this.invoiceId
         }
-        
+        Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          }); 
         placeOrder(para).then(res => {
           if (res) {
              var scopedSlotss = {
@@ -217,7 +245,8 @@ export default {
                 orderAmount:this.detial.specialPrice*this.selIn.orderNum
         }
         localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
-        this.$router.push("/paySuccess");
+        Toast.clear();
+       this.$router.push("/paySuccess");
           }
         })
 
@@ -374,6 +403,9 @@ export default {
   text-align: left;
   background-color: #F2F2F2;
  }
+#app >>> .van-cell{
+      padding: 4px 12px;
+}
 #app >>> .van-field__control{
   
   line-height: 35px;

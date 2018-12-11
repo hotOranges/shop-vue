@@ -14,7 +14,7 @@
   </van-cell-group>
   <div class="init-soller-list2">
   <van-col span='5' offset="2" class="imgList">
-     <img  :src="'http://'+'106.15.44.76/image/'+i.productImage" name="adapter" />
+     <img  :src="'http://'+ host +'/image/'+i.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
       <span>{{i.productName}}</span>
@@ -47,6 +47,7 @@ export default {
       page:0,
       show: false,
       shows:true,
+      host:'pay.iwingscom.com',
       fromData:{}
     };
   },

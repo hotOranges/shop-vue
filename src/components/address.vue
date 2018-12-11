@@ -12,9 +12,10 @@
       <van-address-list v-if="list.length>0"
         v-model="chosenAddressId"
         :list="list"
-        :switchable="false"
+        :switchable="edits"
         @add="onAdd"
         @edit="onEdit"
+        @select="oned"
       />
       <div v-else style="margin-top:160px;text-align: center;padding-bottom: 240px;">
         <h5 style="color:#6B6B6B;">
@@ -35,25 +36,18 @@ export default {
       chosenAddressId: "1",
       listShippings:'',
       list: [
-        {
-          id: '1',
-          name: '张三',
-          tel: '13000000000',
-          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
-        },
-        {
-          id: '2',
-          name: '李四',
-          tel: '1310000000',
-          address: '浙江省杭州市拱墅区莫干山路 50 号'
-        }
+       
       ],
+      edits:false,
       add: "新增地址",
       edit: "编辑地址",
       disabledText: "以下地址超出配送范围"
     };
   },
   mounted(){
+    if (this.$route.query.edit=='true') {
+      this.edits= true
+    }
      let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
@@ -77,6 +71,10 @@ export default {
     onAdd() {
       this.$router.push("addressnew");
     },
+    oned(item,index){
+      localStorage.setItem('LocalAdrrss', JSON.stringify(item))
+     this.onClickLeft()
+    },
     onClickLeft() {
       this.$router.back(-1);
     },
@@ -91,5 +89,8 @@ export default {
   margin-top: 30px;
   width: 80%;
   position: relative;
+}
+#app >>> .van-address-item .van-radio__input{
+  display: none
 }
 </style>

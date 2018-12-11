@@ -6,7 +6,7 @@
         <van-swipe :autoplay="3000">
             <van-swipe-item v-for="(image, index) in images" :key="index">
                 <!-- <img v-lazy="image" style="width:100%;height:160px;" @click.stop="redirect('/goods/id_0')"/> -->
-                <img :src=" 'http://'+image.url+ image.avatar" style="width:100%;" />
+                <img  @click.stop="buy(image)" :src=" 'http://'+image.url+ image.avatar" style="width:100%;" />
             </van-swipe-item>
         </van-swipe>
       </van-col>
@@ -38,7 +38,13 @@ export default {
   methods: {
     redirect(url) {
       this.$router.push(url);
-    }
+    },
+    buy(img) {
+      // this.buyParam(img);
+      // localStorage.setItem('detial_s', JSON.stringify(img))
+      // this.$router.push('/goods/'+img.id +'/buy');
+    },
+    //  ...mapActions(["buyParam"])
   },
   watch: {},
   directives: {},

@@ -17,14 +17,13 @@
         <van-uploader :after-read="onRead" capture="image" accept="image/*" multiple>拍照</van-uploader>
       </p>
       <p calss="pinit" style="text-align: center;border-top: 1px solid #999">
-        <van-uploader :after-read="onRead" multiple accept="image/*">相册</van-uploader>
+        <van-uploader :after-read="onRead" multiple accept="image/*">本地相册</van-uploader>
       </p>
       <p style="background-color:rgba(0,0,0,.7);height: 14px;"></p>
       <p @click="onSelectchange" calss="pinit" style="text-align: center;color: red;">取消</p>
     </van-actionsheet>
   </div>
 </template>
-
 <script>
 import {getUser,editUser} from '../api/login'
 import { Actionsheet } from 'vant';
@@ -43,8 +42,8 @@ export default {
        show: false,
        url:'',
        form:{
-        nickName:'未设置',
-        avatar:'http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg'
+        nickName:'',
+        avatar:''
       },
       actions: [
         {
@@ -76,6 +75,8 @@ export default {
         if (res) {
           if (res.nickName.length>0) {
             this.form.nickName = res.nickName
+          }else{
+             this.form.nickName = res.userName
           }
           if (res.avatar.length>0) {
             this.form.avatar = res.avatar
@@ -91,7 +92,7 @@ export default {
                 duration: 0,
                 mask: true,
                 forbidClick: false,
-                message: '上传中...'
+                message: '上传中...' 
           });
           let img = new Image();
              img.src = file.content;
@@ -132,7 +133,7 @@ export default {
             formData.append("file", file.file);
             formData.append("token", JSON.parse(localStorage.getItem('token')));         
              instance({
-                url:'http://106.15.44.76/iwings-manager/customerUser/upload',
+                url:'http://pay.iwingscom.com/iwings-manager/customerUser/upload',
                 method:'post',
                 headers: {
                     'token': sessionStorage.token

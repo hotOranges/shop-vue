@@ -79,7 +79,14 @@ export default {
        areaCode:content.areaCode,
         shippingId: this.formaddress.id
      }
+     Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
      editShipping(para).then(res => {
+       Toast.clear()
         this.$router.back(-1);
       })
     },
@@ -93,16 +100,9 @@ export default {
        shippingId: this.formaddress.id
      }
      delShipping(para).then(res => {
-        if (res.code =='200') {
-            Toast(res.msg)
+            Toast('删除成功')
             this.$router.back(-1);
-        }else if(res.code =='1008'){
-           Toast(res.msg)
-             this.$router.push('login');
-        }
-        else{
-          Toast(res.msg)
-        }
+        
       })
     },
     onChangeDetail(val) {}

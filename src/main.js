@@ -3,6 +3,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import qs from 'qs'
+import utils from './utils/utils'
+// Vue.prototype.$utils = utils // main.js中全局引入
+let id = utils.getUrlKey('openId')
+console.log(id)
+localStorage.setItem(
+  "opednId",
+  JSON.stringify(id)
+);
 Vue.config.productionTip = false
 
 //ajax

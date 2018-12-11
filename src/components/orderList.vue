@@ -1,23 +1,6 @@
 <template>
   <!-- 购买信息组件  大部分都是一样的 所以数据方面 我就用同一个 作为展示作用-->
   <div id="app">
-    <van-sku
-      v-model="orderShow"
-      :sku="sku"
-      :goods="goods"
-      :goods-id="goodsId"
-      :hide-stock="sku.hide_stock"
-      :quota="quota"
-      :quota-used="quotaUsed"
-      :reset-stepper-on-hide="resetStepperOnHide"
-      :reset-selected-sku-on-hide="resetSelectedSkuOnHide"
-      :close-on-click-overlay="closeOnClickOverlay"
-      :disable-stepper-input="disableStepperInput"
-      :message-config="messageConfig"
-      @buy-clicked="onBuyClicked"
-      @add-cart="onAddCartClicked"
-      v-order="this"
-    />
   </div>
 </template>
 <script>
@@ -136,7 +119,8 @@ export default {
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info,
       orderShow: state => state.home.orderShow
-    })
+    }),
+    
   },
   mounted() {
     this.detial = JSON.parse(localStorage.getItem("detial_s"));
@@ -150,7 +134,8 @@ export default {
       this.$router.back(-1);
     },
     setdata() {
-      this.sku.stock_num = this.detial.saleNum;
+      
+      this.sku.stock_num =9999;
       this.sku.price = this.detial.specialPrice;
       this.goods.title = this.detial.productName;
       this.goods.picture =
@@ -171,7 +156,7 @@ export default {
           id: i,
           s1: i,
           price: this.detial.specialPrice * 100,
-          stock_num: 100
+          stock_num: 1111
         });
       }
       this.sku.tree[0].v = newv;
@@ -196,6 +181,7 @@ export default {
       this.$router.push("/goods/id_2/buy/pay");
     },
     onAddCartClicked(data) {
+       if (localStorage.getItem('token') && localStorage.getItem('token').length>3) {
       const sel = document.querySelector(".van-stepper__input");
       const color = document.querySelector(
         ".van-sku-row__item.van-sku-row__item--active"
@@ -223,6 +209,10 @@ export default {
           Toast("加入成功");
           this.orderShows();
       });
+       }else{
+         Toast('请登录')
+         this.$router.push('/login')
+       }
     },
     getShopCart1(){
    let para = {
@@ -230,8 +220,7 @@ export default {
     };
     getShopCart(para).then(res => {
        localStorage.setItem('getShopCarts', JSON.stringify(res.shopCart))
-       this.infoAction()
-       this.info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+      this.infoAction()
     });
    }
     

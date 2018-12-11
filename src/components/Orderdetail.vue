@@ -13,7 +13,7 @@
   :list="list"
 />     
 <div class="init-10"></div>
-  <van-radio-group v-model="radio3">
+  <van-radio-group v-model="radio3" style="padding-bottom:80px">
         <van-cell-group>
            <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '1'">
             <van-radio name="1" />
@@ -67,24 +67,7 @@ export default {
     return {
       chosenAddressId: "1",
       list: [
-        {
-          id: "1",
-          name: "张三",
-          tel: "13000000000",
-          address: "浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室"
-        },
-        {
-          id: "2",
-          name: "李四",
-          tel: "1310000000",
-          address: "浙江省杭州市拱墅区莫干山路 50 号"
-        },
-        {
-          id: "3",
-          name: "李四",
-          tel: "1310000000",
-          address: "浙江省杭州市拱墅区莫干山路 50 号"
-        }
+       
       ],
       areaList: {},
 

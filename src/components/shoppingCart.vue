@@ -19,13 +19,13 @@
      <div class="checkedBox van-checkbox">
        <div v-model="checkAll" @click="choiceAll" :class="checkAll?'van-checkbox__icon van-checkbox__icon--round van-checkbox__icon--checked':'van-checkbox__icon van-checkbox__icon--round' ">
          <i class="van-icon van-icon-success" style="margin-left: 0px;"><!----></i></div><!----></div>
-         <i  class="van-checkbox__icon van-checkbox__icon--round"><i style="margin-left: 38px;">新翔自营  &nbsp;></i></i></p>
+         <i  class="van-checkbox__icon van-checkbox__icon--round"><i style="margin-left: 38px;">新翔自营</i></i></p>
         </van-row>
     <div v-for="(v,index) in shops" :key="index.id" class="shop-cart">
         <!-- 标签区域 -->
         <div class="shopp_conent">
         <van-col span='2' offset="1" class="">
-          <van-checkbox v-model="v.danxuan" class="checkedBox"  @change="singleChecked(v.danxuan,index)"></van-checkbox>
+          <van-checkbox v-model="v.danxuan" class="checkedBox"   @change="singleChecked(v.danxuan,index)"></van-checkbox>
         </van-col>
         <van-col span='6' offset="1" class="imgList">
       <img  :src="v.productImage" name="adapter" />
@@ -34,11 +34,11 @@
       <span>{{v.productName}}</span>
       <span>￥{{v.price}}</span>
       <span>{{v.productColor}}</span>
-      <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper @plus="subShopCarts2(v)" @minus="subShopCarts(v)" v-model="v.productNum"/></span>
+      <span style="text-align: right;padding-right: 10px;padding-top: 8px;"><van-stepper disable-input @plus="subShopCarts2(v)" @minus="subShopCarts(v)" v-model="v.productNum"/></span>
     </van-col>
         </div>
     </div>
-    <div style="padding-bottom:50px"></div>  
+    <div style="padding-bottom:80px"></div>  
 <van-submit-bar
   :price="total"
   button-text="去结算"
@@ -52,8 +52,7 @@
    </p>
 </van-submit-bar>
 <van-submit-bar
- 
-  button-text="删除"
+  button-text="删除所选"
   @submit="onSubmit2"
   v-else >
    <p class="init-checkd">
@@ -62,7 +61,6 @@
          <i class="van-icon van-icon-success"><!----></i></div><!----></div>
           <i class="van-checkbox__icon van-checkbox__icon--round">全选</i>
    </p>
-  <!-- <van-checkbox v-model="checkAll">全选</van-checkbox> -->
 </van-submit-bar>
   </div>
   <div v-else style="text-align: center;margin-top: 50%;">
@@ -133,13 +131,19 @@ export default {
     ...mapGetters(["bc_notshow", "search_show"])
   },
   methods: {
+    ...mapActions(["infoAction"]),
     onClickLeft() {
-      this.$router.back(-1);
+      this.$router.push('/');
     },
     onSubmit2() {
      var datas =  this.shops.filter(function (vals) {
           return vals.danxuan == true
         })
+       if (datas.length<=0) {
+          Toast('请选择商品')
+          return
+        }
+        
        var  addShopData = [];
        for(var i in datas){
          addShopData.push({
@@ -147,12 +151,15 @@ export default {
             productColor: datas[i].productColor.replace(/\s+/g,""),
          })
        }
-         let para = {
+        let para = {
         token: JSON.parse(localStorage.getItem("token")),
         shopCart: JSON.stringify(addShopData)
-      }
+       }
+     
      delShopCart(para).then(res => {
-            this.inits()
+         this.total = 0
+         this.shops = this.shops.filter(function(i){ return !i.danxuan })
+         Toast('删除成功')
       });
     },
     
@@ -170,7 +177,11 @@ export default {
         shopCart: JSON.stringify(addShopData)
       }
      subShopCart(para).then(res => {
-      this.inits()
+       if (item.danxuan) {
+            let p =
+              parseFloat(item.price) *100
+              this.total -= p
+          }
       });
     },
      subShopCarts2(item){
@@ -186,20 +197,25 @@ export default {
         token: JSON.parse(localStorage.getItem("token")),
         shopCart: JSON.stringify(addShopData)
       }
+   
      addShopCart(para).then(res => {
-        this.inits()
+          if (item.danxuan) {
+            let p =
+              parseFloat(item.price) *100
+              this.total += p
+          }
       });
     },
     choiceAll:function(checkAll){
       this.checkAll = !this.checkAll;
       if (this.checkAll) {
-        for(let val of this.shops){
-            val['danxuan'] = true;
-        }
+        this.shops.forEach(element => {
+           this.$set(element, 'danxuan', true)
+      })
       }else{
-        for(let val of this.shops){
-            val['danxuan'] = false;
-        }
+        this.shops.forEach(element => {
+           this.$set(element, 'danxuan', false)
+      })
       }
    },
     onSubmit() {
@@ -219,10 +235,17 @@ export default {
     inits(){
         let para = {
           token:JSON.parse(localStorage.getItem('token'))
-          }
+          } 
+
       getShopCart(para).then(res => {
+         localStorage.setItem('getShopCarts', JSON.stringify(res.shopCart)) 
+        this.infoAction()
         var data  = res.shopCart;
+       data.filter(function (vals) {
+          return vals.danxuan == false
+        }) 
         this.shops = data
+        Toast.clear();
         if (data.length<=0) {
           this.cantext = ''
         }
@@ -232,14 +255,22 @@ export default {
       let p =
         parseFloat(this.shops[index]["price"]) *
         parseFloat(this.shops[index]["productNum"]);
-      if (!checked) {
+      if (!checked ||checked=='undefined') {
+      
         // this.checked -= 1;
         this.shops[index].danxuan = false;
-        this.total -= p*100;
+         this.$set(this.shops, index, this.shops[index]);
+        if (this.total>0) {
+          this.total -= p*100;
+        }
       } else {
         // this.checked += 1;
         this.shops[index].danxuan = true;
+         this.$set(this.shops, index, this.shops[index]);
         this.total += p*100 ;
+        if (condition) {
+          
+        }
        
       }
       var check =  this.shops.filter(function (vals) {
@@ -271,7 +302,9 @@ export default {
       this.$router.push(url);
     }
   },
-  watch: {},
+  watch: {
+    
+  },
   directives: {
     tab: {
       inserted(el) {
@@ -292,9 +325,9 @@ export default {
   mounted(){
     this.inits()
   },
-  created() {
-    Toast("仅展示作用  ^_^");
-  }
+  // created() {
+  //   Toast("仅展示作用  ^_^");
+  // }
 };
 </script>
 
@@ -370,6 +403,7 @@ export default {
 }
 #app >>> .van-submit-bar__bar {
   height: 70px;
+  border-top: 1px solid #D9D9D9;
 }
 #app >>> .row-1 {
   margin-top: 0;

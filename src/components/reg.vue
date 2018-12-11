@@ -1,6 +1,6 @@
 <template>
    <!-- 登录注册 组件 -->
-  <div id="apps">
+  <div id="apps" style="padding-top:0">
       <van-nav-bar
   class="init-header"
   title="注册"
@@ -15,6 +15,7 @@
                             v-model="iPhone"
                             center
                             clearable
+                            type="tel"
                             placeholder="请输入手机号"
                          >
                         </van-field>
@@ -24,26 +25,24 @@
                             v-model="sms"
                             center
                             clearable
-                            placeholder="请输入短信验证码"
+                            placeholder="请输入验证码"
                         >
-                            <van-button  @click="send" slot="button" size="small"  style="color: #B39061;background-color: #fff; border: 1px solid #B39061;border-radius: 3px;">
-                            <span v-if="sendMsgDisabled">{{time+'秒后获取'}}</span>
-                            <span v-if="!sendMsgDisabled">发送验证码</span>
+                            <van-button  @click="send" slot="button" size="small"  style="color: #B39061;background-color: #fff; border: 1px solid #B39061;border-radius: 3px;font-family: PingFangSC-Medium;">
+                            <span>{{content}}</span>
+                            
                             </van-button>
                         </van-field>
                         </van-cell-group>
                         <van-cell-group>
                         <van-field
                             v-model="password"
-                            center
-                            clearable
-                            icon="password-view"
-                            @click-icon="passwordview"
+                            center                   
                             placeholder="密码（6～20位数字或字母）"
                             :type="paswldtype"
                             @keydown="rules(password,'pass')"
                         >
                         </van-field>
+                         <img   v-show='show' :src="openeye" class="eye" alt="" @click="changeType()">
                         </van-cell-group>
                         <div class="login-inp"><a href="#" @click="submit(iPhone,sms,password)">{{btnName}}</a></div>
             
@@ -71,67 +70,69 @@ export default {
     return {
       password: null,
       sms: null,
-      time: 180,
-      sendMsgDisabled: false,
+      content: '获取验证码',
+      totalTime: 180,
+      canClick: true, //添加canClick  
       paswldtype: "password",
       iPhone: "",
+      openeye: require('@/assets/img/login_icon_hide.png'),
       btnName: "注册",
-      checked: false
+      checked: false,
+      show:true
     };
   },
-  computed: {
-    ...mapState({
-      src: state => state.home.lunbo.src,
-      activeTitle: state => state.active.home.activeTitle,
-      days: state => state.active.home.days,
-      broadcast: state => state.home.broadcast,
-      shop_info: state => state.home.shop_info,
-      my_info: state => state.home.my_info,
-      show: state => state.home.show
-    }),
-    ...mapGetters(["bc_notshow", "search_show"])
+  computed:{
+    // show(){
+    //   if(this.password) return true;
+    //   else return false;
+    // }
   },
   methods: {
     ...mapActions(["searchA", "infoAction"]),
     onClickLeft() {
       this.$router.back(-1);
     },
+     changeType() {
+        this.paswldtype = this.paswldtype === 'password' ? 'text' : 'password';
+        this.openeye = this.openeye == require("@/assets/img/login_icon_show.png") ? require("@/assets/img/login_icon_hide.png") : require("@/assets/img/login_icon_show.png");
+      },
     send() {
       if (this.iPhone.length != 11) return Toast("请输入正确的手机号");
        const para = {
         mobile: this.iPhone,
         type:1
       }
-       let me = this;  
-      getVerifyCode(para).then(res => {
-        me.sendMsgDisabled = true;
-        let interval = window.setInterval(function() {
-        if (me.time-- <= 0) {
-          me.time = 60;
-          me.sendMsgDisabled = false;
-          window.clearInterval(interval);
+        if (!this.canClick) return  //改动的是这两行代码
+        this.canClick = false
+        getVerifyCode(para).then(res => {
+          if (res ==true) {
+        this.content = this.totalTime + 's后重新发送'
+        let clock = window.setInterval(() => {
+          this.totalTime--
+          this.content = this.totalTime + 's后重新发送'
+          if (this.totalTime < 0) {
+          window.clearInterval(clock)
+          this.content = '重新发送验证码'
+          this.totalTime = 180
+          this.canClick = true  //这里重新开启
+          }
+        },1000)
+        }else{
+          this.canClick = true  //这里重新开启
         }
-      }, 1000);
       })
      
-    },
-    passwordview() {
-      if (this.paswldtype === "password") {
-        this.paswldtype = "text";
-      } else {
-        this.paswldtype = "password";
-      }
     },
     //密码验证
     rules(v, choose) {
       if (choose == "pass") {
-        // let password = v.trim();
+        let password = v;
         //最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
         let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
         if (!pPattern.test(password)) {
-          Toast("密码强度较弱o(╥﹏╥)o");
+          // Toast("密码强度较弱");
         } else {
-          Toast("密码强度 安全^_^");
+          // Toast("密码强度 安全");
         }
       }
     },
@@ -143,17 +144,34 @@ export default {
       };
 
       if (data.iPhone == null || data.password == null || data.sms == null) {
-        Toast("手机号、验证码和密码不能为空 o(╥﹏╥)o");
+        Toast("手机号、验证码和密码不能为空");
+      }else if(this.password.length<6){
+        Toast("密码长度最少六位");
       } else {
        const para = {
         mobile: data.iPhone,
         verifyCode:data.sms,
         password:data.password
       }
-     
-      regist(para).then(res => {
-         this.onClickLeft()
+      let thiss =this
+      Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '请求中...' 
+          });
+     this.$ajax.post('http://pay.iwingscom.com/iwings-manager/customerUser/regist',para)
+      .then(function (response) {
+        if (response.data.msg=='注册成功') {
+          Toast.clear();
+          alert('注册成功')
+          thiss.$router.push('/login')
+        }else{
+          Toast.clear();
+          Toast(response.data.msg)
+        }
       })
+      
       }
     },
     tip() {
@@ -215,6 +233,21 @@ export default {
 }
 #apps >>> input::-webkit-input-placeholder {
   color: #c1c1c1;
+}
+#apps >>> .van-field__control{
+  border: none
+}
+#apps >>> .van-hairline--top-bottom::after{
+  border-width:0px
+}
+#apps >>> .eye{
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    width: 23px;
+}
+#apps >>> .van-cell{
+  padding: 10px 0px;
 }
 </style>
 

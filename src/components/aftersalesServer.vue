@@ -11,20 +11,22 @@
 
 <van-row>
      <van-col span='24' offset="0" class="payContent">
-      <van-icon name="passed"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>   
-
-    <p style="font-size: 22px;margin-bottom:30px">订单已完成</p>
+      <van-icon v-if="formdata.orderStatus=='3'" name="passed"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>   
+      <van-icon v-if="formdata.orderStatus=='1'" name="gold-coin"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>
+      <van-icon v-if="formdata.orderStatus=='2'" name="logistics"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>
+      <van-icon v-if="formdata.orderStatus=='4'" name="close"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>     
+    <p style="font-size: 22px;margin-bottom:30px">{{formdata.orderStatus |typeText}}</p>
     </van-col>
     <div class="init-10"></div>
-<van-cell :title="formdata.consigneeName" :value="formdata.consigneePhone" />
-<van-cell :title="formdata.consigneeAddress" />
+<van-cell id="initsbox" :title="formdata.consigneeName" :value="formdata.consigneePhone" />
+<van-cell id="initsbox2" :title="formdata.consigneeAddress" />
  <div class="init-10"></div>
  <van-cell v-for="(item, index) in formdata.detailList" :key="index">
  <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-     <img  :src="'http://'+'106.15.44.76/image/'+item.productImage" name="adapter" />
+     <img  :src="'http://'+ host +'/image/'+item.productImage" name="adapter" />
   </van-col>
-   <van-col span='11' offset="2" class="imgList">
+   <van-col span='24' offset="2" class="imgList">
         <span>{{item.productName}}</span>
         <span>数量：{{item.productNum}} 规格：{{item.productColor}}</span>
         <span>￥{{item.paymentAmount}}</span>
@@ -33,7 +35,7 @@
       <span style="font-size: 11px;"></span>
   </van-col>
   </div>
-    <van-cell-group id="init-border" v-if="item.afterSale">
+    <van-cell-group id="init-border" v-if="item.continueApply=='1'">
       <div span='4' offset="1" class="btn">
       <button @click="continueApply(item)">申请售后</button>
   </div>
@@ -67,7 +69,7 @@
   <template slot="title">
    <span class="custom-text">发票类型</span>
    <span class="custom-text">{{formdata.invoiceType | filterwhet2}}</span>
-   <van-button round  size="small">查看发票</van-button>
+   <!-- <van-button round  size="small">查看发票</van-button> -->
   </template>
 </van-cell>
 <van-cell>
@@ -85,14 +87,17 @@
 </van-row>
   <div class="init-10"></div>
     <van-cell title="商品总价" :value="'￥'+formdata.orderAmount"  />
-    <van-cell title="运费" value="￥0.00"  />
-     <van-cell class="init-table" title="" :value="'实付款：¥'+formdata.orderAmount"  />  
+    <van-cell title="运费" value="+￥0.00"  />
+     <van-cell class="init-table" title="" :value="'实付款：¥ '+formdata.orderAmount"  />  
       <van-cell-group id="init-border" style="">
   <div span='4' offset="1" class="btn" v-if="formdata.orderStatus =='3'">
-      <button @click="redirects('EvaluationList')">评价晒单</button>
+      <button @click="Evaluation">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="canel">删除订单</button>
+  </div>
+  <div span='4' offset="1" class="btn" v-if="formdata.orderStatus =='1'">
+  <button @click="pay">去支付</button>
   </div>
   </van-cell-group>
   <div style="clear: both;"></div>
@@ -113,6 +118,7 @@ export default {
     return {
       radio3: "1",
       orderNo:'',
+      host:'pay.iwingscom.com',
       formdata:''
     };
   },
@@ -140,7 +146,27 @@ export default {
         text = '单位发票'
       }
       return text
-    }
+    },
+     typeText(e){
+      var text;
+       switch(e){
+            case '1' :
+              text = "订单未支付"      
+            break;
+            case '2' :
+              text = "订单待收货"      
+             break;
+            case '3' :
+              text = "订单已完成"      
+            break;
+            case '4' :
+              text = "订单已取消"      
+            break;
+            default:
+            break; 
+       }
+       return text
+    },
   },
   methods: {
     inits(){
@@ -163,12 +189,25 @@ export default {
     continueApply(e){
        this.$router.push({ path: '/AFAS', query: { id: e.id }});
     },
+    Evaluation(i){
+       this.$router.push({ path: '/EvaluationList', query: { orderNo: this.formdata.orderNo }});
+    },
+    pay(i) {
+      this.$router.push({ path: '/orderpaySuccess', query: { orderNo: this.formdata.orderNo }});
+    },
     canel(){
       let para = {
         token:JSON.parse(localStorage.getItem('token')),
         orderNo:this.formdata.orderNo
       }
+      Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+      });
       delOrder(para).then(res=>{
+        Toast.clear()
            Toast('删除成功')
            this.onClickLeft()
       })
@@ -279,6 +318,9 @@ p {
   font-size: 13px;
   display: inline-block;
   padding-bottom: 5px;
+  width: 100%;
+  overflow: hidden;
+    text-overflow: ellipsis
 }
 #apps .btn {
   float: right;
@@ -306,6 +348,12 @@ p {
 }
 #apps >>> .van-nav-bar .van-icon{
     color: #2c3e50
+}
+#apps >>> #initsbox.van-cell:not(:last-child)::after{
+  border-bottom:none
+}
+#apps >>> #initsbox2.van-cell:not(:last-child)::after{
+  border-bottom:none
 }
 </style>
 

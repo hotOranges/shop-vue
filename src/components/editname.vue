@@ -44,6 +44,10 @@ export default {
           nickName:this.nickName,
           fileName:this.fileName
       }
+      if (this.nickName.length<6) {
+        Toast('长度不能大于6')
+        return
+      }
        editUser(para).then(res =>{
          this.onClickLeft()
       })

@@ -1,7 +1,8 @@
 import request from '@/utils/request'
 // const base = 'http://192.168.1.88:60180/smartphone'
 // const HOST = 'localhost'
-const HOST = '106.15.44.76'
+// const HOST = '106.15.44.76'
+const HOST = 'pay.iwingscom.com'
 // const HOST = 'app.iwingscom.com'
 const base = 'http://' + HOST + '/iwings-manager'
 
@@ -238,4 +239,12 @@ export function getBanner(params) {
       method: 'post',
       data: params
     })
-  }  
+  }
+  export function logOut(params) {
+    return request({
+      url: `${base}/customerUser/logOut`,
+      method: 'post',
+      data: params
+    })
+  }
+    

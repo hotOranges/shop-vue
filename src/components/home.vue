@@ -18,10 +18,10 @@
                 <!-- 活动版块 -->
                 <div class="sort">
                   <span>智能热卖</span>
-                  <span class="sort-tab">
+                  <!-- <span class="sort-tab">
                     <button>价格</button>
                     <button>销量</button>
-                  </span>
+                  </span> -->
                 </div>
                 <active :tabs="title[index]"/>
               </div>
@@ -56,13 +56,12 @@
 </template>
 
 <script>
-import { getAllProject } from "../../src/api/login";
+import { getAllProject,getShopCart } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Waterfall } from "vant";
 import Swiper from "./swiper";
 import Active from "./active";
 import { Toast } from "vant";
-import { getShopCart } from "../../src/api/login";
 
 export default {
   name: "home",
@@ -96,19 +95,11 @@ export default {
     }),
   },
   mounted() {
-    if (this.$route.query.opednId !== undefined) {
-      localStorage.setItem(
-        "opednId",
-        JSON.stringify(this.$route.query.opednId)
-      );
-      console.log(this.$route.query.opednId)
-    }
     if (localStorage.getItem("token").length>3) {
       this.getShopCart1()
     }else{
       this.infoAction()
     }
-    
   },
   methods: {
    ...mapActions(["infoAction"]),
@@ -118,9 +109,9 @@ export default {
     };
      let thisss= this
       this.$ajax 
-        .post("http://106.15.44.76/iwings-manager/customer/getShopCart",para)
+        .post("http://pay.iwingscom.com/iwings-manager/customer/getShopCart",para)
         .then(function(res) {
-           console.log(res.data)
+          //  console.log(res.data)
            if (res.data.code == '1008') {
               thisss.infoAction()
            }else{
@@ -233,6 +224,9 @@ export default {
 }
 #app >>> .van-tabs__line {
   background-color: #b39061;
+}
+#app >>> .van-icon-shopping-cart::before{
+   content: url(../assets/img/home_icon_shopping.png);
 }
 </style>
 

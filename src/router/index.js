@@ -29,9 +29,12 @@ import EvaluationList from '@/components/EvaluationList'
 import orderpaySuccess from '@/components/orderpaySuccess'
 import editme from '@/components/editme'
 import editname from '@/components/editname'
+import paySuccessDetil from '@/components/paySuccessDetil'
+import paySuccessDetil2 from '@/components/paySuccessDetil2'
 Vue.use(Router)
 
 export default new Router({
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -62,6 +65,16 @@ export default new Router({
       path:'/address',
       name:'address',
       component:Address,
+    },
+    {
+      path:'/paySuccessDetil',
+      name:'paySuccessDetil',
+      component:paySuccessDetil
+    },
+    {
+      path:'/paySuccessDetil2',
+      name:'paySuccessDetil2',
+      component:paySuccessDetil2
     },
     {
       path: '/addressEdit',

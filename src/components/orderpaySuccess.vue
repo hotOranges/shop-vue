@@ -44,12 +44,12 @@
       </van-cell>
     </van-row>
     <div class="init-10"></div>
-    <van-radio-group v-model="formdata.payMethod">
+    <van-radio-group v-model="formdata.payMethod" style="padding-bottom:80px">
       <van-cell-group>
         <van-cell title="微信" icon="wechat" clickable @click="radio3 = '1'">
           <van-radio name="1"/>
         </van-cell>
-        <van-cell title="支付宝" icon="alipay" clickable @click="radio3 = '2'">
+        <van-cell  title="支付宝" icon="alipay" clickable @click="radio3 = '2'">
           <van-radio name="2"/>
         </van-cell>
       </van-cell-group>
@@ -74,7 +74,8 @@ export default {
       formdata: "",
       opednId: "",
       orderNo:'',
-      datas: ""
+      datas: "",
+      show:true
     };
   },
   mounted() {
@@ -82,6 +83,12 @@ export default {
     this.inits()
     console.log(JSON.parse(localStorage.getItem('opednId')))
     this.opednId = JSON.parse(localStorage.getItem('opednId'))
+      var ua = window.navigator.userAgent.toLowerCase(); 
+    if (ua.match(/MicroMessenger/i) == 'micromessenger') { 
+          this.show = false
+        } else { 
+          this.show = true
+        } 
   },
   filters:{
     filterwhet(e){
@@ -115,60 +122,85 @@ export default {
        if (res) {
            console.log(res)
          this.formdata = res
+          localStorage.setItem('placeOrders', JSON.stringify(res))
         }
       })
     },
     pay() {
+        let vm = this
       let para = {
         token: JSON.parse(localStorage.getItem("token")),
         orderNo: this.formdata.orderNo,
         payMethod: this.radio3,
         opednId: this.opednId
       };
+      if (this.radio3 == '1') {
+        
+      
       payMent(para).then(res => {
         if (res) {
         this.datas = JSON.stringify(res);
-        var params = this.datas.data;
-        if (typeof WeixinJSBridge == "undefined") {
-          if (document.addEventListener) {
-            document.addEventListener(
-              "WeixinJSBridgeReady",
-              this.onBridgeReady(),
-              false
-            );
-          } else if (document.attachEvent) {
-            document.attachEvent("WeixinJSBridgeReady", this.onBridgeReady());
-            document.attachEvent("onWeixinJSBridgeReady", this.onBridgeReady());
-          }
-        } else {
-          this.onBridgeReady();
-        }
+          var params = JSON.parse(this.datas);
+            function onBridgeReady() {
+              console.log(WeixinJSBridge)
+              WeixinJSBridge.invoke(
+                "getBrandWCPayRequest",
+                {
+                  appId: params.appId,
+                  timeStamp: params.timeStamp,
+                  nonceStr: params.nonceStr,
+                  package: params.package,
+                  signType: params.signType,
+                  paySign: params.paySign
+                },
+                function(res) {
+                  if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    Toast("支付成功");
+                    vm.$router.push({ path: '/paySuccessDetil', query: { orderNo: vm.formdata.orderNo,orderAmount:vm.formdata.orderAmount }});
+                  } else {
+                    Toast("取消支付");
+                  }
+                }
+              );
+            }
+
+            if (typeof WeixinJSBridge == "undefined") {
+              if (document.addEventListener) {
+                document.addEventListener(
+                  "WeixinJSBridgeReady",
+                  onBridgeReady,
+                  false
+                );
+              } else if (document.attachEvent) {
+                document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+              }
+            } else {
+              onBridgeReady();
+            }
+    
       }
       });
+      }else{
+        this.httpPost("http://pay.iwingscom.com/iwings-manager/customer/payMent", para);
+      }
     },
-    onBridgeReady() {
-      var params = this.datas.data;
-      WeixinJSBridge.invoke(
-        "getBrandWCPayRequest",
-        {
-          appId: params.appId,
-          timeStamp: params.timeStamp,
-          nonceStr: params.nonceStr,
-          package: params.package,
-          signType: params.signType,
-          paySign: params.paySign
-        },
-        function(res) {
-          if (res.err_msg === "get_brand_wcpay_request:ok") {
-            Toast("微信支付成功");
-            //   this.$router.push('/')
-          } else if (res.err_msg === "get_brand_wcpay_request:cancel") {
-            Toast("用户取消支付"); // window.location.href = 'gift_failview.do?out_trade_no=' + this.orderId
-          } else if (res.err_msg === "get_brand_wcpay_request:fail") {
-            Toast("网络异常，请重试");
-          }
+      httpPost(URL, PARAMS) {
+        var temp = document.createElement("form");
+        temp.action = URL;
+        temp.method = "post";
+        temp.style.display = "none";
+        for (var x in PARAMS) {
+            var opt = document.createElement("textarea");
+            opt.name = x;
+            opt.value = PARAMS[x];
+            temp.appendChild(opt);
         }
-      );
+
+    document.body.appendChild(temp);
+    temp.submit();
+
+    return temp;
     },
     redirects(url) {
       this.$router.push(url);
@@ -268,6 +300,12 @@ p {
 }
 #apps >>> .van-nav-bar .van-icon {
   color: #2c3e50;
+}
+#apps >>> .van-goods-action-mini-btn::after{
+  border-width:0
+}
+#apps >>> .van-goods-action{
+  border-top: 1px solid #eee
 }
 </style>
 

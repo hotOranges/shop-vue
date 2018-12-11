@@ -94,10 +94,6 @@ export default {
     search() {
       console.log(this.value);
     },
-    productTypes(){},
-    search_shows() {
-      this.$router.push("/");
-    },
     buy(img) {
       this.buyParam(img);
       localStorage.setItem('detial_s', JSON.stringify(img))
@@ -146,10 +142,8 @@ export default {
         }
      
     });
-  },
-  created() {
-    // Toast("加载完毕 ^_^");
   }
+ 
 };
 </script>
 

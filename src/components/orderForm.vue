@@ -13,13 +13,13 @@
   </van-cell-group>
   <div class="init-soller-list2" @click="orderDeil(i)">
   <van-col span='5' offset="2" class="imgList">
-      <img  :src="'http://'+'106.15.44.76/image/'+i.avatar[0]" name="adapter" />
+      <img  :src="'http://'+ host+'/image/'+i.avatar[0]" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
       <span>{{i.productName}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥{{i.productPrice}}</span>
+      <span>¥  {{i.productPrice}}</span>
       <span style="font-size: 11px;">X{{i.num}}</span>
   </van-col>
   </div>
@@ -32,12 +32,12 @@
   </van-cell-group>
   <div class="init-soller-list"   @click="orderDeil(i)">
   <van-col span='5' offset="1" class="imgList" v-for="adx in i.avatar">
-    <img  :src="'http://'+'106.15.44.76/image/'+adx" name="adapter" />
+    <img  :src="'http://'+ host+'/image/'+adx" name="adapter" />
   </van-col>
   </div>
    </div>
      </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共 {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)">¥{{i.num*i.productPrice}}</span></h5>
+    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共  {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)">¥ {{i.num*i.productPrice}}</span></h5>
    <!--全部订单-->
   <van-cell-group id="init-border" v-if="active==0">
   <div span='4' offset="1" class="btn" v-if="i.status =='3'">
@@ -48,6 +48,9 @@
   </div>
   <div span='4' offset="1" class="btn">
       <button @click="del(i)">删除订单</button>
+  </div>
+   <div span='4' offset="1" class="btn" v-if="i.status =='1'">
+  <button @click="pay(i)">去支付</button>
   </div>
   </van-cell-group>
 <!--待付款--> 
@@ -72,14 +75,15 @@
 
    <!--已收货-->
  <van-cell-group id="init-border" v-if="active==3">
-  <div span='4' offset="1" class="btn">
-      <button @click="del(i)">删除订单</button>
+  <div span='4' offset="1" class="btn" v-if="i.status =='3'">
+      <button @click="Evaluation(i)">评价晒单</button>
   </div>
   <div span='4' offset="1" class="btn" v-if="i.afterSale">
       <button @click="orderDeil(i)">申请售后</button>
   </div>
-  <div span='4' offset="1" class="btn" v-if="i.status =='3'">
-      <button @click="Evaluation(i)">评价晒单</button>
+  
+   <div span='4' offset="1" class="btn">
+      <button @click="del(i)">删除订单</button>
   </div>
   </van-cell-group>
 
@@ -136,6 +140,7 @@ export default {
       page:0,
       shows:true,
       fromData:[],
+      host:'pay.iwingscom.com',
       Tabtext: ["全部订单", "待付款", "待收货", "已收货", "已取消"]
     };
   },
@@ -220,15 +225,22 @@ export default {
         token:JSON.parse(localStorage.getItem('token')),
         orderNo:i.orderNo
       }
+      Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
       delOrder(para).then(res=>{
+        Toast.clear()
            Toast('删除成功')
            this.initData()
       })
     },
     orderDeil(i){
-      if (this.active!==1) {
+      
         this.$router.push({ path: '/aftersalesServer', query: { orderNo: i.orderNo }});
-      }
+      
     },
     pay(i) {
       this.$router.push({ path: '/orderpaySuccess', query: { orderNo: i.orderNo }});
@@ -239,8 +251,16 @@ export default {
         orderNo:i.orderNo,
         orderStatus:4
       }
+      Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
       updateOrderStatus(para).then(res=>{
+        Toast.clear()
            Toast('取消订单')
+
            this.initData()
       })
     },
@@ -250,8 +270,14 @@ export default {
         orderNo:i.orderNo,
         orderStatus:3
       }
-   
+    Toast.loading({
+                duration: 0,
+                mask: true,
+                forbidClick: false,
+                message: '提交中...' 
+          });
       updateOrderStatus(para).then(res=>{
+         Toast('取消订单')
            Toast('订单已完成')
            this.initData()
       })
@@ -308,6 +334,7 @@ export default {
   white-space: nowrap;
   /*解决ios上滑动不流畅*/
   -webkit-overflow-scrolling: touch;
+  padding-top: 10px;
   /*利用padding将滚动条挤出：纵向超出部分将会隐藏，即滚动条部分被挤出可视区域*/
 }
 #app >>> .init-soller-list2 {
@@ -369,5 +396,8 @@ export default {
 }
 #app >>> .van-nav-bar .van-icon{
     color: #2c3e50
+}
+#app >>> .van-tabs__wrap--scrollable .van-tab{
+  flex: auto;
 }
 </style>

@@ -3,6 +3,7 @@
   <div id="app">
   <van-nav-bar title="" @click-left="onClickLeft" left-arrow>
   <van-icon name="setting" slot="right" @click= "redirects('/editme')" />
+  <!-- <van-icon name="chat" slot="right" /> -->
 </van-nav-bar>
   <van-row class="col-me" style="background: rgba(242,242,242,1);">            
                     <van-col span='24' class="title">
@@ -13,39 +14,39 @@
                           <span>{{form.nickName}}</span>
                         </van-col>
                         <van-col span='6' offset="1" class="goodIntegral">
-                          <span style="font-size: 12px;"><van-icon name="points" />积分12</span>
+                          <span style="font-size: 12px;"><van-icon name="points" />积分0</span>
                         </van-col>
                      </van-col>
                      <!-- 订单 -->
                      <van-col span="24" class="headerImg">
-                      <van-cell @click="toOrder('0')" style="padding-bottom: 15px;" title="我的订单" value="查看全部订单" icon="location" is-link />
+                      <van-cell @click="toOrder('0')" style="border-bottom: 1px solid #D9D9D9;padding-top: 25px;margin-bottom: 25px;padding-right: 10px;" title="我的订单" value="查看全部订单" icon="close" is-link />
                      <van-col span='5' offset="0">
                      <div @click="toOrder('1')">
-                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span><img src="../../static/images/icon/1.png"  /></span>  
                      <span>待付款</span>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0">
                      <div @click="toOrder('2')">
-                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span><img src="../../static/images/icon/2.png"  /></span>  
                      <span>待收货</span>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('3')">
                      <div @click="toOrder('3')">
-                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span><img src="../../static/images/icon/12.png"  /></span>  
                      <span>已收货</span>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('4')">
                      <div @click="toOrder('4')">
-                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span><img src="../../static/images/icon/11.png"  /></span>  
                      <span>已取消</span>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('4')">
                      <div @click="redirects('aftersales')">
-                     <span><img src="../../static/images/icon/icon_9.png"  /></span>  
+                     <span><img src="../../static/images/icon/8.png"  /></span>  
                      <span>退换/售后</span>
                      </div>
                      </van-col>
@@ -53,12 +54,13 @@
                       
                       <!-- 列表区 -->
                       <van-col span="24" class="headerList">
-                      <van-cell style="padding-bottom: 15px;" title="我的收藏"  icon="location" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="我的优惠劵"  icon="location" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="location" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="帮助与反馈"  icon="location" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="客服中心"  icon="location" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="关于"  icon="location" is-link />
+                      <van-cell style="padding-bottom: 15px;"  @click="$toast('敬请期待')" title="我的收藏"  icon="shoucang" is-link />
+                      <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="我的优惠劵"  icon="youhuijuan" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="dizhi" is-link />
+                      <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="帮助与反馈"  icon="bangzhu" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="$toast('敬请期待')" icon="kefu" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="退出"  @click="outin" icon="kefu" />
+                      
                      </van-col>
  
        </van-row>
@@ -76,7 +78,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
 import { Uploader } from 'vant';
-import {getUser} from '../api/login'
+import {getUser,logOut} from '../api/login'
 export default {
   name: "Me",
   components: {},
@@ -92,8 +94,8 @@ export default {
       wuliu: false,
       contact: false,
       form:{
-        nickName:'未设置',
-        avatar:'http://106.15.44.76:60180/smartphone-web/static/img/img.739c4ef.jpg'
+        nickName:'',
+        avatar:''
       },
       pass: false,
       value: 5,
@@ -104,11 +106,6 @@ export default {
       showEdit: false,
       isEdit: false,
       list: [
-        {
-          name: "张三",
-          tel: "13000000000",
-          id: 0
-        }
       ],
       value: "",
       showKeyboard: true
@@ -153,6 +150,8 @@ export default {
         if (res) {
           if (res.nickName.length>0) {
             this.form.nickName = res.nickName
+          }else{
+             this.form.nickName = res.userName
           }
           if (res.avatar.length>0) {
             this.form.avatar = res.avatar
@@ -160,11 +159,20 @@ export default {
         }
       })
     },
+    outin(){
+      let para = {
+         token:JSON.parse(localStorage.getItem('token'))
+      }
+      logOut(para).then(res =>{
+          localStorage.removeItem('token')
+          localStorage.removeItem('getShopCarts')
+          this.$router.push("/");
+      })
+    },
     onClickLeft() {
       this.$router.push("/");
     },
     toOrder(e) {
-      console.log(e);
       this.$router.push({ path: "/orderForm", query: { activeId: e } });
     },
   
@@ -220,5 +228,29 @@ export default {
 }
 #app >>> .headerImg .van-cell:not(:last-child)::after{
   border-bottom: 0px solid #eee;
+} 
+#app >>> .van-icon-setting::before {
+    content: url(../assets/img/10.png);
+}
+#app >>> .van-icon-chat::before{
+   content: url(../assets/img/9.png);
+}
+#app >>> .van-icon-close::before{
+   content: url(../assets/img/5.png);
+}
+#app >>> .van-icon-shoucang::before{
+   content: url(../assets/img/6.png);
+}
+#app >>> .van-icon-youhuijuan::before{
+   content: url(../assets/img/13.png);
+}
+#app >>> .van-icon-dizhi::before{
+   content: url(../assets/img/7.png);
+}
+#app >>> .van-icon-bangzhu::before{
+   content: url(../assets/img/3.png);
+}
+#app >>> .van-icon-kefu::before{
+   content: url(../assets/img/4.png);
 }
 </style>

@@ -10,7 +10,7 @@
 />
 <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-       <img  :src="'http://'+'106.15.44.76/image/'+formdata.productImage" name="adapter" />
+       <img  :src="'http://'+'pay.iwingscom.com/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
         <span>{{formdata.productName}}</span>
@@ -25,6 +25,7 @@
       <span style="float:left;line-height: 35px;font-size: 14px">申请数量</span>
       <van-stepper v-model="value" integer
   :min="1"
+  disable-input
   :max="formdata.productSumNum"
   :step="1" />
   </van-cell-group>
@@ -47,11 +48,11 @@
 </van-cell>
 <van-cell @click="Actionsheet(3)">
   <template slot="title" >
-   <span class="init-text-1">换货</span>
+   <span class="init-text-1">维修</span>
    <span class="init-text">{{Returns3}}</span>
   </template>
 </van-cell>
-<van-actionsheet v-model="show" title="申请原因" >
+<van-actionsheet v-model="show" :title="ReturnsTitle" >
   <van-radio-group v-model="radio">
   <van-cell-group>
     <van-cell  v-for="img in reason" :key='img.value' :title="img.label" clickable @click="">
@@ -75,6 +76,7 @@ export default {
       radio:1,
       formdata:'',
       id:'',
+      ReturnsTitle:'',
       Returns:'已收货，需要退回该商品',
       Returns2:'已收货，需要退回该商品',
       Returns3:'已收货，需要退回该商品',
@@ -121,6 +123,7 @@ export default {
             { value: 4, label: "不想要了" },
             { value: 5, label: "七天无理由退换货" },
           ]
+         this.ReturnsTitle ='退货' 
       } else if(e==2){
          this.reason = [
             { value: 1, label: "商品损坏" },
@@ -129,11 +132,13 @@ export default {
             { value: 4, label: "缺少件" },
             { value: 5, label: "七天无理由退换货" },
           ]
+          this.ReturnsTitle ='换货' 
       }else{
          this.reason = [
             { value: 1, label: "商品故障" },
             { value: 2, label: "其他" },
           ]
+          this.ReturnsTitle ='维修'   
       }
       this.show = true
     },
@@ -163,11 +168,13 @@ export default {
         saleReason:saleReason,
         saleType:this.sheet,
         price:this.formdata.price,
+        orderNo:this.formdata.orderNo,
         productImage:this.formdata.productImage,
         productName:this.formdata.productName,
         productColor:this.formdata.productColor,
         detailId:this.id
       })
+      
        localStorage.setItem("applyServiceData",JSON.stringify(applyServiceData));
       this.$router.push('/AFASDetil')
     }
@@ -178,6 +185,7 @@ export default {
 <style scoped>
 #apps >>> .imgList img {
   width: 100%;
+  margin-top: 10px;
 }
 
 #apps >>> .init-soller-list2 {
