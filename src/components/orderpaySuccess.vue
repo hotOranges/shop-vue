@@ -68,6 +68,7 @@ import { Toast } from "vant";
 import { payMent,getOrderDetail } from "../../src/api/login";
 
 export default {
+   inject: ['reload'],
   data() {
     return {
       radio3: "1",
@@ -79,7 +80,8 @@ export default {
     };
   },
   mounted() {
-  this.orderNo =  this.$route.query.orderNo;
+    this.reload()
+    this.orderNo =  this.$route.query.orderNo;
     this.inits()
     console.log(JSON.parse(localStorage.getItem('opednId')))
     this.opednId = JSON.parse(localStorage.getItem('opednId'))

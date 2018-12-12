@@ -8,7 +8,7 @@
   left-arrow
   @click-left="onClickLeft"
 />
-<van-cell  v-if="list.length>0" @click="redirects('/address')" >
+<van-cell  v-if="list.length>0" @click="address" >
      <van-address-list
   v-model="chosenAddressId"
   :list="list"
@@ -114,6 +114,7 @@ export default {
       selIn:{},
       bill:'不开发票',
       show:false,
+      total:0,
       active:1,
       isInvoice:0,
       invoiceId:'',
@@ -196,14 +197,15 @@ export default {
             this.deiladdress = arrs.address  
           }
        
-          this.list = datas  
-         
-          
+          this.list = datas   
       })
      }
   },
   methods: {
     ...mapActions(["orderShows"]),
+     address(){
+       this.$router.push({ path: '/address', query: { edit: 'true' }});
+    },
     onSubmit(e) {
       if (this.list.length == 0) {
         Toast("请填写收货信息");
@@ -248,9 +250,6 @@ export default {
        this.$router.push("/paySuccess");
         }
         })
-
-        // Toast("提交成功");
-        // this.$router.push("/payFailed");
       }
     },
     addtaxpayer(){

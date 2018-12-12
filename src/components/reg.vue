@@ -25,13 +25,26 @@
                             v-model="sms"
                             center
                             clearable
-                            placeholder="请输入验证码"
+                            placeholder="请输入手机验证码"
                         >
                             <van-button  @click="send" slot="button" size="small"  style="color: #B39061;background-color: #fff; border: 1px solid #B39061;border-radius: 3px;font-family: PingFangSC-Medium;">
                             <span>{{content}}</span>
-                            
                             </van-button>
                         </van-field>
+                        </van-cell-group>
+                        <van-cell-group>
+                         
+                             <van-field
+                            v-model="sms2"
+                            center
+                            clearable
+                            placeholder="请输入验证码"
+                        >  <span  @click="refreshCode" slot="button" size="small"  style="color: transparent;background-color:transparent; border: 1px solid #B39061;border:none;font-family: PingFangSC-Medium;">
+                     <s-identify  :identifyCode="identifyCode"></s-identify>
+                     </span>
+                            
+                             </van-field>
+                       
                         </van-cell-group>
                         <van-cell-group>
                         <van-field
@@ -62,10 +75,12 @@ import { getVerifyCode,regist } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
-
+import SIdentify from "./identify";
 export default {
   name: "login",
-  components: {},
+  components: {
+    SIdentify,
+  },
   data() {
     return {
       password: null,
@@ -75,10 +90,13 @@ export default {
       canClick: true, //添加canClick  
       paswldtype: "password",
       iPhone: "",
+      sms2:'',
       openeye: require('@/assets/img/login_icon_hide.png'),
       btnName: "注册",
       checked: false,
-      show:true
+      show:true,
+      identifyCodes: "1234567890",
+      identifyCode: ""
     };
   },
   computed:{
@@ -86,6 +104,10 @@ export default {
     //   if(this.password) return true;
     //   else return false;
     // }
+  },
+  mounted(){
+    this.identifyCode = "";
+    this.makeCode(this.identifyCodes, 4);
   },
   methods: {
     ...mapActions(["searchA", "infoAction"]),
@@ -147,6 +169,8 @@ export default {
         Toast("手机号、验证码和密码不能为空");
       }else if(this.password.length<6){
         Toast("密码长度最少六位");
+      } else if(this.identifyCode!==this.sms2){
+         Toast("验证码不正确");
       } else {
        const para = {
         mobile: data.iPhone,
@@ -164,7 +188,7 @@ export default {
       .then(function (response) {
         if (response.data.msg=='注册成功') {
           Toast.clear();
-          alert('注册成功')
+          Toast('注册成功')
           thiss.$router.push('/login')
         }else{
           Toast.clear();
@@ -176,6 +200,20 @@ export default {
     },
     tip() {
       Toast("该功能正在维护 o(╥﹏╥)o");
+    },
+      randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+    refreshCode() {
+      this.identifyCode = "";
+      this.makeCode(this.identifyCodes, 4);
+    },
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[
+          this.randomNum(0, this.identifyCodes.length)
+        ];
+      }
     }
   },
   watch: {},

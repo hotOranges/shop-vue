@@ -434,5 +434,9 @@ export default {
     text-align: right;
     padding: 0px 15px;
   }
+  #app >>> .van-submit-bar{
+    position: relative;
+    margin-top: 40px;
+  }
 </style>
 

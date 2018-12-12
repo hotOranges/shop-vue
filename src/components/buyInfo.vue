@@ -29,10 +29,10 @@
     <van-row class="col-3">
       <div v-if="oShow1">
         <van-col span="24" class="lazy-bottom">
-             <h4>￥{{form.specialPrice}} <span>￥{{form.originalPrice}}</span></h4> 
+             <h4>￥{{detial.specialPrice}} <span>￥{{detial.originalPrice}}</span></h4> 
          </van-col>
      <van-col span="24" class="lazy-left">
-           <span>{{form.productName}}</span>
+           <span>{{detial.productName}}</span>
      </van-col>
      <hr/>
      <van-col class="empty"></van-col>
@@ -156,7 +156,7 @@ import StarRate from 'vue-cute-rate'
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { getProductDetail,listImage,getProductComment,addShopCart,getShopCart } from "../../src/api/login";
+import { productInfo,getProductDetail,listImage,getProductComment,addShopCart,getShopCart } from "../../src/api/login";
 
 //obj 优惠券
 const coupon = {
@@ -178,6 +178,7 @@ export default {
       preImgs: [],
       orderNum:0,
       listImages:'',
+      detial:'',
       chosenCoupon: -1,
       shop_info:0,
       initgeval:'请选择颜色 型号 数量',
@@ -314,11 +315,18 @@ export default {
     ...mapState({
       buyImg: state => state.home.buyInfo.img[0],
       actives: state => state.active.home.title,
-      my_info: state => state.home.my_info,
-      shop_info: state => state.home.shop_info
+      my_info: state => state.home.my_info
     }),
+  },
+  mounted(){
+      this.productId = JSON.parse(localStorage.getItem('productId'))
+      if (localStorage.getItem('getShopCarts')!==null) {
+        this.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length
+      }
     
-
+      
+    //  window.addEventListener('scroll',this.loadMore,true);
+      this.inits()
   },
   methods: {
     ...mapActions(["infoAction"]),
@@ -331,17 +339,89 @@ export default {
     onClickLeft(){
        this.$router.back(-1);
     },
+       inits(){
+        let para ={
+         productId:this.productId
+       }
+       productInfo(para).then(res => {  
+       this.detial = res
+       localStorage.setItem('detial_s', JSON.stringify(res))
+      //  console.log(res)
+        this.slistImage2()
+        })
+     
+    },
+    slistImage2(){
+       let para ={
+        productId:this.productId
+       }
+      listImage(para).then(res => {
+        // console.log(res)
+          this.listImages = res[0];
+          this.images= res
+          for (var i in res) {
+             var imgs= 'http://'+res[i].url + res[i].avatar;
+              this.preImgs.push(imgs)  
+          }
+            this.setdata()
+           
+      })
+    },
+    setdata() {
+      this.sku.stock_num =9999;
+      this.sku.price = this.detial.specialPrice;
+      this.goods.title = this.detial.productName;
+      this.goods.picture =
+        "http://" + this.detial.productUrl + this.detial.productImage;
+      let newv = [];
+      let newlist = [];
+      var str = this.detial.saleColor;
+      var datas = new Array();
+      datas = str.split("，");
+      for (var i in datas) {
+        const element = datas[i];
+        newv.push({
+          id: i,
+          imgUrl: this.goods.picture,
+          name: element
+        });
+        newlist.push({
+          id: i,
+          s1: i,
+          price: this.detial.specialPrice * 100,
+          stock_num: 1111
+        });
+      }
+      this.sku.tree[0].v = newv;
+      this.sku.list = newlist;
+      this.getProductComments()  
+    },
   
+    getProductComments(){
+       let para ={
+         productId:this.productId,
+         currentPage:this.page,
+         pageSize:4
+       }
+      getProductComment(para).then(res => {
+        this.commentSize = res.commentSize
+        this.avgScore.value =  Number(res.avgScore)
+        this.fromData = res.commentList      
+        this.$nextTick(function() {
+            this.show1 = true;
+          });
+        this.getProductDetails() 
+      })
+    },
     more(){
      ++this.page
      let para = {
-          productId:this.form.id,
+          productId:this.productId,
           currentPage:this.page,
           pageSize:4
       }
       getProductComment(para).then(res=>{
         let data = res.commentList
-       
         if (data.length>0) {
           for (var i in data) {
           this.fromData.push(data[i])
@@ -352,19 +432,12 @@ export default {
 
       })
     },
-    inits(){
-        let para ={
-         productId:this.form.id
+     getProductDetails(){
+      let para ={
+        productId:this.productId
        }
-      listImage(para).then(res => {
-          this.listImages = res[0];
-          this.images= res
-          for (var i in res) {
-             var imgs= 'http://'+res[i].url + res[i].avatar;
-              this.preImgs.push(imgs)  
-          }
-           this.getProductComments() 
-           
+      getProductDetail(para).then(res => {
+        this.detilimg = res
       })
     },
     closeSku(){
@@ -382,30 +455,6 @@ export default {
       this.initgeval ='请选择颜色 型号 数量'
       }
       this.orderShow = false
-    },
-    getProductComments(){
-       let para ={
-         productId:this.form.id,
-         currentPage:this.page,
-         pageSize:4
-       }
-      getProductComment(para).then(res => {
-        this.commentSize = res.commentSize
-        this.avgScore.value =  Number(res.avgScore)
-        this.fromData = res.commentList      
-        this.$nextTick(function() {
-            this.show1 = true;
-          });
-        this.getProductDetails() 
-      })
-    },
-    getProductDetails(){
-      let para ={
-         productId:this.form.id
-       }
-      getProductDetail(para).then(res => {
-        this.detilimg = res
-      })
     },
     //商品预览
     ImagePreviews() {
@@ -466,34 +515,6 @@ export default {
           
        }
     },
-     setdata() {
-      this.sku.stock_num =9999;
-      this.sku.price = this.detial.specialPrice;
-      this.goods.title = this.detial.productName;
-      this.goods.picture =
-        "http://" + this.detial.productUrl + this.detial.productImage;
-      let newv = [];
-      let newlist = [];
-      var str = this.detial.saleColor;
-      var datas = new Array();
-      datas = str.split("，");
-      for (var i in datas) {
-        const element = datas[i];
-        newv.push({
-          id: i,
-          imgUrl: this.goods.picture,
-          name: element
-        });
-        newlist.push({
-          id: i,
-          s1: i,
-          price: this.detial.specialPrice * 100,
-          stock_num: 1111
-        });
-      }
-      this.sku.tree[0].v = newv;
-      this.sku.list = newlist;
-    },
     onclik(e){
       if (e==0) {
       this.oShow2 = true
@@ -509,7 +530,7 @@ export default {
       document.documentElement.scrollTop = 0
     },
     onBuynumber(data){
-      console.log(data)
+      // console.log(data)
     },
     onBuyClicked(data) {
       const sel = document.querySelector(".van-stepper__input");
@@ -598,23 +619,9 @@ export default {
 //         }
 //     },13);
 // }
-  },
-  mounted(){
-      this.form = JSON.parse(localStorage.getItem('detial_s'))
-      this.detial = this.form
-      if (localStorage.getItem('getShopCarts')!==null) {
-        this.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length
-      }
-    
-      
-    //  window.addEventListener('scroll',this.loadMore,true);
-      this.inits()
-      this.setdata()
-  },
-  created() {
-    this.form = this.buyImg
-    
   }
+  
+  
 };
 </script>
 

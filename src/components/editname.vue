@@ -44,7 +44,7 @@ export default {
           nickName:this.nickName,
           fileName:this.fileName
       }
-      if (this.nickName.length<6) {
+      if (this.nickName.length>6) {
         Toast('长度不能大于6')
         return
       }

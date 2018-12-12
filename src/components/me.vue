@@ -166,7 +166,7 @@ export default {
       logOut(para).then(res =>{
           localStorage.removeItem('token')
           localStorage.removeItem('getShopCarts')
-          this.$router.push("/");
+          this.$router.push("/login");
       })
     },
     onClickLeft() {

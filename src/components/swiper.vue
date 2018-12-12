@@ -40,11 +40,13 @@ export default {
       this.$router.push(url);
     },
     buy(img) {
-      // this.buyParam(img);
-      // localStorage.setItem('detial_s', JSON.stringify(img))
-      // this.$router.push('/goods/'+img.id +'/buy');
+      img.id =Number(img.remarks)
+      if (img.id) {
+        
+      localStorage.setItem('productId', JSON.stringify(img.id))
+      this.$router.push('/goods/'+Number(img.id) +'/buy');
+      }
     },
-    //  ...mapActions(["buyParam"])
   },
   watch: {},
   directives: {},

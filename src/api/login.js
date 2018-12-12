@@ -247,4 +247,10 @@ export function getBanner(params) {
       data: params
     })
   }
-    
+  export function productInfo(params) {
+    return request({
+      url: `${base}/customerUser/productInfo`,
+      method: 'post',
+      data: params
+    })
+  }

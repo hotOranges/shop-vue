@@ -68,6 +68,7 @@ import { Toast } from "vant";
 import { payMent } from "../../src/api/login";
 
 export default {
+   inject: ['reload'],
   data() {
     return {
       radio3: "1",
@@ -78,6 +79,7 @@ export default {
     };
   },
   mounted() {
+     this.reload();
     this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
     this.opednId = JSON.parse(localStorage.getItem("opednId"));
     // alert(this.opednId)

@@ -49,7 +49,7 @@ export default {
       btnName: "登录",
       openeye: require('@/assets/img/login_icon_hide.png'),
       paswldtype: "password",
-      checked: false
+      checked: true
     };
   },
    computed:{

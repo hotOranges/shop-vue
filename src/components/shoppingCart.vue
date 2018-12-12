@@ -228,7 +228,8 @@ export default {
         }
         localStorage.setItem("detial_s", JSON.stringify(datas));
         localStorage.setItem("total",this.total); 
-        this.$router.push('/orderPays')
+       console.log(this.total)
+       this.$router.push('/orderPays')
         
 
     },
@@ -268,9 +269,7 @@ export default {
         this.shops[index].danxuan = true;
          this.$set(this.shops, index, this.shops[index]);
         this.total += p*100 ;
-        if (condition) {
-          
-        }
+   
        
       }
       var check =  this.shops.filter(function (vals) {

@@ -87,9 +87,7 @@ export default {
   computed: {
     ...mapState({
       title: state => state.home.tab.title,
-      icon: state => state.home.badge.icon,
       bageTitle: state => state.home.badge.title,
-      src: state => state.home.lunbo.src,
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info
     }),

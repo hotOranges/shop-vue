@@ -46,6 +46,10 @@ axios.interceptors.request.use((config) => {
 }, function (error) {
   return Promise.reject(error)
 })
+router.afterEach((to,from,next) => {
+  window.scrollTo(0,0);
+});
+
 /*登录拦截*/
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
