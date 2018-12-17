@@ -49,7 +49,7 @@ export default {
       btnName: "登录",
       openeye: require('@/assets/img/login_icon_hide.png'),
       paswldtype: "password",
-      checked: true
+      checked: false
     };
   },
    computed:{
@@ -64,6 +64,9 @@ export default {
     }
     if (localStorage.getItem("password")!==null) {
        this.password = localStorage.getItem("password")
+    }
+    if (localStorage.getItem("checked")!==null) {
+      this.checked = JSON.parse(localStorage.getItem("checked"))
     }
   },
   methods: {
@@ -116,14 +119,16 @@ export default {
           if (this.checked == true) {
              localStorage.setItem('mobile', username)
              localStorage.setItem('password', password)
+          }else{
+            localStorage.removeItem('mobile')
+            localStorage.removeItem('password')
           }
+        localStorage.setItem('checked', this.checked)  
         localStorage.setItem('token', JSON.stringify(res))
         this.newtoken()
         this.redirects("/");
          Toast("登录成功");
-        }
-        
-       
+        }   
       }) 
       
     }

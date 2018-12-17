@@ -68,7 +68,7 @@ import { Toast } from "vant";
 import { payMent } from "../../src/api/login";
 
 export default {
-   inject: ['reload'],
+  inject: ['reload'],
   data() {
     return {
       radio3: "1",
@@ -79,7 +79,7 @@ export default {
     };
   },
   mounted() {
-     this.reload();
+    this.reload();
     this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
     this.opednId = JSON.parse(localStorage.getItem("opednId"));
     // alert(this.opednId)
@@ -111,7 +111,7 @@ export default {
           Toast.clear()
           if (res) {
             this.datas = JSON.stringify(res);
-          var params = JSON.parse(this.datas);
+            var params = JSON.parse(this.datas);
 
             function onBridgeReady() {
                console.log(WeixinJSBridge)

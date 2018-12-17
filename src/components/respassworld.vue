@@ -77,7 +77,7 @@ export default {
     return {
       password: null,
       sms: null,
-       content: '获取验证码',
+      content: '获取验证码',
       totalTime: 180,
       canClick: true, //添加canClick  
       password2: null,
@@ -86,7 +86,7 @@ export default {
       iPhone: "",
       openeye: require('@/assets/img/login_icon_hide.png'),
       openeye2: require('@/assets/img/login_icon_hide.png'),
-      btnName: "注册",
+      btnName: "确定",
       checked: false
     };
   },
@@ -251,7 +251,7 @@ export default {
     width: 23px;
 }
 #apps >>> .van-icon.van-icon-clear{
-  right: 22px;
+  right: 35px;
 }
 #apps >>> .van-cell{
   padding: 10px 0px;

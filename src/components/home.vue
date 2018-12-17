@@ -2,7 +2,8 @@
   <!-- 首页组件 -->
   <div id="app">
     <!-- 搜索区 -->
-    <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft">
+    <!-- <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft"> -->
+    <van-nav-bar class="init-header" title="商城">
       <van-icon name="chat" slot="right" info=""/>
     </van-nav-bar>
     <!-- 标签区域 -->
@@ -10,7 +11,7 @@
       <van-col span="24">
         <van-tabs v-model="active" swipeable v-tab>
           <van-tab v-for="index in 4" :title="title[index]" :key="index.id" class="tab">
-            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
               <!-- 推荐版块 -->
               <div v-if="title[index]== '推荐'" class="contain">
                 <!-- 轮播 -->
@@ -36,7 +37,7 @@
               <div v-if="title[index]== '健康'" class="contain">
                 <active :tabs="title[index]"/>
               </div>
-            </van-pull-refresh>
+            <!-- </van-pull-refresh> -->
           </van-tab>
         </van-tabs>
       </van-col>
@@ -46,7 +47,7 @@
     <van-tabbar v-model="tabarActive">
       <van-tabbar-item icon="contact" @click="redirects('/Me')"></van-tabbar-item>
       <van-tabbar-item
-        icon="shopping-cart"
+        icon="cart"
         :info="info"
         @click="redirects('/shoppingCart')"
       ></van-tabbar-item>
@@ -128,13 +129,13 @@ export default {
     onClickRight() {
       // Toast("暂无");
     },
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.isLoading = false;
-        this.count++;
-      }, 500);
-    },
+    // onRefresh() {
+    //   setTimeout(() => {
+    //     this.$toast("刷新成功");
+    //     this.isLoading = false;
+    //     this.count++;
+    //   }, 500);
+    // },
     
     // 瀑布流方法
     loadMore() {
@@ -223,8 +224,8 @@ export default {
 #app >>> .van-tabs__line {
   background-color: #b39061;
 }
-#app >>> .van-icon-shopping-cart::before{
+/* #app >>> .van-icon-shopping-cart::before{
    content: url(../assets/img/home_icon_shopping.png);
-}
+} */
 </style>
 

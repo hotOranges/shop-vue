@@ -59,8 +59,7 @@
                       <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="dizhi" is-link />
                       <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="帮助与反馈"  icon="bangzhu" is-link />
                       <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="$toast('敬请期待')" icon="kefu" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="退出"  @click="outin" icon="kefu" />
-                      
+                      <van-cell style="padding-bottom: 15px;" title="退出登录"  @click="outin" icon="kefu" />    
                      </van-col>
  
        </van-row>

@@ -93,4 +93,7 @@ export default {
 #app >>> .van-address-item .van-radio__input{
   display: none
 }
+#app >>> .van-address-item .van-radio__label{
+  padding-left: 0
+}
 </style>

@@ -19,7 +19,7 @@
       <span>{{i.productName}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList" style="margin-top:14px">
-      <span>¥  {{i.productPrice}}</span>
+      <span>¥{{i.productPrice}}</span>
       <span style="font-size: 11px;">X{{i.num}}</span>
   </van-col>
   </div>
@@ -37,7 +37,7 @@
   </div>
    </div>
      </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共  {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)">¥ {{i.num*i.productPrice}}</span></h5>
+    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共  {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)"> ¥{{i.num*i.productPrice}}</span></h5>
    <!--全部订单-->
   <van-cell-group id="init-border" v-if="active==0">
   <div span='4' offset="1" class="btn" v-if="i.status =='3'">
@@ -102,7 +102,7 @@
   <div>
   <h5 v-if="fromData.length<=0" style="color:#8C8C8C;text-align: center;padding-top: 200px;">目前还没有订单哦～</h5>
 </div>
-  <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
+  <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*number" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
 <!--查看物流-->
 <van-actionsheet
   v-model="show"
@@ -138,6 +138,7 @@ export default {
       show: false,
       active: 0,
       page:0,
+      number:5,
       shows:true,
       fromData:[],
       host:'pay.iwingscom.com',
@@ -152,6 +153,7 @@ export default {
   },
   methods: {
     initData(){
+       this.number = 5
       let para = {
         token:JSON.parse(localStorage.getItem('token')),
         currentPage:this.page,
@@ -182,6 +184,7 @@ export default {
         if (res.length>0) {
           for (var i in res) {
           this.fromData.push(res[i])
+          this.number = 5
           }
         }else{
           this.shows =false
@@ -233,8 +236,11 @@ export default {
           });
       delOrder(para).then(res=>{
         Toast.clear()
-           Toast('删除成功')
-           this.initData()
+           this.fromData = this.fromData.filter(function(is){  return i.orderNo!== is.orderNo}) 
+         -- this.number
+         Toast('删除成功')
+           
+          //  this.initData()
       })
     },
     orderDeil(i){
@@ -258,10 +264,11 @@ export default {
                 message: '提交中...' 
           });
       updateOrderStatus(para).then(res=>{
-        Toast.clear()
+           Toast.clear()
            Toast('取消订单')
-
-           this.initData()
+            this.fromData = this.fromData.filter(function(is){ return i.orderNo!== is.orderNo})
+           -- this.number
+           // this.initData()
       })
     },
     confirm(i) {
@@ -277,9 +284,10 @@ export default {
                 message: '提交中...' 
           });
       updateOrderStatus(para).then(res=>{
-         Toast('取消订单')
            Toast('订单已完成')
-           this.initData()
+           this.fromData = this.fromData.filter(function(is){ return i.orderNo!== is.orderNo})
+          -- this.number
+          //  this.initData()
       })
      
     },
@@ -378,12 +386,16 @@ export default {
 }
 #app >>> .van-hairline--top-bottom::after {
   border-color: #d8d8d8;
+      left: -47%;
+    right: -47%;
 }
 #app >>> .init-border ::before {
   border-bottom: 1px solid #d8d8d8;
 }
 #app >>> #init-border::after {
-  transform: scale(0.3);
+  transform: scale(0.5);
+  left: -47%;
+  right: -47%;
 }
 #app >>> .init-clear {
   clear: both;

@@ -78,8 +78,8 @@ export default {
       id:'',
       ReturnsTitle:'',
       Returns:'已收货，需要退回该商品',
-      Returns2:'已收货，需要退回该商品',
-      Returns3:'已收货，需要退回该商品',
+      Returns2:'已收货，需要更换已收到的商品',
+      Returns3:'已收货，需要维修已收到的商品',
       reason:[
         { value: 1, label: "商品损坏" },
         { value: 2, label: "质量问题" },

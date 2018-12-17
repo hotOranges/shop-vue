@@ -54,7 +54,7 @@
   <van-cell title="发票类型" :value="bill"  @click="show =!show " />
   <van-cell>
     <span>买家留言</span>
-    <van-field v-model="message" placeholder="请输入留言" />
+    <van-field @focus="initfocus" @blur="initblur"  v-model="message" placeholder="请输入留言" />
   </van-cell> 
   <van-cell title="商品总价" :value="'￥'+detial.specialPrice*selIn.orderNum" />
   <van-cell title="运费" value="+￥0.00" />
@@ -67,6 +67,7 @@
         :price="detial.specialPrice*selIn.orderNum*100"
         button-text="提交订单"
         @submit="onSubmit"
+        :class="{'colordisplay':display}"
         />
   <van-popup v-model="show" position="bottom" :overlay="true" class="bill">
   <h3 style="text-align: center; border-bottom: 1px solid #D8D8D8;margin-top: 0;margin-bottom: 0;width: 85%;margin-left: 7.5%;line-height: 39px;font-size: 18px;font-weight: 400;color: #323232;">发票</h3>
@@ -117,6 +118,7 @@ export default {
       active:1,
       isInvoice:0,
       invoiceId:'',
+      display: false,
       invoiceType:'',
       LocalAdrrss:[],
       chosenAddressId: "",
@@ -254,6 +256,12 @@ export default {
         // this.$router.push("/payFailed");
       }
     },
+    initfocus(){
+      this.display = true
+    },
+    initblur(){
+      this.display = false
+    },
     addtaxpayer(){
       if (this.active==0) {
         this.bill = '个人发票'
@@ -342,7 +350,7 @@ export default {
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
-  padding-top: 5px;
+  padding-top: 5px; 
 }
 #app >>> .van-submit-bar__text {
   text-align: left;
@@ -403,9 +411,6 @@ export default {
   text-align: left;
   background-color: #F2F2F2;
  }
-#app >>> .van-cell{
-      padding: 4px 12px;
-}
 #app >>> .van-field__control{
   
   line-height: 35px;
@@ -434,9 +439,32 @@ export default {
     text-align: right;
     padding: 0px 15px;
   }
-  #app >>> .van-submit-bar{
-    position: relative;
-    margin-top: 40px;
+  #app >>> .bill .van-hairline--top-bottom::after {
+    border-width: 0px 0;
+    border-color: #fff
   }
+  #app >>> .bill .van-cell:not(:last-child)::after{
+    border-color: #fff
+  }
+  #app >>> .van-submit-bar{
+    position: flex;
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  #app >>> .van-submit-bar.colordisplay{
+    position:relative
+  }
+  #app >>> .imgList.van-col.van-col--6.van-col--offset-1{
+    margin-left: 0px;
+    text-align: left;
+    margin-right: 11%;
+  }
+  #app >>> .van-notice-bar{
+    background:rgba(0,0,0,1);
+    opacity:0.1997;
+    color:#fff;
+    margin-bottom: 60px;
+  }
+  
 </style>
 

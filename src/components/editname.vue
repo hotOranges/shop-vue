@@ -95,5 +95,9 @@ color: red;
 #apps >>> .van-nav-bar .van-icon{
     color: #2c3e50
 }
+#apps >>> .van-icon.van-icon-clear{
+  right: 5px;
+  width: 30px;
+}
 </style>
 

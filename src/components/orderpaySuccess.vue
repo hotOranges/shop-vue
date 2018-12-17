@@ -83,7 +83,7 @@ export default {
     this.reload()
     this.orderNo =  this.$route.query.orderNo;
     this.inits()
-    console.log(JSON.parse(localStorage.getItem('opednId')))
+    // console.log(JSON.parse(localStorage.getItem('opednId')))
     this.opednId = JSON.parse(localStorage.getItem('opednId'))
       var ua = window.navigator.userAgent.toLowerCase(); 
     if (ua.match(/MicroMessenger/i) == 'micromessenger') { 
@@ -122,7 +122,7 @@ export default {
       }
       getOrderDetail(para).then(res =>{
        if (res) {
-           console.log(res)
+          //  console.log(res)
          this.formdata = res
           localStorage.setItem('placeOrders', JSON.stringify(res))
         }

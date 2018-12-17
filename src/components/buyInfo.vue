@@ -541,6 +541,14 @@ export default {
         Toast('请选择规格')
         return
       }
+      if (sel.value<=0) {
+         Toast('数量不合理')
+        return
+      }
+       if (!(/(^[1-9]\d*$)/.test(sel.value))) { 
+　　　　　Toast('数量不合理')
+　　　　　　return ; 
+　　　}
       var selIn = [];
       selIn.push({
         orderNum: sel.value,
@@ -556,6 +564,22 @@ export default {
         ".van-sku-row__item.van-sku-row__item--active"
       );
       var selIn = [];
+      if (sel.value<=0) {
+         Toast('数量不合理')
+        return
+      }
+     if (!(/(^[1-9]\d*$)/.test(sel.value))) { 
+　　　　　Toast('数量不合理')
+　　　　　　return ; 
+　　　}
+      if (!(/(^[1-9]\d*$)/.test(sel.value))) { 
+　　　　　Toast('数量不合理')
+　　　　　　return ; 
+　　　}
+      if (color==null) {
+        Toast('请选择规格')
+        return
+      }
       selIn.push({
         orderNum: sel.value,
         color: color.innerHTML
@@ -782,10 +806,13 @@ export default {
   border: 1px solid #b39061;
 }
 #app >>> .van-sku-header{
-  padding-top: 12px
+  padding-top: 20px
 }
 #app >>> .van-sku-actions{
   padding-bottom: 10px;
+}
+#app >>> .van-sku-header__img-wrap img{
+  max-height: initial
 }
 </style>
 

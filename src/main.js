@@ -5,6 +5,8 @@ import router from './router'
 import qs from 'qs'
 import utils from './utils/utils'
 // Vue.prototype.$utils = utils // main.js中全局引入
+import promise from 'es6-promise';
+promise.polyfill();
 let id = utils.getUrlKey('openId')
 console.log(id)
 localStorage.setItem(

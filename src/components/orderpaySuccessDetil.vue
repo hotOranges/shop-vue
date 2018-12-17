@@ -67,8 +67,8 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { payMent } from "../../src/api/login";
 export default {
+   inject: ['reload'],
   data() {
-     inject: ['reload'],
     return {
       radio3: "1",
       placeOrders: "",

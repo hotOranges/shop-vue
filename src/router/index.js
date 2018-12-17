@@ -115,7 +115,7 @@ export default new Router({
       path:'/editme',
       name:'editme',
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,
       },
       component:editme
     },
@@ -146,7 +146,7 @@ export default new Router({
       path:'/goods/:id/buy/pay',
       name:'pay',
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,
       },
       component:Pay,
     },
@@ -170,7 +170,7 @@ export default new Router({
       path:'/shoppingCart',
       name:'shoppingCart',
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true, 
       },
       component:ShopingCart,
     },
@@ -178,7 +178,7 @@ export default new Router({
       path:'/me',
       name:'Me',
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,
       },
       component:Me,
     },

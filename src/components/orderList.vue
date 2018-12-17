@@ -134,7 +134,6 @@ export default {
       this.$router.back(-1);
     },
     setdata() {
-      
       this.sku.stock_num =9999;
       this.sku.price = this.detial.specialPrice;
       this.goods.title = this.detial.productName;
