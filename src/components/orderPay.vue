@@ -314,7 +314,7 @@ export default {
   padding-right: 0px;
 }
 #app >>> .van-address-item__edit::before {
-      content: "\F007";
+      content: "\F009";
 }
 #app >>> .van-address-list__add {
   display: none;

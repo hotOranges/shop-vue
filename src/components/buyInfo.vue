@@ -526,7 +526,7 @@ export default {
       this.oShow2 = false
       this.oShow1 = false
       }
-       document.body.scrollTop = 0
+      document.body.scrollTop = 0
       document.documentElement.scrollTop = 0
     },
     onBuynumber(data){
@@ -558,7 +558,7 @@ export default {
       this.$router.push("/goods/id_2/buy/pay");
     },
     onAddCartClicked(data) {
-       if (localStorage.getItem('token') && localStorage.getItem('token').length>3) {
+       if (localStorage.getItem('token')) {
       const sel = document.querySelector(".van-stepper__input");
       const color = document.querySelector(
         ".van-sku-row__item.van-sku-row__item--active"

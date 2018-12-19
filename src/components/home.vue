@@ -227,5 +227,8 @@ export default {
 /* #app >>> .van-icon-shopping-cart::before{
    content: url(../assets/img/home_icon_shopping.png);
 } */
+#app >>> .init-header .van-info{
+  border:none
+}
 </style>
 
