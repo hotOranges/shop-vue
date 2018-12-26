@@ -5,7 +5,7 @@
       </van-nav-bar>
     <van-row class="shopp_conent">
       <van-col span='6' offset="1" class="imgList">
-      <img :src="'http://'+ host +'/image/'+formdata.productImage" name="adapter" />
+      <img :src="imgsevers +'/image/'+formdata.productImage" name="adapter" />
     </van-col>
     <van-col span='15' offset="1">
       <span>商品评分</span>
@@ -71,16 +71,17 @@
 </template>
 
 <script>
-import {comment} from '../api/login'
+import {comment,severs,imgsevers} from '../api/login'
 import { Toast } from "vant";
 export default {
   data() {
     return {
       score: 4,
       message:'',
+      severs:severs(),
       logistics1:0,
+      imgsevers:imgsevers(),
       logistics2:0,
-      host:'pay.iwingscom.com',
       formdata:'',
       orderNo:'',
       textareaH: { maxHeight: 150, minHeight: 60 },

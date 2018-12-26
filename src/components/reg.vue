@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { getVerifyCode,regist } from "../../src/api/login";
+import { severs,getVerifyCode,regist } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
@@ -87,6 +87,7 @@ export default {
       sms: null,
       content: '获取验证码',
       totalTime: 180,
+      severs:severs(),
       canClick: true, //添加canClick  
       paswldtype: "password",
       iPhone: "",
@@ -184,7 +185,8 @@ export default {
                 forbidClick: false,
                 message: '请求中...' 
           });
-     this.$ajax.post('http://pay.iwingscom.com/iwings-manager/customerUser/regist',para)
+      const url = thiss.severs + '/customerUser/regist'
+     this.$ajax.post(url,para)
       .then(function (response) {
         if (response.data.msg=='注册成功') {
           Toast.clear();

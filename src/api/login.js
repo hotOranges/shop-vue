@@ -1,11 +1,16 @@
 import request from '@/utils/request'
-// const base = 'http://192.168.1.88:60180/smartphone'
-// const HOST = 'localhost'
-// const HOST = '106.15.44.76'
-const HOST = 'pay.iwingscom.com'
-// const HOST = 'app.iwingscom.com'
+import {Locale} from 'vant'
+import service from '../utils/request'
+const HOST = '106.15.44.76'
+// const HOST = 'pay.iwingscom.com'
 const base = 'http://' + HOST + '/iwings-manager'
-
+const baseImg = 'http://' + HOST 
+export function severs() {
+  return base
+}
+export function imgsevers() {
+  return baseImg
+}
 export function getVerifyCode(params) {
   return request({
     url: `${base}/customerUser/getVerifyCode`,
@@ -254,3 +259,10 @@ export function getBanner(params) {
       data: params
     })
   }
+  export function getTrack(params) {
+    return request({
+      url: `${base}/promotional/getTrack`,
+      method: 'post',
+      data: params
+    })
+}

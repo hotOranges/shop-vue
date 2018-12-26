@@ -156,7 +156,7 @@ import StarRate from 'vue-cute-rate'
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { productInfo,getProductDetail,listImage,getProductComment,addShopCart,getShopCart } from "../../src/api/login";
+import { severs,productInfo,getProductDetail,listImage,getProductComment,addShopCart,getShopCart } from "../../src/api/login";
 
 //obj 优惠券
 const coupon = {
@@ -179,6 +179,7 @@ export default {
       orderNum:0,
       listImages:'',
       detial:'',
+      severs:severs(),
       chosenCoupon: -1,
       shop_info:0,
       initgeval:'请选择颜色 型号 数量',
@@ -615,8 +616,9 @@ export default {
       token: JSON.parse(localStorage.getItem("token"))
     };
      let thisss= this
+      const url = this.severs + '/customer/getShopCart'
       this.$ajax 
-        .post("http://pay.iwingscom.com/iwings-manager/customer/getShopCart",para)
+        .post(url,para)
         .then(function(res) {
           //  console.log(res.data)
            if (res.data.code == '1008') {

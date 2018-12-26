@@ -28,9 +28,12 @@ Vue.use(vuex);
 //ui 框架
 import Vant from 'vant';
 import 'vant/lib/index.css';
-
+import VueTouch from 'vue-touch'
+Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(Vant);
 
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 //懒加载
 import { Lazyload } from 'vant';
 Vue.use(Lazyload);
@@ -47,6 +50,16 @@ axios.interceptors.request.use((config) => {
   return config
 }, function (error) {
   return Promise.reject(error)
+})
+
+axios.interceptors.request.use(config => {
+  if (localStorage.getItem('token')) {
+    config.headers['X-Token'] = JSON.parse(localStorage.getItem('token'))  // 让每个请求携带自定义token 请根据实际情况自行修改
+  }
+  return config
+}, error => {
+  console.log(error) 
+  Promise.reject(error)
 })
 router.afterEach((to,from,next) => {
   window.scrollTo(0,0);

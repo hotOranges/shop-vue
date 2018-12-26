@@ -61,11 +61,10 @@
     </van-goods-action>
   </div>
 </template>
-
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
-import { payMent } from "../../src/api/login";
+import { severs,payMent } from "../../src/api/login";
 
 export default {
   inject: ['reload'],
@@ -74,6 +73,7 @@ export default {
       radio3: "1",
       placeOrders: "",
       opednId: "",
+      severs:severs(),
       datas: "",
       show: true
     };
@@ -154,8 +154,9 @@ export default {
         });
       } else {
         Toast.clear()
+        const url = this.severs + '/customer/payMent'
         this.httpPost(
-          "http://pay.iwingscom.com/iwings-manager/customer/payMent",
+         url,
           para
         );
       }

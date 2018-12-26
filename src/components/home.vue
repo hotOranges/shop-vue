@@ -4,7 +4,7 @@
     <!-- 搜索区 -->
     <!-- <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft"> -->
     <van-nav-bar class="init-header" title="商城">
-      <van-icon name="chat" slot="right" info=""/>
+      <van-icon name="chat" slot="right" @click="im" info=""/>
     </van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getAllProject,getShopCart } from "../../src/api/login";
+import { getAllProject,getShopCart,severs } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Waterfall } from "vant";
 import Swiper from "./swiper";
@@ -76,6 +76,7 @@ export default {
       tabarActive: 0,
       value: null,
       active: 0,
+      severs:severs(),
       info:'0',
       activeTitle: null,
       path: "../../static/images/",
@@ -107,8 +108,9 @@ export default {
       token: JSON.parse(localStorage.getItem("token"))
     };
      let thisss= this
+      const url = this.severs + '/customer/getShopCart'
       this.$ajax 
-        .post("http://pay.iwingscom.com/iwings-manager/customer/getShopCart",para)
+        .post(url,para)
         .then(function(res) {
           //  console.log(res.data)
            if (res.data.code == '1008') {
@@ -149,6 +151,9 @@ export default {
     },
     redirects(url) {
       this.$router.push(url);
+    },
+    im(){
+      this.$router.push('/im')
     },
     tip() {
       Toast("网络错误o(╥﹏╥)o 请稍后再试~");

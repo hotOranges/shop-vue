@@ -65,7 +65,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
-import { payMent,getOrderDetail } from "../../src/api/login";
+import { severs,payMent,getOrderDetail } from "../../src/api/login";
 
 export default {
    inject: ['reload'],
@@ -73,6 +73,7 @@ export default {
     return {
       radio3: "1",
       formdata: "",
+      severs:severs(),
       opednId: "",
       orderNo:'',
       datas: "",
@@ -184,7 +185,8 @@ export default {
       }
       });
       }else{
-        this.httpPost("http://pay.iwingscom.com/iwings-manager/customer/payMent", para);
+        const url = this.severs + '/customer/payMent'
+        this.httpPost(url, para);
       }
     },
       httpPost(URL, PARAMS) {

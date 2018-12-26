@@ -24,7 +24,7 @@
  <van-cell v-for="(item, index) in formdata.detailList" :key="index">
  <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-     <img  :src="'http://'+ host +'/image/'+item.productImage" name="adapter" />
+     <img  :src="imgsevers +'/image/'+item.productImage" name="adapter" />
   </van-col>
    <van-col span='24' offset="2" class="imgList">
         <span>{{item.productName}}</span>
@@ -111,14 +111,15 @@
 </template>
 
 <script>
-import {delOrder,getOrderDetail} from '../api/login'
+import {delOrder,getOrderDetail,severs,imgsevers} from '../api/login'
 import { Toast } from "vant";
 export default {
   data() {
     return {
       radio3: "1",
+      severs:severs(),
+      imgsevers:imgsevers(),
       orderNo:'',
-      host:'pay.iwingscom.com',
       formdata:''
     };
   },

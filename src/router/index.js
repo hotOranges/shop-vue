@@ -31,6 +31,8 @@ import editme from '@/components/editme'
 import editname from '@/components/editname'
 import paySuccessDetil from '@/components/paySuccessDetil'
 import paySuccessDetil2 from '@/components/paySuccessDetil2'
+import Im from '@/components/im'
+import Calendar from '@/components/calendar'
 Vue.use(Router)
 
 export default new Router({
@@ -175,6 +177,14 @@ export default new Router({
       component:ShopingCart,
     },
     {
+      path:'/Calendar',
+      name:'Calendar',
+      meta:{
+        requireAuth:true
+      },
+      component:Calendar
+    },
+    {
       path:'/me',
       name:'Me',
       meta: {
@@ -207,6 +217,11 @@ export default new Router({
       path:'/register',
       name:'register',
       component:Reg,
+    },
+    {
+      path:'/im',
+      name:'im',
+      component:Im,
     },
     {
       path:'/respassworld',

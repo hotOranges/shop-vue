@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import {getUser,editUser} from '../api/login'
+import {getUser,editUser,severs} from '../api/login'
 import { Actionsheet } from 'vant';
 import { Uploader } from 'vant';
 import {Toast} from 'vant'
@@ -41,6 +41,7 @@ export default {
     return {
        show: false,
        url:'',
+       severs:severs(),
        form:{
         nickName:'',
         avatar:''
@@ -129,11 +130,13 @@ export default {
         },
         onimg(file){
             //console.log(file.content)
+            const urls = this.severs + '/customerUser/upload'
+
             var formData = new FormData();
             formData.append("file", file.file);
             formData.append("token", JSON.parse(localStorage.getItem('token')));         
              instance({
-                url:'http://pay.iwingscom.com/iwings-manager/customerUser/upload',
+                url:urls,
                 method:'post',
                 headers: {
                     'token': sessionStorage.token

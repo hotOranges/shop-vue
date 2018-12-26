@@ -4,7 +4,7 @@
       <van-nav-bar title="我的订单" @click-left="onClickLeft" left-arrow>
 </van-nav-bar>
 <van-tabs v-model="active" @change="changeTab">
-  <van-tab v-for="index in Tabtext" :key="index+1" :title="' ' + index" >
+  <van-tab v-for="index in Tabtext" :title="' ' + index" >
   <div  v-for="i in fromData"> 
   <div v-if="i.displayType=='0'">
    <div class="init-list">
@@ -13,7 +13,7 @@
   </van-cell-group>
   <div class="init-soller-list2" @click="orderDeil(i)">
   <van-col span='5' offset="2" class="imgList">
-      <img  :src="'http://'+ host+'/image/'+i.avatar[0]" name="adapter" />
+      <img  :src="imgsevers+'/image/'+i.avatar[0]" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList"  style="margin-top:14px">
       <span>{{i.productName}}</span>
@@ -52,6 +52,9 @@
    <div span='4' offset="1" class="btn" v-if="i.status =='1'">
   <button @click="pay(i)">去支付</button>
   </div>
+  <div span='4' offset="1" class="btn" v-if="i.status =='2'">
+      <button @click="logistics(i)" >查看物流</button>
+  </div>
   </van-cell-group>
 <!--待付款--> 
    <van-cell-group id="init-border" v-if="active==1">
@@ -68,9 +71,9 @@
   <div span='4' offset="1" class="btn">
       <button @click="confirm(i)">确认收货</button>
   </div>
-  <!-- <div span='4' offset="1" class="btn">
-      <button @click="logistics()">查看物流</button>
-  </div> -->
+  <div span='4' offset="1" class="btn" v-if="i.status =='2'">
+      <button @click="logistics(i)">查看物流</button>
+  </div>
   </van-cell-group>
 
    <!--已收货-->
@@ -106,20 +109,21 @@
 <!--查看物流-->
 <van-actionsheet
   v-model="show"
-  @select="onSelect"
 >
+  <p style="line-height: 35px;border-bottom: 1px solid #d8d8d8; text-indent:1em;font-size: 14px;"><span>{{stepsData.shipperCode | sfdata}}</span><span style="margin-left:2em;">运单号：<span>{{stepsData.logisticCode}}</span></span>
+  <span>
+    <el-button class="ml10" type="text" size="medium"
+        v-clipboard:copy="sysAppIds"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError">点击复制</el-button>
+  </span>
+  </p>
+   
   <van-steps direction="vertical" :active="0" active-color="#f44">
-  <van-step>
-    <h3>【城市】物流状态1</h3>
-    <p>2016-07-12 12:40</p>
-  </van-step>
-  <van-step>
-    <h3>【城市】物流状态2</h3>
-    <p>2016-07-11 10:00</p>
-  </van-step>
-  <van-step>
-    <h3>快件已发货</h3>
-    <p>2016-07-10 09:30</p>
+  
+  <van-step  v-for="steps in stepsData.traces">
+    <h3>{{steps.acceptStation}}</h3>
+    <p>{{steps.acceptTime}}</p>
   </van-step>
 </van-steps>
 </van-actionsheet>
@@ -130,7 +134,7 @@
 </template>
 
 <script>
-import {listOrder,delOrder,updateOrderStatus} from '../api/login'
+import {imgsevers,severs,listOrder,delOrder,updateOrderStatus} from '../api/login'
 import { Toast } from "vant";
 export default {
   data() {
@@ -139,11 +143,45 @@ export default {
       active: 0,
       page:0,
       number:5,
+      sysAppIds:'',
+      severs:severs(),
+      imgsevers:imgsevers(),
       shows:true,
+      stepsData:'',
       fromData:[],
-      host:'pay.iwingscom.com',
       Tabtext: ["全部订单", "待付款", "待收货", "已收货", "已取消"]
     };
+  },
+  filters: {
+    sfdata: function(e) {
+      var text;
+       switch(e){
+            case 'DBL' :
+              text = "德邦快递"      
+            break;
+            case 'EMS' :
+              text = "EMS"      
+             break;
+            case 'ZTO' :
+              text = "中通快递"      
+            break;
+            case 'SF' :
+              text = "顺丰快递"      
+            break;
+            case 'YTO' :
+              text = "圆通快递"      
+            break;
+            case 'YD' :
+              text = "韵达速递"      
+            break;
+            case 'YZPY' :
+              text = "邮政快递包裹"      
+            break;
+            default:
+            break; 
+       }
+      return text
+    }
   },
   created() {
     this.active = this.$route.query.activeId;
@@ -153,7 +191,7 @@ export default {
   },
   methods: {
     initData(){
-       this.number = 5
+      this.number = 5
       let para = {
         token:JSON.parse(localStorage.getItem('token')),
         currentPage:this.page,
@@ -163,6 +201,13 @@ export default {
       listOrder(para).then(res=>{
         this.fromData = res ? res:'';
       })
+    },
+    onCopy(e){
+     Toast('复制成功')
+    },
+    // 复制失败
+    onError(e){
+      Toast("复制成功");
     },
     changeTab(e){
        this.page = 0
@@ -233,7 +278,7 @@ export default {
                 mask: true,
                 forbidClick: false,
                 message: '提交中...' 
-          });
+      });
       delOrder(para).then(res=>{
         Toast.clear()
            this.fromData = this.fromData.filter(function(is){  return i.orderNo!== is.orderNo}) 
@@ -244,9 +289,7 @@ export default {
       })
     },
     orderDeil(i){
-      
         this.$router.push({ path: '/aftersalesServer', query: { orderNo: i.orderNo }});
-      
     },
     pay(i) {
       this.$router.push({ path: '/orderpaySuccess', query: { orderNo: i.orderNo }});
@@ -258,10 +301,10 @@ export default {
         orderStatus:4
       }
       Toast.loading({
-                duration: 0,
-                mask: true,
-                forbidClick: false,
-                message: '提交中...' 
+            duration: 0,
+            mask: true,
+            forbidClick: false,
+            message: '提交中...' 
           });
       updateOrderStatus(para).then(res=>{
            Toast.clear()
@@ -289,15 +332,39 @@ export default {
           -- this.number
           //  this.initData()
       })
-     
     },
     onSelect(item) {
       // 点击选项时默认不会关闭菜单，可以手动关闭
       this.show = false;
       Toast(item.name);
     },
-    logistics() {
-      this.show = true;
+    logistics(i) {
+       let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        orderNo:i.orderNo
+      }
+      let thiss= this 
+      const url = this.severs + '/promotional/getTrack'
+        Toast.loading({
+            duration: 0,
+            mask: true,
+            forbidClick: false,
+            message: '查询中...' 
+          });
+      this.$ajax.post(url,para)
+      .then(function (response) {
+        if (response.data.code=='1013') {
+          Toast('暂无轨迹数据')
+        }else if(response.data.code=='200'){
+         thiss.stepsData = response.data.data
+         thiss.sysAppIds = thiss.stepsData.logisticCode
+         thiss.show = true;
+          Toast.clear()
+         
+        }else{
+          Toast(response.data.msg)
+        }
+      })
     }
   }
 };
@@ -383,6 +450,30 @@ export default {
   text-align: right;
   padding-right: 11px;
   line-height: 28px;
+}
+.ml10{
+  -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+    box-sizing: border-box;
+    text-align: center;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 100%;
+    padding: 2px 8px 2px 8px;
+    font-size: 11px;
+    text-align: center;
+    color: #b5915c;
+    background-color:transparent;
+    border: none;
+    border-radius: 10em;
+    height: 20px;
+    line-height: 17px;
+    top: 19px;
+    right: 10px;
+    position:absolute;
+}
+#app >>> .van-actionsheet{
+  max-height: 60%
 }
 #app >>> .van-hairline--top-bottom::after {
   border-color: #d8d8d8;

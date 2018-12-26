@@ -20,7 +20,7 @@
 </van-cell-group>
 <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-      <img   :src="'http://'+host+'/image/'+formdata.productImage" name="adapter" />
+      <img :src="imgsevers+'/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
         <span>{{formdata.productName}}</span>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import {saleDetail} from '../api/login'
+import {saleDetail,severs,imgsevers} from '../api/login'
 import { Toast } from "vant";
 export default {
   data() {
@@ -62,8 +62,9 @@ export default {
       active:0,
       saleId:'',
       typeTitle:'',
+      severs:severs(),
+      imgsevers:imgsevers(),
       formdata:'',
-      host:'pay.iwingscom.com',
       typeTexts:'',
       items:''
     };

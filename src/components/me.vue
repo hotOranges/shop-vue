@@ -1,7 +1,7 @@
 <template>
    <!-- 我的 组件 -->
   <div id="app">
-  <van-nav-bar title="" @click-left="onClickLeft" left-arrow>
+  <van-nav-bar  @click-left="onClickLeft" left-arrow>
   <van-icon name="setting" slot="right" @click= "redirects('/editme')" />
   <!-- <van-icon name="chat" slot="right" /> -->
 </van-nav-bar>
@@ -14,7 +14,7 @@
                           <span>{{form.nickName}}</span>
                         </van-col>
                         <van-col span='6' offset="1" class="goodIntegral">
-                          <span style="font-size: 12px;"><van-icon name="points" />积分0</span>
+                          <span style="font-size: 12px;" @click="redirects('Calendar')"><van-icon name="points" />积分0</span>
                         </van-col>
                      </van-col>
                      <!-- 订单 -->
@@ -200,6 +200,7 @@ export default {
     rgba(239, 158, 62, 1) 0%,
     rgba(228, 160, 66, 1) 100%
   );
+      height: 48px;
 }
 #app >>> .van-nav-bar .van-icon {
   color: #fff;
@@ -207,10 +208,7 @@ export default {
 #app >>> .van-icon-discount::before {
   font-size: 22px;
 }
-#app >>> .van-hairline--bottom::after {
-  border-bottom-width: 0px;
-  border:0 solid #ef9e3e
-}
+
 #app >>> .van-cell__title {
   text-align: left;
   font-size: 15px;
@@ -251,5 +249,11 @@ export default {
 }
 #app >>> .van-icon-kefu::before{
    content: url(../assets/img/4.png);
+}
+#app >>> [class*=van-hairline]::after{
+      border: 0 solid #ef9e3e;
+          transform: none;
+
+
 }
 </style>

@@ -8,7 +8,6 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
 import { addShopCart,getShopCart } from "../../src/api/login";
-
 export default {
   name: "buyInfo",
   data() {

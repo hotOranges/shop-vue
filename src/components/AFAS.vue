@@ -10,7 +10,7 @@
 />
 <div class="init-soller-list2">
   <van-col span='7' offset="2" class="imgList">
-       <img  :src="'http://'+'pay.iwingscom.com/image/'+formdata.productImage" name="adapter" />
+       <img :src="imgsevers+'/image/'+formdata.productImage" name="adapter" />
   </van-col>
    <van-col span='11' offset="2" class="imgList">
         <span>{{formdata.productName}}</span>
@@ -26,7 +26,7 @@
       <van-stepper v-model="value" integer
   :min="1"
   disable-input
-  :max="formdata.productSumNum"
+  :max="formdata.afterSaleNum"
   :step="1" />
   </van-cell-group>
   <van-cell class="custom-text">
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {applyPage} from '../api/login'
+import {applyPage,severs,imgsevers} from '../api/login'
 export default {
   data() {
     return {
@@ -74,6 +74,8 @@ export default {
       sheet:'',
       show:false,
       radio:1,
+      severs:severs(),
+      imgsevers:imgsevers(),
       formdata:'',
       id:'',
       ReturnsTitle:'',
@@ -175,7 +177,7 @@ export default {
         detailId:this.id
       })
       
-       localStorage.setItem("applyServiceData",JSON.stringify(applyServiceData));
+      localStorage.setItem("applyServiceData",JSON.stringify(applyServiceData));
       this.$router.push('/AFASDetil')
     }
     
