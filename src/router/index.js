@@ -33,6 +33,8 @@ import paySuccessDetil from '@/components/paySuccessDetil'
 import paySuccessDetil2 from '@/components/paySuccessDetil2'
 import Im from '@/components/im'
 import Calendar from '@/components/calendar'
+import integralDetil from '@/components/integralDetil'
+import integralRule from '@/components/integralRule'
 Vue.use(Router)
 
 export default new Router({
@@ -183,6 +185,22 @@ export default new Router({
         requireAuth:true
       },
       component:Calendar
+    },
+    {
+      path:'/integralDetil',
+      name:'integralDetil',
+      meta:{
+        requireAuth:true
+      },
+      component:integralDetil
+    },
+    {
+      path:'/integralRule',
+      name:'integralRule',
+      meta:{
+        requireAuth:true
+      },
+      component:integralRule
     },
     {
       path:'/me',

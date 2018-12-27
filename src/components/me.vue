@@ -253,7 +253,5 @@ export default {
 #app >>> [class*=van-hairline]::after{
       border: 0 solid #ef9e3e;
           transform: none;
-
-
 }
 </style>

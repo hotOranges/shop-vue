@@ -1,7 +1,7 @@
 <template>
   <div class="date">
     <van-nav-bar title="我的积分" @click-left="onClickLeft" left-arrow>
-      <van-icon name="question" slot="right" @click="redirects('/editme')"/>
+      <van-icon name="question" slot="right" @click="redirects('/integralRule')"/>
     </van-nav-bar>
     <van-col span="24" class="title">
       <van-cell-group class="caltext"></van-cell-group>
@@ -15,15 +15,15 @@
       </van-cell-group>
     </van-col>
     <van-col class="title2" span="24">
-      <van-cell-group>
-        <span class="span"><van-button round class="initBtn active">{{btntext}}</van-button></span>
-        <span class="span"><van-button round class="initBtn">积分明细</van-button></span>
-      </van-cell-group>
+      <div>
+        <span class="span"><van-button round v-bind:class="{ classred:disabled}" class="initBtn" :disabled="disabled" @click="qd">{{btntext}}</van-button></span>
+        <span class="span"><van-button round class="initBtn" @click="redirects('/integralDetil')">积分明细</van-button></span>
+      </div>
     </van-col>
    
     <ul class="weekdays days">
       <v-touch v-on:swipeleft="left" v-on:swiperight="right" class="wrapper">
-      <li  v-for="(day, index) in days" :key="index" class="active">
+      <li  v-for="(day, index) in days" :key="index" :class="menuListActive(day.time)">
         <span v-if="day.time.getMonth()+1 != currentMonth" class="other-month crl">+1</span>
         <span v-else>
           <span
@@ -64,13 +64,17 @@ export default {
       currentMonth: 1, // 月份
       currentDay: 1, // 日期
       currentWeek: 1, // 星期
+      activeDay:[
+        {time:''}
+      ],
       days: [],
+      disabled:false,
       btntext:''
     };
   },
 
   mounted() {
-    this.btntext = '签到'
+    this.jugstat()
   },
 
   created() {
@@ -78,6 +82,20 @@ export default {
   },
 
   methods: {
+    jugstat(){
+       this.btntext = '签到';
+       var filters = this.activeDay.filter(item =>{
+         var datas = new Date(item.time).getDate();
+         var yedata = new Date().getDate()
+         if (datas===yedata) {
+            this.btntext = '已签到';
+            this.disabled = true
+         }else{
+            this.btntext = '签到';
+            this.disabled = false
+         }
+      })
+    },
     formatDate(year, month, day) {
       const y = year;
       let m = month;
@@ -86,11 +104,30 @@ export default {
       if (d < 10) d = `0${d}`;
       return `${y}-${m}-${d}`;
     },
+    menuListActive: function(name) {
+       var text ='sort';
+       var filters = this.activeDay.filter(item =>{
+         var datas = new Date(item.time).getDate();
+         if (datas===name.getDate()) {
+           return text="active"
+         }else{
+           return text="sort"
+         }
+      })
+       return text
+    },
     left(){
       this.weekNext()
     },
     right(){
       this.weekPre()
+    },
+    qd(){
+       var datas = new Date();
+       this.activeDay.push({
+         time:datas
+       })
+       this.jugstat()
     },
     initData(cur) {
       let date = "";
@@ -119,6 +156,7 @@ export default {
           time:d,
           state:false
         });
+        // console.log(this.days)
       }
       for (let i = 1; i <= 7 - this.currentWeek; i += 1) {
         const d = new Date(str);
@@ -162,6 +200,9 @@ export default {
         this.formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
       );
     },
+    redirects(url) {
+      this.$router.push(url);
+    },
     onClickLeft() {
       this.$router.push("/");
     }
@@ -200,6 +241,13 @@ export default {
       width: 100px;
       .van-button__text{
         color: #fff
+      }
+    }
+    .classred{
+      background:rgba(255,255,255,1);
+      
+      .van-button__text{
+      color:rgba(237,159,63,1);
       }
     }
     .van-cell-group{
@@ -305,12 +353,15 @@ export default {
         color: #fff;
       }
     }
+     .sort{
+      width: 10%;
+    }
     li {
       flex: 1;
       text-align: center;
       border: 1px solid #d8d8d8;
       color: #d8d8d8;
-      border-radius: 30px 30px 30px 30px;
+      border-radius: 50%;
       line-height: 35px;
       margin-left: 7px;
       margin-right: 7px;
@@ -378,5 +429,8 @@ export default {
       }
     }
   }
+}
+.van-hairline--top-bottom::after{
+      border-width: 0px 0;
 }
 </style>

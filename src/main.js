@@ -8,7 +8,7 @@ import utils from './utils/utils'
 import promise from 'es6-promise';
 promise.polyfill();
 let id = utils.getUrlKey('openId')
-console.log(id)
+
 localStorage.setItem(
   "opednId",
   JSON.stringify(id)
