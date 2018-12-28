@@ -56,6 +56,12 @@
     <span>买家留言</span>
     <van-field @focus="initfocus" @blur="initblur"  v-model="message" placeholder="请输入留言" />
   </van-cell> 
+   <van-coupon-cell
+            :coupons="coupons"
+            :chosen-coupon="chosenCoupon"
+            :title="'优惠券：'"
+            @click="showList = true"
+    />
   <van-cell title="商品总价" :value="'￥'+detial.specialPrice*selIn.orderNum" />
   <van-cell title="运费" value="+￥0.00" />
 <van-notice-bar :scrollable="false">
@@ -64,7 +70,7 @@
 </van-cell-group>
 </van-panel>
       <van-submit-bar
-        :price="detial.specialPrice*selIn.orderNum*100"
+        :price="totalprices"
         button-text="提交订单"
         @submit="onSubmit"
         :class="{'colordisplay':display}"
@@ -94,7 +100,18 @@
  </van-tabs>
 </van-cell-group>
 <van-button round @click="addtaxpayer"  size="large" style="background-color:#CF3939;color:#fff;width: 85%;margin-left: 7.5%;height: 40px;line-height: 40px;margin-bottom: 40px;margin-top: 40px;">确认</van-button>
-</van-popup>      
+</van-popup>
+ <!-- 优惠券列表 -->
+    <van-popup v-model="showList" position="bottom">
+      <van-coupon-list
+        :coupons="coupons"
+        :chosen-coupon="chosenCoupon"
+        :disabled-coupons="disabledCoupons"
+        @change="onChange"
+        @exchange="onExchange"
+        :show-exchange-bar="false"
+      />
+    </van-popup>      
   </div>
 </template>
 
@@ -113,10 +130,16 @@ export default {
       message:'',
       taxNumber:'',
       selIn:{},
+      totalprices:0,
       bill:'不开发票',
       show:false,
       active:1,
       isInvoice:0,
+      chosenCoupon: -1,
+      coupons: [],
+      disabledCoupons: [],
+      couponNumber:0,
+      showList: null,
       invoiceId:'',
       display: false,
       invoiceType:'',
@@ -148,11 +171,25 @@ export default {
       numO: state => state.home.numO
     }),
     ...mapGetters(["bc_notshow"])
-  },
+  },                       
   mounted(){
-    this.detial = JSON.parse(localStorage.getItem('detial_s'))
-    this.selIn = JSON.parse(localStorage.getItem('selIn'))[0]
-    
+    this.detial = JSON.parse(localStorage.getItem('detial_s'));
+    this.selIn = JSON.parse(localStorage.getItem('selIn'))[0];
+    var coupons = JSON.parse(localStorage.getItem('coupons'));
+    var disabledCoupons = JSON.parse(localStorage.getItem('disabledCoupons'));
+    var couponsIndex = JSON.parse(localStorage.getItem('couponsIndex'));
+    if (coupons!==null) {
+      this.coupons = coupons;
+    }
+    if (disabledCoupons!==null) {
+       this.disabledCoupons = disabledCoupons;
+    }
+    if (couponsIndex!==null) {
+      this.chosenCoupon = couponsIndex;
+      this.couponNumber = this.coupons[couponsIndex].originCondition / 100;
+    }
+    this.productId = JSON.parse(localStorage.getItem("productId"));
+    this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100-this.couponNumber
      let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
@@ -217,7 +254,7 @@ export default {
         buyDetail.push({
           productId:this.detial.id,
           productNum:this.selIn.orderNum,
-          price:this.detial.specialPrice,
+          price:Number(this.detial.specialPrice),
           productName:this.detial.productName,
           productColor:this.selIn.color,
         })
@@ -255,6 +292,37 @@ export default {
         // Toast("提交成功");
         // this.$router.push("/payFailed");
       }
+    },
+     //优惠券
+    onChange(index) {
+      /**/
+      if (index !== -1) {
+        var datas = localStorage.getItem("selIn");
+        if (datas == null) {
+          alert("请选择商品规则");
+          //  this.showList = false;
+        } else {
+          var prise = Number(this.detial.specialPrice);
+          var orderNum = JSON.parse(datas)[0].orderNum;
+          var originCondition = this.coupons[index].originCondition / 100;
+          if (originCondition > prise * orderNum) {
+            alert("满" + originCondition + "元可用");
+          } else {
+            localStorage.setItem("coupons", JSON.stringify(this.coupons));
+            localStorage.setItem("chosenCoupon", JSON.stringify(this.chosenCoupon));
+            localStorage.setItem("couponsIndex", index);
+            this.showList = false;
+            this.chosenCoupon = index;
+          }
+        }
+      } else {
+        this.showList = false;
+        this.chosenCoupon = index;
+        this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100
+      }
+    },
+    onExchange(code) {
+      this.coupons.push(coupon);
     },
     initfocus(){
       this.display = true

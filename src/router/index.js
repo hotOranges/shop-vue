@@ -35,6 +35,8 @@ import Im from '@/components/im'
 import Calendar from '@/components/calendar'
 import integralDetil from '@/components/integralDetil'
 import integralRule from '@/components/integralRule'
+import couponCenter from '@/components/couponCenter'
+import coupon from '@/components/coupon'
 Vue.use(Router)
 
 export default new Router({
@@ -74,6 +76,22 @@ export default new Router({
       path:'/paySuccessDetil',
       name:'paySuccessDetil',
       component:paySuccessDetil
+    },
+    {
+      path:'/couponCenter',
+      name:'couponCenter',
+      meta: {
+        requireAuth: true,
+      },
+      component:couponCenter
+    },
+    {
+      path:'/coupon',
+      name:'coupon',
+      meta:{
+        requireAuth:true
+      },
+      component:coupon
     },
     {
       path:'/paySuccessDetil2',

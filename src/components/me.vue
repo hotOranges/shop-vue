@@ -54,8 +54,8 @@
                       
                       <!-- 列表区 -->
                       <van-col span="24" class="headerList">
-                      <van-cell style="padding-bottom: 15px;"  @click="$toast('敬请期待')" title="我的收藏"  icon="shoucang" is-link />
-                      <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="我的优惠劵"  icon="youhuijuan" is-link />
+                      <van-cell style="padding-bottom: 15px;"  @click="redirects('couponCenter')" title="领券中心"  icon="shoucang" is-link />
+                      <van-cell style="padding-bottom: 15px;" @click="redirects('coupon')" title="我的优惠劵"  icon="youhuijuan" is-link />
                       <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="dizhi" is-link />
                       <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="帮助与反馈"  icon="bangzhu" is-link />
                       <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="$toast('敬请期待')" icon="kefu" is-link />

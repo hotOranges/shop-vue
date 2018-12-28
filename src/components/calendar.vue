@@ -85,8 +85,8 @@ export default {
     jugstat(){
        this.btntext = '签到';
        var filters = this.activeDay.filter(item =>{
-         var datas = new Date(item.time).getDate();
-         var yedata = new Date().getDate()
+          var datas =  new Date(item.time).getFullYear() + '.'+ (new Date(item.time).getMonth()+1) + '.'+ new Date(item.time).getDate();
+          var yedata = new Date().getFullYear() + '.'+ (new Date().getMonth()+1) + '.'+ new Date().getDate()
          if (datas===yedata) {
             this.btntext = '已签到';
             this.disabled = true
@@ -107,8 +107,9 @@ export default {
     menuListActive: function(name) {
        var text ='sort';
        var filters = this.activeDay.filter(item =>{
-         var datas = new Date(item.time).getDate();
-         if (datas===name.getDate()) {
+        var datas = new Date(item.time).getFullYear() + '.' + (new Date(item.time).getMonth()+1) + '.' + new Date(item.time).getDate();
+        var yedata = new Date(name).getFullYear() + '.' + (new Date(name).getMonth()+1) + '.' + new Date(name).getDate();
+        if (datas===yedata) {
            return text="active"
          }else{
            return text="sort"
@@ -204,7 +205,7 @@ export default {
       this.$router.push(url);
     },
     onClickLeft() {
-      this.$router.push("/");
+      this.$router.back(-1);
     }
   }
 };

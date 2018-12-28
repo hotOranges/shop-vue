@@ -121,7 +121,7 @@
    
   <van-steps direction="vertical" :active="0" active-color="#f44">
   
-  <van-step  v-for="steps in stepsData.traces">
+  <van-step  v-for="steps in stepsData.traces" :key="steps+1">
     <h3>{{steps.acceptStation}}</h3>
     <p>{{steps.acceptTime}}</p>
   </van-step>

@@ -55,7 +55,7 @@
 <van-actionsheet v-model="show" :title="ReturnsTitle" >
   <van-radio-group v-model="radio">
   <van-cell-group>
-    <van-cell  v-for="img in reason" :key='img.value' :title="img.label" clickable @click="">
+    <van-cell  v-for="img in reason" :key='img.value' :title="img.label" clickable>
       <van-radio :name="img.value" />
     </van-cell>
   </van-cell-group>
