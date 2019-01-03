@@ -9,9 +9,10 @@
 />
  <van-cell-group>
   <van-cell v-if="data.length>0" v-for="(item, index) in data" :key="index+1">
-      <p class="integrailtext">{{item.title}}</p>
-      <span class="time">{{item.time}}</span>
-      <span class="qrd">+ {{item.pre}}</span>
+      <p class="integrailtext">{{item.integralType | filterText}}</p>
+      <span class="time">{{item.createTime}}</span>
+      <span class="qrd" v-if="item.onChange>0">+ {{item.onChange}}</span>
+      <span class="qrd" v-else>{{item.onChange}}</span>
   </van-cell>
   <div v-else class="noneStyle">
       暂无积分明细
@@ -22,11 +23,11 @@
 </template>
 
 <script>
+import {integralDetail} from '../api/login'
 export default {
   data () {
     return {
         data:[
-            {title:'购物送积分',pre:'122',time:'2018-12-22 13:56'}
         ]
     };
   },
@@ -34,12 +35,43 @@ export default {
   components: {},
 
   computed: {},
-
-  mounted(){},
+  filters:{
+      filterText(id){
+          var text;
+         switch (id) {
+             case '1':
+                 text='签到'
+                 break;
+             case '2':
+                 text='购买商品送积分'
+                 break;
+             case '3':
+                 text='兑换商品'
+                 break;    
+             case '4':
+                 text='退款扣除积分'
+                 break;      
+             default:
+                 break;
+         }
+         return text
+      }
+  },
+  mounted(){
+      this.inits()
+  },
 
   methods: {
       onClickLeft(){
           this.$router.back()
+      },
+      inits(){
+            let para = {
+              token:JSON.parse(localStorage.getItem('token'))
+            }
+            integralDetail(para).then(res=>{
+               this.data = res ? res:'';
+            })
       }
   }
 }

@@ -8,10 +8,10 @@
       <van-cell-group class="caltextBorder"></van-cell-group>
       <van-cell-group class="caltext2">
         <span>
-          <b>2000</b>
+          <b>{{score}}</b>
           分
         </span>
-        <span>累计签到100天</span>
+        <span>累计签到{{daysNumber}}天</span>
       </van-cell-group>
     </van-col>
     <van-col class="title2" span="24">
@@ -22,7 +22,7 @@
     </van-col>
    
     <ul class="weekdays days">
-      <v-touch v-on:swipeleft="left" v-on:swiperight="right" class="wrapper">
+      <!-- <v-touch v-on:swipeleft="left" v-on:swiperight="right" class="wrapper"> -->
       <li  v-for="(day, index) in days" :key="index" :class="menuListActive(day.time)">
         <span v-if="day.time.getMonth()+1 != currentMonth" class="other-month crl">+1</span>
         <span v-else>
@@ -33,7 +33,7 @@
           <span class="crl" v-else>+1</span>
         </span>
       </li>
-          </v-touch>
+          <!-- </v-touch> -->
     </ul>
     <!-- 日期 -->
     
@@ -56,6 +56,7 @@
   </div>
 </template>
 <script>
+import {integralIndex,signIn} from '../api/login'
 export default {
   name: "date",
   data() {
@@ -64,9 +65,9 @@ export default {
       currentMonth: 1, // 月份
       currentDay: 1, // 日期
       currentWeek: 1, // 星期
-      activeDay:[
-        {time:''}
-      ],
+      daysNumber:'',
+      score:'',
+      activeDay:[],
       days: [],
       disabled:false,
       btntext:''
@@ -83,18 +84,35 @@ export default {
 
   methods: {
     jugstat(){
-       this.btntext = '签到';
-       var filters = this.activeDay.filter(item =>{
-          var datas =  new Date(item.time).getFullYear() + '.'+ (new Date(item.time).getMonth()+1) + '.'+ new Date(item.time).getDate();
-          var yedata = new Date().getFullYear() + '.'+ (new Date().getMonth()+1) + '.'+ new Date().getDate()
-         if (datas===yedata) {
-            this.btntext = '已签到';
-            this.disabled = true
-         }else{
+
+          let para = {
+              token:JSON.parse(localStorage.getItem('token'))
+            }
+            integralIndex(para).then(res=>{
+              if (res) {
+                this.daysNumber = res.signInCount;
+                this.score = res.score;
+                if (res.signInDate.length>0) {
+                  for (let i = 0; i < res.signInDate.length; i++) {
+                   this.activeDay.push({
+                    time:res.signInDate[i]
+                  }) 
+                  }
+                }
+           this.btntext = '签到';
+          if (res.isSignIn==0) {
             this.btntext = '签到';
             this.disabled = false
-         }
-      })
+          }else{
+             this.btntext = '已签到';
+             this.disabled = true
+          }
+         
+        }
+             
+            })
+       
+
     },
     formatDate(year, month, day) {
       const y = year;
@@ -106,15 +124,18 @@ export default {
     },
     menuListActive: function(name) {
        var text ='sort';
+       var yedata = new Date(name).getFullYear() + '.' + (new Date(name).getMonth()+1) + '.' + new Date(name).getDate();
        var filters = this.activeDay.filter(item =>{
-        var datas = new Date(item.time).getFullYear() + '.' + (new Date(item.time).getMonth()+1) + '.' + new Date(item.time).getDate();
-        var yedata = new Date(name).getFullYear() + '.' + (new Date(name).getMonth()+1) + '.' + new Date(name).getDate();
-        if (datas===yedata) {
-           return text="active"
-         }else{
-           return text="sort"
-         }
+           var datas = new Date(item.time).getFullYear() + '.' + (new Date(item.time).getMonth()+1) + '.' + new Date(item.time).getDate();  
+            if (yedata && datas.indexOf(yedata) === -1) return false;
+            return true;
       })
+      if (filters.length>0) {
+        text = 'active'
+      }else{
+        text = 'sort'
+      }
+
        return text
     },
     left(){
@@ -124,11 +145,19 @@ export default {
       this.weekPre()
     },
     qd(){
-       var datas = new Date();
-       this.activeDay.push({
-         time:datas
-       })
-       this.jugstat()
+         let para = {
+              token:JSON.parse(localStorage.getItem('token'))
+            }
+            signIn(para).then(res=>{
+                var datas = new Date();
+                this.activeDay.push({
+                time:datas
+                })
+               this.btntext = '已签到';
+               this.disabled = true;
+               this.jugstat()
+            })
+           
     },
     initData(cur) {
       let date = "";

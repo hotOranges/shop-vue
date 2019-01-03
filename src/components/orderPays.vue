@@ -55,7 +55,13 @@
   <van-cell>
     <span>买家留言</span>
     <van-field @focus="initfocus" @blur="initblur" v-model="message" placeholder="请输入留言" />
-  </van-cell> 
+  </van-cell>
+   <van-coupon-cell
+            :coupons="coupons"
+            :chosen-coupon="chosenCoupon"
+            :title="'优惠券：'"
+            @click="showList = true"
+    /> 
   <van-cell title="商品总价" :value="'￥'+total/100" />
   <van-cell title="运费" value="+￥0.00" />
 <van-notice-bar :scrollable="false">
@@ -94,7 +100,18 @@
  </van-tabs>
 </van-cell-group>
 <van-button round @click="addtaxpayer"  size="large" style="background-color:#CF3939;color:#fff;width: 85%;margin-left: 7.5%;height: 40px;line-height: 40px;margin-bottom: 40px;margin-top: 40px;">确认</van-button>
-</van-popup>      
+</van-popup>
+ <!-- 优惠券列表 -->
+    <van-popup v-model="showList" position="bottom">
+      <van-coupon-list
+        :coupons="coupons"
+        :chosen-coupon="chosenCoupon"
+        :disabled-coupons="disabledCoupons"
+        @change="onChange"
+        @exchange="onExchange"
+        :show-exchange-bar="false"
+      />
+    </van-popup>        
   </div>
 </template>
 
@@ -118,7 +135,14 @@ export default {
       total:0,
       active:1,
       isInvoice:0,
+      chosenCoupon: -1,
+      coupons: [],
+      disabledCoupons: [],
+      couponNumber:0,
+      showList: null,
+      LocalAdrrss:[],
       invoiceId:'',
+      display: false,
       invoiceType:'',
       chosenAddressId: "",
       deiladdress:'',
@@ -252,6 +276,37 @@ export default {
         }
         })
       }
+    },
+    //优惠券
+    onChange(index) {
+      /**/
+      if (index !== -1) {
+        var datas = localStorage.getItem("selIn");
+        if (datas == null) {
+          alert("请选择商品规则");
+          //  this.showList = false;
+        } else {
+          var prise = Number(this.detial.specialPrice);
+          var orderNum = JSON.parse(datas)[0].orderNum;
+          var originCondition = this.coupons[index].originCondition / 100;
+          if (originCondition > prise * orderNum) {
+            alert("满" + originCondition + "元可用");
+          } else {
+            localStorage.setItem("coupons", JSON.stringify(this.coupons));
+            localStorage.setItem("chosenCoupon", JSON.stringify(this.chosenCoupon));
+            localStorage.setItem("couponsIndex", index);
+            this.showList = false;
+            this.chosenCoupon = index;
+          }
+        }
+      } else {
+        this.showList = false;
+        this.chosenCoupon = index;
+        this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100
+      }
+    },
+    onExchange(code) {
+      this.coupons.push(coupon);
     },
     initfocus(){
       this.display = true
@@ -463,4 +518,7 @@ export default {
     color:#fff;
     margin-bottom: 60px;
   }
+  #app >>> .van-address-item__edit::before {
+    content: "\F009";
+}
 </style>

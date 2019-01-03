@@ -265,4 +265,32 @@ export function getBanner(params) {
       method: 'post',
       data: params
     })
-}
+  }
+  export function integralIndex(params) {
+    return request({
+      url: `${base}/promotional/integralIndex`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function signIn(params) {
+    return request({
+      url: `${base}/promotional/signIn`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function integralDetail(params) {
+    return request({
+      url: `${base}/promotional/integralDetail`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function couponCenter(params) {
+    return request({
+      url: `${base}/promotional/couponCenter`,
+      method: 'post',
+      data: params
+    })
+  }
