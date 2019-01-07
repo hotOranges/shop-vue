@@ -203,60 +203,61 @@ import {
   productInfo,
   getProductDetail,
   listImage,
+  myCoupons,
   getProductComment,
   addShopCart,
   getShopCart
 } from "../../src/api/login";
-
+import { formatDate } from "../utils/date";
 //obj 优惠券
-const coupon = [
-  {
-    available: 1,
-    discount: 0,
-    denominations: 150,
-    originCondition: 480 * 100,
-    reason: "",
-    value: 150,
-    name: "优惠券名称3",
-    startAt: 1489104000,
-    endAt: 1514592000
-  },
-  {
-    available: 1,
-    discount: 0,
-    denominations: 150,
-    originCondition: 200 * 100,
-    reason: "",
-    value: 150,
-    name: "优惠券名称4",
-    startAt: 1489104000,
-    endAt: 1514592000
-  }
-];
-const disabledcoupon = [
-  {
-    available: 1,
-    discount: 0,
-    denominations: 150,
-    originCondition: 480 * 100,
-    reason: "",
-    value: 150,
-    name: "优惠券名称1",
-    startAt: 1489104000,
-    endAt: 1514592000
-  },
-  {
-    available: 1,
-    discount: 0,
-    denominations: 150,
-    originCondition: 480 * 100,
-    reason: "",
-    value: 150,
-    name: "优惠券名称2",
-    startAt: 1489104000,
-    endAt: 1514592000
-  }
-];
+// const coupon = [
+//   {
+//     available: 1,
+//     discount: 0,
+//     denominations: 150,
+//     originCondition: 480 * 100,
+//     reason: "",
+//     value: 150,
+//     name: "优惠券名称3",
+//     startAt: 1489104000,
+//     endAt: 1514592000
+//   },
+//   {
+//     available: 1,
+//     discount: 0,
+//     denominations: 150,
+//     originCondition: 200 * 100,
+//     reason: "",
+//     value: 150,
+//     name: "优惠券名称4",
+//     startAt: 1489104000,
+//     endAt: 1514592000
+//   }
+// ];
+// const disabledcoupon = [
+//   {
+//     available: 1,
+//     discount: 0,
+//     denominations: 150,
+//     originCondition: 480 * 100,
+//     reason: "",
+//     value: 150,
+//     name: "优惠券名称1",
+//     startAt: 1489104000,
+//     endAt: 1514592000
+//   },
+//   {
+//     available: 1,
+//     discount: 0,
+//     denominations: 150,
+//     originCondition: 480 * 100,
+//     reason: "",
+//     value: 150,
+//     name: "优惠券名称2",
+//     startAt: 1489104000,
+//     endAt: 1514592000
+//   }
+// ];
 export default {
   name: "buyInfo",
   data() {
@@ -285,8 +286,8 @@ export default {
       oShow2: true,
       show1: false,
       fromData: {},
-      coupons: coupon,
-      disabledCoupons: disabledcoupon,
+      coupons: [],
+      disabledCoupons: [],
       showList: null,
       oShow: true,
       form: {
@@ -402,6 +403,12 @@ export default {
       actives: state => state.active.home.title,
       my_info: state => state.home.my_info
     })
+  },
+  filters: {
+    capitalize: function(value) {
+      var newDate = new Date(value);
+      return formatDate(newDate, "yyyy-MM-dd");
+    }
   },
   mounted() {
     localStorage.removeItem("selIn");
@@ -522,6 +529,48 @@ export default {
       };
       getProductDetail(para).then(res => {
         this.detilimg = res;
+        this.myCouponss();
+      });
+    },
+    myCouponss() {
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 0
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.coupons = res;
+        this.disabledcoupon();
+      });
+    },
+    disabledcoupon() {
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 1
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.disabledCoupons = res;
       });
     },
     closeSku() {
@@ -566,7 +615,10 @@ export default {
             alert("满" + originCondition + "元可用");
           } else {
             localStorage.setItem("coupons", JSON.stringify(this.coupons));
-            localStorage.setItem("disabledCoupons", JSON.stringify(this.disabledCoupons));
+            localStorage.setItem(
+              "disabledCoupons",
+              JSON.stringify(this.disabledCoupons)
+            );
             localStorage.setItem("couponsIndex", index);
             this.showList = false;
             this.chosenCoupon = index;

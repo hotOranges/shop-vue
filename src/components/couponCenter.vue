@@ -6,13 +6,13 @@
   <van-cell class="bg1">
       <van-row class="couponcard" v-for="(item, index) in couponcardData" :key="index+1">
          <van-col span="9" class="couponleft">
-             <span class="pr_text">￥<b>{{item.price}}</b></span>
-             <span class="ge_text">{{item.rule}}</span>
+             <span class="pr_text">￥<b>{{item.reductionMoney}}</b></span>
+             <span class="ge_text">满{{item.fullMoney}}元可用</span>
          </van-col>
          <van-col span="15" class="couponright">
-             <span class="couponame">{{item.name}}</span>
-             <span class="coupontime">{{item.time}}</span>
-             <van-button v-if="item.state" size="small" round class="couponbutton" type="danger" @click="getcoupon(item)">立即领取</van-button>
+             <span class="couponame">{{item.couponName}}</span>
+             <span class="coupontime">{{item.startTime | capitalize}}~{{item.endTime | capitalize}}</span>
+             <van-button v-if="item.isCollect=='1'" size="small" round class="couponbutton" type="danger" @click="getcoupon(item)">立即领取</van-button>
              <van-button v-else size="small" round class="couponbutton noactive" disabled>已领取</van-button>
          </van-col>
       </van-row>
@@ -23,34 +23,57 @@
 </template>
 
 <script>
-import { Toast } from "vant";
+import { Toast } from "vant"; 
+import {couponCenter,collectCoupons} from '../api/login'
+import {formatDate} from '../utils/date'
 export default {
   data () {
     return {
         fullHeight: document.documentElement.clientHeight,
-        couponcardData:[
-            {price:'xxx',rule:'满xxx元可用',name:'优惠券名xxxxx',time:'2017.03.13-20.17.04.12',state:true},
-            {price:'xxx',rule:'满xxx元可用',name:'优惠券名xxxxx',time:'2017.03.13-20.17.04.12',state:false},
-            {price:'xxx',rule:'满xxx元可用',name:'优惠券名xxxxx',time:'2017.03.13-20.17.04.12',state:true},
-        ],
+        couponcardData:[],
         shows:true,
         page:0,
     };
   },
-
+filters:{
+		capitalize:function(value){
+            var newDate=new Date(value)
+			return formatDate(newDate,'yyyy-MM-dd')
+        }
+},
   components: {},
 
   computed: {},
 
-  mounted() {},
+  mounted() {
+      this.inits()
+  },
 
   methods: {
+    inits(){
+         let para = {
+              token:JSON.parse(localStorage.getItem('token'))
+            }
+            couponCenter(para).then(res=>{
+            this.couponcardData = res
+            })
+    },
     onClickLeft() {
       this.$router.back(-1);
     },
     getcoupon(e){
-        Toast('领取成功')
-        e.state = false;
+        let para = {
+              token:JSON.parse(localStorage.getItem('token')),
+              couponId:e.id
+            }    
+            collectCoupons(para).then(res=>{
+                    if (res) {
+                        e.isCollect = '0'
+                        Toast('领取成功')
+                    }
+             })
+        
+    
     },
     more(){
     //   ++this.page

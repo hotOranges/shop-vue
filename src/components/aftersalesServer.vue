@@ -8,7 +8,6 @@
   @click-left="onClickLeft"
 
 />
-
 <van-row>
      <van-col span='24' offset="0" class="payContent">
       <van-icon v-if="formdata.orderStatus=='3'" name="passed"  size="60px" color="#26ADAB" style="padding-top:20px;padding-bottom:10px"/>   
@@ -75,6 +74,12 @@
 <van-cell>
   <template slot="title">
    <span class="custom-text">买家留言</span>
+   <span class="custom-text">{{formdata.buyerMessage}}</span>
+  </template>
+</van-cell>
+<van-cell>
+  <template slot="title">
+   <span class="custom-text">优惠券</span>
    <span class="custom-text">{{formdata.buyerMessage}}</span>
   </template>
 </van-cell>

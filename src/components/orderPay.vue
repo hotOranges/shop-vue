@@ -119,7 +119,8 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { listShipping,placeOrder,saveInvoice } from "../../src/api/login";
+import { listShipping,placeOrder,myCoupons,saveInvoice } from "../../src/api/login";
+import { formatDate } from "../utils/date";
 
 export default {
   name: "pay",
@@ -143,6 +144,7 @@ export default {
       invoiceId:'',
       display: false,
       invoiceType:'',
+      couponId:'',
       LocalAdrrss:[],
       chosenAddressId: "",
       deiladdress:'',
@@ -171,6 +173,12 @@ export default {
       numO: state => state.home.numO
     }),
     ...mapGetters(["bc_notshow"])
+  },
+  filters: {
+    capitalize: function(value) {
+      var newDate = new Date(value);
+      return formatDate(newDate, "yyyy-MM-dd");
+    }
   },                       
   mounted(){
     this.detial = JSON.parse(localStorage.getItem('detial_s'));
@@ -186,10 +194,12 @@ export default {
     }
     if (couponsIndex!==null) {
       this.chosenCoupon = couponsIndex;
-      this.couponNumber = this.coupons[couponsIndex].originCondition / 100;
+      this.couponNumber = this.coupons[couponsIndex].value / 100;
+    }else{
+      this.myCouponss()
     }
     this.productId = JSON.parse(localStorage.getItem("productId"));
-    this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100-this.couponNumber
+    this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100-this.couponNumber*100
      let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
@@ -246,6 +256,47 @@ export default {
     address(){
        this.$router.push({ path: '/address', query: { edit: 'true' }});
     },
+    myCouponss(){
+       let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 0
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.coupons = res;
+        this.disabledcoupon();
+      });
+    },
+    disabledcoupon() {
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 1
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.disabledCoupons = res;
+      });
+    },
     onSubmit(e) {
       if (this.list.length == 0) {
         Toast("请填写收货信息");
@@ -266,7 +317,8 @@ export default {
            buyDetail:JSON.stringify(buyDetail),
            isInvoice:this.isInvoice,
            invoiceType:this.invoiceType,
-           invoiceId:this.invoiceId
+           invoiceId:this.invoiceId,
+           couponId:this.couponId
         }
         Toast.loading({
                 duration: 0,
@@ -284,6 +336,7 @@ export default {
                 orderAmount:this.detial.specialPrice*this.selIn.orderNum
         }
         localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
+        localStorage.setItem('numall',this.totalprices)
         Toast.clear();
        this.$router.push("/paySuccess");
           }
@@ -296,6 +349,7 @@ export default {
      //优惠券
     onChange(index) {
       /**/
+     
       if (index !== -1) {
         var datas = localStorage.getItem("selIn");
         if (datas == null) {
@@ -313,15 +367,21 @@ export default {
             localStorage.setItem("couponsIndex", index);
             this.showList = false;
             this.chosenCoupon = index;
+             this.couponNumber = this.coupons[index].value
+            this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100-this.couponNumber
+            this.couponId = this.coupons[index].id
           }
         }
       } else {
         this.showList = false;
         this.chosenCoupon = index;
         this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100
+        localStorage.setItem("couponsIndex", index);
+        this.couponId = ''
       }
     },
     onExchange(code) {
+
       this.coupons.push(coupon);
     },
     initfocus(){

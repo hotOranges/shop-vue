@@ -32,7 +32,7 @@
   </van-cell-group>
   <div class="init-soller-list"   @click="orderDeil(i)">
   <van-col span='5' offset="1" class="imgList" v-for="adx in i.avatar">
-    <img  :src="'http://'+ host+'/image/'+adx" name="adapter" />
+    <img  :src="'http://'+ imgsevers+'/image/'+adx" name="adapter" />
   </van-col>
   </div>
    </div>

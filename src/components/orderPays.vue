@@ -70,7 +70,7 @@
 </van-cell-group>
 </van-panel>
       <van-submit-bar
-        :price="total"
+        :price="totals"
         button-text="提交订单"
         @submit="onSubmit"
          :class="{'colordisplay':display}"
@@ -119,7 +119,9 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
-import { listShipping,placeOrder,saveInvoice } from "../../src/api/login";
+import { listShipping,placeOrder,myCoupons,saveInvoice } from "../../src/api/login";
+import { formatDate } from "../utils/date";
+
 export default {
   name: "pay",
   data() {
@@ -133,6 +135,7 @@ export default {
       bill:'不开发票',
       show:false,
       total:0,
+      totals:0,
       active:1,
       isInvoice:0,
       chosenCoupon: -1,
@@ -175,7 +178,8 @@ export default {
   mounted(){
     this.detial = JSON.parse(localStorage.getItem('detial_s'))
     this.total = JSON.parse(localStorage.getItem('total'))
-     let para = {
+    this.totals = this.total
+    let para = {
        token:JSON.parse(localStorage.getItem('token'))
      }
     this.LocalAdrrss = JSON.parse(localStorage.getItem('LocalAdrrss'))
@@ -225,11 +229,53 @@ export default {
           this.list = datas   
       })
      }
+     this.myCouponss()
   },
   methods: {
     ...mapActions(["orderShows"]),
      address(){
        this.$router.push({ path: '/address', query: { edit: 'true' }});
+    },
+     myCouponss(){
+       let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 0
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.coupons = res;
+        this.disabledcoupon();
+      });
+    },
+    disabledcoupon() {
+      let para = {
+        token: JSON.parse(localStorage.getItem("token")),
+        type: 1
+      };
+      myCoupons(para).then(res => {
+        if (res) {
+          for (let i = 0; i < res.length; i++) {
+            res[i].name = res[i].couponName;
+            res[i].originCondition = res[i].fullMoney * 100;
+            res[i].name = res[i].couponName;
+            res[i].startAt = new Date(res[i].startTime) / 1000;
+            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].value = Number(res[i].reductionMoney * 100);
+            res[i].denominations = Number(res[i].reductionMoney * 100);
+          }
+        }
+        this.disabledCoupons = res;
+      });
     },
     onSubmit(e) {
       if (this.list.length == 0) {
@@ -271,6 +317,7 @@ export default {
                 orderAmount:this.total/100
         }
         localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
+        localStorage.setItem('numall',this.totals)
         Toast.clear();
        this.$router.push("/paySuccess");
         }
@@ -281,15 +328,9 @@ export default {
     onChange(index) {
       /**/
       if (index !== -1) {
-        var datas = localStorage.getItem("selIn");
-        if (datas == null) {
-          alert("请选择商品规则");
-          //  this.showList = false;
-        } else {
-          var prise = Number(this.detial.specialPrice);
-          var orderNum = JSON.parse(datas)[0].orderNum;
-          var originCondition = this.coupons[index].originCondition / 100;
-          if (originCondition > prise * orderNum) {
+         var originCondition = this.coupons[index].originCondition / 100;
+          console.log(originCondition,this.total /100)
+          if (originCondition > this.total /100) {
             alert("满" + originCondition + "元可用");
           } else {
             localStorage.setItem("coupons", JSON.stringify(this.coupons));
@@ -297,12 +338,14 @@ export default {
             localStorage.setItem("couponsIndex", index);
             this.showList = false;
             this.chosenCoupon = index;
+            this.couponNumber = this.coupons[index].value
+            this.totals = this.total-this.couponNumber
           }
-        }
+        
       } else {
         this.showList = false;
         this.chosenCoupon = index;
-        this.totalprices = this.detial.specialPrice*this.selIn.orderNum*100
+        this.totals = this.total
       }
     },
     onExchange(code) {

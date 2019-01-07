@@ -55,7 +55,7 @@
       </van-cell-group>
     </van-radio-group>
     <van-goods-action>
-      <van-goods-action-mini-btn :text="'合计：¥ '+placeOrders.orderAmount"/>
+      <van-goods-action-mini-btn :text="'合计：¥ '+numall/100"/>
       <!-- <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  /> -->
       <van-goods-action-big-btn @click="pay" text="去支付" primary/>
     </van-goods-action>
@@ -75,12 +75,14 @@ export default {
       opednId: "",
       severs:severs(),
       datas: "",
+      numall:0,
       show: true
     };
   },
   mounted() {
     this.reload();
     this.placeOrders = JSON.parse(localStorage.getItem("placeOrders"));
+    this.numall =localStorage.getItem("numall");
     this.opednId = JSON.parse(localStorage.getItem("opednId"));
     // alert(this.opednId)
     var ua = window.navigator.userAgent.toLowerCase();

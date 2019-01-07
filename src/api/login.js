@@ -294,3 +294,17 @@ export function getBanner(params) {
       data: params
     })
   }
+  export function collectCoupons(params) {
+    return request({
+      url: `${base}/promotional/collectCoupons`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function myCoupons(params) {
+    return request({
+      url: `${base}/promotional/myCoupons`,
+      method: 'post',
+      data: params
+    })
+  }
