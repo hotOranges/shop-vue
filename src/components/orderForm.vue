@@ -32,12 +32,12 @@
   </van-cell-group>
   <div class="init-soller-list"   @click="orderDeil(i)">
   <van-col span='5' offset="1" class="imgList" v-for="adx in i.avatar">
-    <img  :src="'http://'+ imgsevers+'/image/'+adx" name="adapter" />
+    <img  :src="imgsevers+'/image/'+adx" name="adapter" />
   </van-col>
   </div>
    </div>
      </div>
-    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共  {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)"> ¥{{i.num*i.productPrice}}</span></h5>
+    <h5 style="text-align: right;padding-right: 25px;margin-top: 0;">共  {{i.num}} 件商品,总金额<span style="color:rgba(50,50,50,1)"> ¥{{i.price}}</span></h5>
    <!--全部订单-->
   <van-cell-group id="init-border" v-if="active==0">
   <div span='4' offset="1" class="btn" v-if="i.status =='3'">

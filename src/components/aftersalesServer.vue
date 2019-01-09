@@ -80,7 +80,7 @@
 <van-cell>
   <template slot="title">
    <span class="custom-text">优惠券</span>
-   <span class="custom-text">{{formdata.buyerMessage}}</span>
+   <span class="custom-text">￥{{formdata.couponAmount}}</span>
   </template>
 </van-cell>
 <van-cell>

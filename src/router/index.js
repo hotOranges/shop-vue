@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home'
+
+// import imWeb from '../components/im_web'
+import session from '../components/im/session'
+
 import Search from '@/components/search'
 import GoodsInfo from '@/components/goodsInfo'
 import Buy from '@/components/buyInfo'
@@ -45,7 +49,14 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home,
+      component: Home
+    },
+    {
+      path: '/chat/:sessionId',
+      name: 'chat',
+      component (resolve) {
+        require(['../components/im/Chat'], resolve)
+      }
     },
     {
       path: '/search',

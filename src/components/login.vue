@@ -34,11 +34,13 @@
 </template>
 
 <script>
+
 import { login } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
-
+import cookie from '../components/im/utils/cookie'
+import config from '../components/im/configs'
 export default {
   name: "login",
   components: {},
@@ -47,6 +49,8 @@ export default {
       username: null,
       password: null,
       btnName: "登录",
+      account:'13661470387',
+      passwords:'6693166',
       openeye: require('@/assets/img/login_icon_hide.png'),
       paswldtype: "password",
       checked: false
@@ -126,12 +130,21 @@ export default {
         localStorage.setItem('checked', this.checked)  
         localStorage.setItem('token', JSON.stringify(res))
         this.newtoken()
-        this.redirects("/");
-         Toast("登录成功");
+        this.chatlogin()
+        // this.redirects("/");
+        //  Toast("登录成功");
         }   
       }) 
       
     }
+    },
+    chatlogin(){ 
+       const sdktoken =this.passwords
+        cookie.setCookie('uid', this.account)
+        cookie.setCookie('sdktoken', sdktoken)
+         this.redirects("/");
+         Toast("登录成功");
+        console.log('connect', this.$store.dispatch('connect'))
     },
     redirects(url) {
       this.$router.push(url);

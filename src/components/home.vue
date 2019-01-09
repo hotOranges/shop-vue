@@ -4,10 +4,13 @@
     <!-- 搜索区 -->
     <!-- <van-nav-bar class="init-header" title="商城" left-text left-arrow @click-left="onClickLeft"> -->
     <van-nav-bar class="init-header" title="商城">
-      <van-icon name="chat" slot="right" @click="im" info=""/>
+      
+      <van-icon name="chat" slot="right" @click="im" :info="myInfo"/>
+       
     </van-nav-bar>
     <!-- 标签区域 -->
     <van-row>
+      <div>{{sessionlist.lastMsgShow}}</div>
       <van-col span="24">
         <van-tabs v-model="active" swipeable v-tab>
           <van-tab v-for="index in 4" :title="title[index]" :key="index.id" class="tab">
@@ -63,6 +66,8 @@ import { Waterfall } from "vant";
 import Swiper from "./swiper";
 import Active from "./active";
 import { Toast } from "vant";
+import util from '../utils';
+import cookie from '../components/im/utils/cookie'
 
 export default {
   name: "home",
@@ -93,16 +98,104 @@ export default {
       shop_info: state => state.home.shop_info,
       my_info: state => state.home.my_info
     }),
+    sysMsgUnread () {
+      let temp = this.$store.state.sysMsgUnread
+      let sysMsgUnread = temp.addFriend || 0
+      sysMsgUnread += temp.team || 0
+      let customSysMsgUnread = this.$store.state.customSysMsgUnread
+      return sysMsgUnread + customSysMsgUnread
+    },
+    userInfos () {
+      return this.$store.state.userInfos
+    },
+    myInfo () {
+      var number;
+      var sesessionlist =  Number(this.$store.state.sessionlist.length)
+     if (sesessionlist==0) {
+       number = ''
+     }else{
+        number = sesessionlist
+     }
+      return number
+    },
+    myPhoneId () {
+      return `${this.$store.state.userUID}`
+    },
+    sessionlist () {
+      let sessionlist = this.$store.state.sessionlist.filter(item => {
+        item.name = ''
+        item.avatar = ''
+        if (item.scene === 'p2p') {
+          let userInfo = null
+          if (item.to !== this.myPhoneId) {
+            userInfo = this.userInfos[item.to]
+          } else {
+            // userInfo = this.myInfo
+            // userInfo.alias = '我的手机'
+            // userInfo.avatar = `${config.myPhoneIcon}`
+            return false
+          }
+          if (userInfo) {
+            item.name = util.getFriendAlias(userInfo)
+            item.avatar = userInfo.avatar
+          }
+        } else if (item.scene === 'team') {
+          let teamInfo = null
+          teamInfo = this.$store.state.teamlist.find(team => {
+            return team.teamId === item.to
+          })
+          if (teamInfo) {
+            item.name = teamInfo.name
+            item.avatar = teamInfo.avatar || (teamInfo.type === 'normal' ? this.myGroupIcon : this.myAdvancedIcon)
+          } else {
+            item.name = `群${item.to}`
+            item.avatar = item.avatar || this.myGroupIcon
+          }
+        }
+        let lastMsg = item.lastMsg || {}
+        if (lastMsg.type === 'text') {
+          item.lastMsgShow = lastMsg.text || ''
+        } else if (lastMsg.type === 'custom') {
+          item.lastMsgShow = util.parseCustomMsg(lastMsg)
+        } else if (lastMsg.scene === 'team' && lastMsg.type === 'notification') {
+          item.lastMsgShow = util.generateTeamSysmMsg(lastMsg)
+        } else if (util.mapMsgType(lastMsg)) {
+          item.lastMsgShow = `[${util.mapMsgType(lastMsg)}]`
+        } else {
+          item.lastMsgShow = ''
+        }
+        if (item.updateTime) {
+          item.updateTimeShow = util.formatDate(item.updateTime, true)
+        }
+        return item
+      })
+      return sessionlist
+    }
   },
+   watch: {
+      myInfo() {
+        console.log('watch', this.$store.state.myInfo)
+      },
+    },
   mounted() {
+    // cookie.setCookie('uid', this.account)
+    //     cookie.setCookie('sdktoken', sdktoken)
+ 
+    // console.log(this.$store.state.myInfo)
+    // console.log(this.$store.state.userInfos)
     if (localStorage.getItem("token").length>3) {
       this.getShopCart1()
+      this.$store.state.isRefresh
     }else{
       this.infoAction()
     }
   },
   methods: {
    ...mapActions(["infoAction"]),
+    goToLink(link) {
+        this.$router.push(`${link}`)
+      },
+
    getShopCart1(){
    let para = {
       token: JSON.parse(localStorage.getItem("token"))
@@ -153,7 +246,12 @@ export default {
       this.$router.push(url);
     },
     im(){
-      this.$router.push('/im')
+      // console.log( this.$store.state.sessionlist[0].id)
+      var session =  'p2p-123456'
+        // if (session)
+        // p2p-123456
+        location.href = `#/chat/${session}`
+      // this.$router.push('/session')
     },
     tip() {
       Toast("网络错误o(╥﹏╥)o 请稍后再试~");
@@ -191,7 +289,9 @@ export default {
     //   }
     // );
   },
-  created() {}
+  created() {
+     console.log('created', this.$store.state.msgs)
+  }
 };
 </script>
 

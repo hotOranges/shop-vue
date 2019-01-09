@@ -5,7 +5,10 @@ import router from './router'
 import qs from 'qs'
 import utils from './utils/utils'
 // Vue.prototype.$utils = utils // main.js中全局引入
+import store from './vuex/store'
 import promise from 'es6-promise';
+import Moment from 'moment'
+
 promise.polyfill();
 let id = utils.getUrlKey('openId')
 
@@ -14,7 +17,17 @@ localStorage.setItem(
   JSON.stringify(id)
 );
 Vue.config.productionTip = false
+const _ = require('lodash')
+const load = require('load-script')
 
+load('../static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
+  if (err) {
+    console.log('LOAD NIM ERR:', err)
+  } else {
+    console.log('LOAD NIM SUCCESS:', script.src)
+  }
+})
+// const currentEnv = Config.dev
 //ajax
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -31,7 +44,14 @@ import 'vant/lib/index.css';
 import VueTouch from 'vue-touch'
 Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(Vant);
+_.assign(window, {
+  _,
+  Vue,
+  store,
+  Moment,
+  axios,
 
+})
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 //懒加载
@@ -42,7 +62,7 @@ Vue.use(Lazyload);
 import { Waterfall } from 'vant';
 Vue.use(Waterfall);
 
-import store from './store/index'
+// import store from './store/index'
 
 Vue.prototype.$ajax = axios
 axios.interceptors.request.use((config) => {

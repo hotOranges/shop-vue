@@ -49,7 +49,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     // assetsPublicPath: './',
-    assetsPublicPath: '/smartphone-web/',
+    assetsPublicPath: '/tyrn/shop/',
 
     /**
      * Source Maps
