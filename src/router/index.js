@@ -58,6 +58,15 @@ export default new Router({
         require(['../components/im/Chat'], resolve)
       }
     },
+    // 聊天历史记录
+  {
+    path: '/chathistory/:sessionId',
+    name: 'chathistory',
+    component (resolve) {
+      require(['../components/im/ChatHistory'], resolve)
+    }
+  },
+
     {
       path: '/search',
       name: 'search',

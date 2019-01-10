@@ -3,9 +3,10 @@
     <van-nav-bar
   class="init-header"
   title="客服"
-  left-text=""
+  right-text="历史消息"
   left-arrow
   @click-left="onClickBack"
+  @click-right="enterHistory"
 />
   <div class="g-inherit m-article">
     <!-- <Row class="b-b-1">
@@ -128,7 +129,7 @@
     methods: {
       enterHistory () {
         this.$router.push({
-          path: `/im_web/chatHistory/${this.sessionId}`
+          path: `/chatHistory/${this.sessionId}`
         })
       },
       onClickBack () {
@@ -557,7 +558,7 @@ html, body, .g-window {
 
     position: absolute;
 
-    padding-top: 3.6rem;
+    /* padding-top: 3.6rem; */
 
     display: block;
 
@@ -938,6 +939,9 @@ html, body, .g-window {
 
     padding: 0 0 4rem 0;
 }
+.g-window .m-chat-main.init{
+    padding:0
+}
 /* 聊天历史记录没有输入框 */
 .g-window .m-chat-main .m-chat-list {
 
@@ -949,7 +953,7 @@ html, body, .g-window {
 
          box-sizing: border-box;
 
-    padding: 1rem 2%;
+    /* padding: 1rem 2%; */
 
     width: 100%;
 

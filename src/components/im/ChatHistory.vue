@@ -1,6 +1,7 @@
 <template>
+<div class="g-window">
   <div class="g-inherit m-article p-chat-history">
-    <Row class="b-b-1">
+    <!-- <Row class="b-b-1">
       <Col span="24">
       <div class="fz-20 w-100 h60">
         <span class="fl m-l-10" @click="onClickBack">
@@ -9,9 +10,10 @@
         <span class="fr m-r-10">{{sessionName}}</span>
       </div>
       </Col>
-    </Row>
-      <div class="m-chat-main" style="height: 700px">
+    </Row> -->
+      <div class="m-chat-main init" style="height: 700px">
         <chat-list
+        style="height: 700px"
           ref="chatlist"
           type="session"
           :canLoadMore="canLoadMore"
@@ -20,6 +22,7 @@
           :myInfo="myInfo"
         ></chat-list>
       </div>
+  </div>
   </div>
 </template>
 
