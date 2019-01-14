@@ -80,7 +80,7 @@
 <van-cell>
   <template slot="title">
    <span class="custom-text">优惠券</span>
-   <span class="custom-text">￥{{formdata.couponAmount}}</span>
+   <span class="custom-text">￥{{formdata.couponAmount | filtercouponAmount}}</span>
   </template>
 </van-cell>
 <van-cell>
@@ -125,7 +125,9 @@ export default {
       severs:severs(),
       imgsevers:imgsevers(),
       orderNo:'',
-      formdata:''
+      formdata:{
+        couponAmount:0
+      }
     };
   },
   mounted(){
@@ -133,6 +135,15 @@ export default {
     this.inits()
   },
   filters:{
+    filtercouponAmount(e){
+     var text;
+      if (e=='') {
+        text ='0'
+      }else{
+        text = e
+      }
+    return text
+    },
     filterwhet(e){
       var text;
       if (e=='1') {

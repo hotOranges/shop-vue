@@ -67,10 +67,8 @@ filters:{
               couponId:e.id
             }    
             collectCoupons(para).then(res=>{
-                    if (res) {
-                        e.isCollect = '0'
+                        this.inits()
                         Toast('领取成功')
-                    }
              })
         
     

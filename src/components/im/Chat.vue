@@ -1,4 +1,5 @@
 <template>
+<div class="initdiv">
 <div class="g-window">
     <van-nav-bar
   class="init-header"
@@ -35,6 +36,7 @@
     ></chat-editor>
   </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -42,7 +44,7 @@
   import ChatList from './components/ChatList'
   import util from './utils'
   import pageUtil from './utils/page'
-
+  import cookie from '../../components/im/utils/cookie'
   export default {
     /*eslint-disable*/
     components: {
@@ -75,6 +77,7 @@
       this.$store.dispatch('connect')
       this.$store.dispatch('showLoading')
       // 此时设置当前会话
+      console.log(cookie.readCookie('uid'))
       this.$store.dispatch('setCurrSession', this.sessionId)
       pageUtil.scrollChatListDown()
       setTimeout(() => {
@@ -164,8 +167,12 @@
 <style scope="">
 
 
-
-
+.initdiv .van-nav-bar .van-icon {
+    color: #323232;
+}
+.initdiv .van-nav-bar__text{
+        color: #333;
+}
 textarea, input {
 
     outline: none;
@@ -238,7 +245,16 @@ li {
 * 布局
 */
 /* 手机全屏占比 */
-html, body, .g-window {
+.initdiv{
+ width: 100%;
+ height: 100%;
+ overflow: hidden;
+}
+html, body{
+    height: 100%;
+    position: relative;
+}
+.g-window {
 
     position: relative;
 
@@ -578,9 +594,9 @@ html, body, .g-window {
 
     -webkit-overflow-scrolling: touch;
 
-    overflow-y: auto;
+    /* overflow-y: auto; */
 
-    overflow-x: hidden;
+    overflow-x:visible;
 }
 /* 封面皮肤 */
 .g-window .m-album {
@@ -644,6 +660,7 @@ html, body, .g-window {
 .g-window .m-login .cells .ipt::-webkit-input-placeholder {
 
     color: #d9d9d9;
+    -webkit-overflow-scrolling: touch;
 }
 .g-window .m-login .cells .ipt::-moz-placeholder {
 
@@ -838,6 +855,9 @@ html, body, .g-window {
 
     font-size: 1.3rem;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 .g-window .m-tab .m-tab-top.vux-button-group {
 
     margin: 4px auto;
@@ -937,7 +957,7 @@ html, body, .g-window {
 /* 聊天页面 */
 .g-window .m-chat-main {/* 聊天页面有输入框 */
 
-    padding: 0 0 4rem 0;
+    padding: 0 0 42px 0;
 }
 .g-window .m-chat-main.init{
     padding:0
@@ -977,9 +997,9 @@ html, body, .g-window {
 
     width: 100%;
 
-    height: 4rem;
+       height: 42px;
 
-    background-color: #e5f4ff;
+    background-color: #fff;
 }
 /* 聊天按钮组件 */
 .g-window .m-chat-editor-main {
@@ -994,7 +1014,7 @@ html, body, .g-window {
 
     padding: 0;
 
-    height: 100%;
+    height:auto;
 
     width: 100%;
 }
@@ -1012,36 +1032,55 @@ html, body, .g-window {
 
     padding: 0.2rem;
 
-    padding-right: 11rem;
+    padding-right: 7.5rem;
 
     width: 100%;
 
-    height: 4rem;
+    height: 42px;
 }
 .g-window .m-chat-editor-main .u-editor-input textarea {
 
     position: relative;
 
     display: inline-block;
-
+   background:rgba(242,242,242,.4);
     -moz-box-sizing: border-box;
 
          box-sizing: border-box;
 
     padding: 0.2rem;
 
-    font-size: 1rem;
+    font-size: 14px;
 
     width: 100%;
 
-    height: 100%;
-
+    height: 30px;
+    margin-top: 2px;
     text-align: left;
 
-    border: 1px solid #ccc;
+    border: none;
 
-    border-radius: 0.4rem;
+    border-radius: 0;
 }
+.g-window .m-chat-editor-main .u-editor-input textarea::-webkit-input-placeholder {
+
+         
+         font-size: 14px;
+}
+ .forward-enter-active {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.5s;
+    z-index: 0;
+  }
+  .forward-enter {
+    transform: translate3d(100%, 0, 0);
+  }
+  
+  .forward-enter-to {
+    transform: translate3d(0, 0, 0);
+  }
 .g-window .m-chat-editor-main .u-editor-icons {
 
     position: absolute;
@@ -1052,9 +1091,9 @@ html, body, .g-window {
 
     top: 0;
 
-    width: 11rem;
+    width: 7.5rem;
 
-    height: 4rem;
+    height: 42px;
 }
 .g-window .m-chat-editor-main .u-editor-icons .u-editor-icon {
 
@@ -1062,11 +1101,11 @@ html, body, .g-window {
 
     display: inline-block;
 
-    top: 1.2rem;
+    top: 7px;
 
     width: 1.6rem;
 
-    height: 1.6rem;
+    height: auto;
 
     margin-left: 0.2rem;
 
@@ -1096,13 +1135,13 @@ html, body, .g-window {
 
     display: inline-block;
 
-    top: 1.2rem;
+    top: 7px;
 
     margin-left: 0.2rem;
 
     width: 2.6rem;
 
-    height: 1.6rem;
+    height: auto;
 
     line-height: 1.6rem;
 

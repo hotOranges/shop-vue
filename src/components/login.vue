@@ -49,8 +49,8 @@ export default {
       username: null,
       password: null,
       btnName: "登录",
-      account:'13661470387',
-      passwords:'6693166',
+      account:'',
+      sdktoken :'',
       openeye: require('@/assets/img/login_icon_hide.png'),
       paswldtype: "password",
       checked: false
@@ -63,6 +63,10 @@ export default {
     }
   },
   mounted(){
+    cookie.delCookie('uid')
+    cookie.delCookie('sdktoken')
+     this.$store.state.sessionlist = [];
+      this.$store.state.nim = null;
     if (localStorage.getItem("mobile")!==null) {
       this.username = localStorage.getItem("mobile")
     }
@@ -128,7 +132,9 @@ export default {
             localStorage.removeItem('password')
           }
         localStorage.setItem('checked', this.checked)  
-        localStorage.setItem('token', JSON.stringify(res))
+        localStorage.setItem('token', JSON.stringify(res.token))
+        this.account = res.mobile
+        this.sdktoken = res.md5Password
         this.newtoken()
         this.chatlogin()
         // this.redirects("/");
@@ -139,12 +145,17 @@ export default {
     }
     },
     chatlogin(){ 
-       const sdktoken =this.passwords
         cookie.setCookie('uid', this.account)
-        cookie.setCookie('sdktoken', sdktoken)
+        cookie.setCookie('sdktoken', this.sdktoken)
+        // this.$store.dispatch('connect',true)
+         let loginInfo = {
+              uid: cookie.readCookie('uid'),
+              sdktoken: cookie.readCookie('sdktoken'),
+            }
+           this.$store.dispatch('initNimSDK', loginInfo)
+        // dispatch('initNimSDK', loginInfo) 
          this.redirects("/");
          Toast("登录成功");
-        console.log('connect', this.$store.dispatch('connect'))
     },
     redirects(url) {
       this.$router.push(url);

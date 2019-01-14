@@ -12,6 +12,7 @@
 <span class="u-editor-input">
         <textarea v-model="msgToSent"
                   @keyup.enter="sendTextMsg"
+                  placeholder="请输入您的问题……"
         ></textarea>
       </span>
         <div class="u-editor-icons" >
@@ -23,9 +24,9 @@
           <i class="u-icon-img"><img :src="icon2"></i>
           <input type="file" ref="fileToSent">
         </span>
-          <span class="u-editor-icon" @click.stop="sendPlayMsg">
+          <!-- <span class="u-editor-icon" @click.stop="sendPlayMsg">
           <i class="u-icon-img"><img :src="icon3"></i>
-        </span>
+        </span> -->
           <span class="u-editor-send" @click="sendTextMsg">发送</span>
         </div>
       </div>

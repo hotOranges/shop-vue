@@ -185,7 +185,6 @@ export default {
     // console.log(this.$store.state.userInfos)
     if (localStorage.getItem("token").length>3) {
       this.getShopCart1()
-      this.$store.state.isRefresh
     }else{
       this.infoAction()
     }
@@ -247,7 +246,7 @@ export default {
     },
     im(){
       // console.log( this.$store.state.sessionlist[0].id)
-      var session =  'p2p-123456'
+      var session =  'p2p-admin'
         // if (session)
         // p2p-123456
         location.href = `#/chat/${session}`

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition  :name="transitionName">
+    <router-view  class="Router" />
+    </transition>
   </div>
 </template>
 
@@ -16,9 +18,11 @@ export default {
     // isRouterAlive控制显示
     data: function () {
       return {
-        isRouterAlive: true
+        isRouterAlive: true,
+        transitionName: 'slide-left'
       }
     },
+
     methods: {
       // 刷新方法
       reload: function () {
@@ -26,6 +30,16 @@ export default {
         // 该方法会在dom更新后执行
         this.$nextTick(function () { this.isRouterAlive = true })
       }
+    },
+    beforeRouteUpdate (to, from, next) {
+      let isBack = this.$router.isBack
+      if (isBack) {
+        this.transitionName = 'slide-right'
+      } else {
+        this.transitionName = 'slide-left'
+      }
+      this.$router.isBack = false
+      next()
     }
   }
 </script>
@@ -37,5 +51,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   color: #2c3e50;
+}
+.slide-left-enter, .slide-right-leave-active {
+    opacity: 0;
+    -webkit-transform: translate(50px, 0);
+    transform: translate(50px, 0);
+  }
+  .slide-left-leave-active, .slide-right-enter {
+    opacity: 0;
+    -webkit-transform: translate(-50px, 0);
+    transform: translate(-50px, 0);
+  }
+.Router {
+     position: absolute;
+     width: 100%;
+      transition: all .8s cubic-bezier(.55,0,.1,1);
 }
 </style>

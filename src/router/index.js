@@ -41,7 +41,12 @@ import integralDetil from '@/components/integralDetil'
 import integralRule from '@/components/integralRule'
 import couponCenter from '@/components/couponCenter'
 import coupon from '@/components/coupon'
+Router.prototype.goBack = function () {
+  this.isBack = true
+  window.history.go(-1)
+}
 Vue.use(Router)
+
 
 export default new Router({
   // mode: 'history',

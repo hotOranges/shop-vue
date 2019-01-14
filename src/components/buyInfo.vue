@@ -183,7 +183,7 @@
 
     <!-- 底部购买 -->
     <van-goods-action>
-      <van-goods-action-mini-btn icon="chat" text="客服"/>
+      <van-goods-action-mini-btn icon="chat" text="客服" @click="im" />
       <van-goods-action-mini-btn icon="cart" text="购物车" @click="onClickMiniBtn" :info="shop_info"/>
       <van-goods-action-big-btn text="立即购买" @click="onClickBigBtn" primary/>
       <van-goods-action-big-btn text="加入购物车" @click="onClickBigBtns"/>
@@ -630,6 +630,14 @@ export default {
     },
     onExchange(code) {
       this.coupons.push(coupon);
+    },
+     im(){
+      // console.log( this.$store.state.sessionlist[0].id)
+      var session =  'p2p-admin'
+        // if (session)
+        // p2p-123456
+        location.href = `#/chat/${session}`
+      // this.$router.push('/session')
     },
     onClickMiniBtn() {
       this.$router.push("/shoppingCart");

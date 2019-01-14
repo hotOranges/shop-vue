@@ -1,10 +1,10 @@
 <template>
-  <ul id="chat-list" class="m-chat-list p-chat-list">
+  <ul id="chat-list" class="m-chat-list p-chat-list" style="padding-bottom:40px;margin-top:40px">
     <li class="u-msg item-time" v-if="canLoadMore">
-      ---- 上拉加载更多 ----
+
     </li>
     <li class="u-msg item-time" v-else>
-      ---- 已无更多记录 ----
+  
     </li>
     <chat-item
       v-for="msg in msglist"
@@ -74,9 +74,9 @@
 </script>
 
 <style type="scss">
-  #chat-list{
+  /* #chat-list{
     height: 580px;
-  }
+  } */
 
   .p-chat-list {
     .u-icon {

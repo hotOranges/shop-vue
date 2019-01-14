@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 import {Locale} from 'vant'
 import service from '../utils/request'
-const HOST = '106.15.44.76'
-// const HOST = 'pay.iwingscom.com'
+// const HOST = '106.15.44.76'
+const HOST = 'pay.iwingscom.com'
 const base = 'http://' + HOST + '/iwings-manager'
 const baseImg = 'http://' + HOST 
 export function severs() {

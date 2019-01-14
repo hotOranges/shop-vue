@@ -1,9 +1,9 @@
 <template>
   <div class="date">
     <van-nav-bar title="我的积分" @click-left="onClickLeft" left-arrow>
-      <van-icon name="question" slot="right" @click="redirects('/integralRule')"/>
+      <van-icon name="question-o" style="font-size: 20px;" slot="right" @click="redirects('/integralRule')"/>
     </van-nav-bar>
-    <van-col span="24" class="title">
+    <div class="title">
       <van-cell-group class="caltext"></van-cell-group>
       <van-cell-group class="caltextBorder"></van-cell-group>
       <van-cell-group class="caltext2">
@@ -13,14 +13,14 @@
         </span>
         <span>累计签到{{daysNumber}}天</span>
       </van-cell-group>
-    </van-col>
-    <van-col class="title2" span="24">
+    </div>
+    <div class="title2">
       <div>
         <span class="span"><van-button round v-bind:class="{ classred:disabled}" class="initBtn" :disabled="disabled" @click="qd">{{btntext}}</van-button></span>
         <span class="span"><van-button round class="initBtn" @click="redirects('/integralDetil')">积分明细</van-button></span>
       </div>
-    </van-col>
-   
+    </div>
+   <div style="position:absolute;top:300px">
     <ul class="weekdays days">
       <!-- <v-touch v-on:swipeleft="left" v-on:swiperight="right" class="wrapper"> -->
       <li  v-for="(day, index) in days" :key="index" :class="menuListActive(day.time)">
@@ -53,6 +53,7 @@
         </span>
       </li>
     </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -240,12 +241,16 @@ export default {
 };
 </script>
 <style lang="scss">
+.van-hairline--top-bottom::after{
+            border-width:0px 0px;
+      }
 .date {
   height: px2rem(180);
   color: #333;
+   background-color:#ef9e3e;
   .van-hairline--bottom::after {
     border-bottom-width: 0px;
-    border-color: linear-gradient(48deg, #ef9e3e 0%, #e4a042 100%);
+    border-color: #ef9e3e;
   }
   .wrapper{
  width: 100%
@@ -283,9 +288,6 @@ export default {
     .van-cell-group{
       background-color: transparent;
     }
-     .van-hairline--top-bottom::after{
-            border-width:0px 0px;
-      }
   }
   .title {
     height: 180px;
@@ -392,9 +394,9 @@ export default {
       border: 1px solid #d8d8d8;
       color: #d8d8d8;
       border-radius: 50%;
-      line-height: 35px;
-      margin-left: 7px;
-      margin-right: 7px;
+      line-height: 2.1rem;
+      margin-left: 0.8rem;
+      margin-right: .4rem;
       margin-bottom: 10px;
     }
     span {
@@ -434,10 +436,11 @@ export default {
     display: flex;
     float: left;
     width: 100%;
-    white-space: nowrap;
-    overflow-x: scroll;
-    -webkit-overflow-scrolling: touch; /*解决在ios滑动不顺畅问题*/
-     overflow-y: hidden;
+    // white-space: nowrap;
+    // overflow-x: scroll;
+    // -webkit-overflow-scrolling: touch; /*解决在ios滑动不顺畅问题*/
+    //  overflow-y: hidden;
+    // background-color: #fff;
     li {
       font-size: px2rem(30);
       text-align: center;
@@ -462,5 +465,9 @@ export default {
 }
 .van-hairline--top-bottom::after{
       border-width: 0px 0;
+      transform: scale(0);
 }
+
+
+
 </style>

@@ -58,7 +58,7 @@
                       <van-cell style="padding-bottom: 15px;" @click="redirects('coupon')" title="我的优惠劵"  icon="youhuijuan" is-link />
                       <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="dizhi" is-link />
                       <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="帮助与反馈"  icon="bangzhu" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="$toast('敬请期待')" icon="kefu" is-link />
+                      <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="im" icon="kefu" is-link />
                       <van-cell style="padding-bottom: 15px;" title="退出登录"  @click="outin" icon="kefu" />    
                      </van-col>
  
@@ -141,6 +141,14 @@ export default {
     redirects(url) {
       this.$router.push(url);
     },
+     im(){
+      // console.log( this.$store.state.sessionlist[0].id)
+      var session =  'p2p-admin'
+        // if (session)
+        // p2p-123456
+        location.href = `#/chat/${session}`
+      // this.$router.push('/session')
+    },
     inits(){
       let para = {
         token:JSON.parse(localStorage.getItem('token'))
@@ -165,7 +173,8 @@ export default {
       logOut(para).then(res =>{
           localStorage.removeItem('token')
           localStorage.removeItem('getShopCarts')
-          this.$router.push("/login");
+          this.$store.dispatch('logout')
+          // this.$router.push("/login");
       })
     },
     onClickLeft() {

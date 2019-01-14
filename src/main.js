@@ -20,7 +20,7 @@ Vue.config.productionTip = false
 const _ = require('lodash')
 const load = require('load-script')
 
-load('../static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
+load('../customer/static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
   if (err) {
     console.log('LOAD NIM ERR:', err)
   } else {

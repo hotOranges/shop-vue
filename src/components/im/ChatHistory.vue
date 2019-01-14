@@ -1,5 +1,11 @@
 <template>
 <div class="g-window">
+   <van-nav-bar
+  class="init-header"
+  title="历史消息"
+  left-arrow
+  @click-left="onClickBack"
+/>
   <div class="g-inherit m-article p-chat-history">
     <!-- <Row class="b-b-1">
       <Col span="24">
