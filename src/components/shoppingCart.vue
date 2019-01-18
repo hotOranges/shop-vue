@@ -340,6 +340,10 @@ export default {
   align-items: center;
   display: -webkit-flex;
 }
+#app >>> .van-stepper__input[disabled] {
+    color: #7d7e80;
+    background-color: #f8f8f8;
+}
 #app >>> .imgList img {
   width: 100%;
   height: 100%;

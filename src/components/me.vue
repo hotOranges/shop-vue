@@ -1,6 +1,6 @@
 <template>
    <!-- 我的 组件 -->
-  <div id="app">
+  <div id="apps">
   <van-nav-bar  @click-left="onClickLeft" left-arrow>
   <van-icon name="setting" slot="right" @click= "redirects('/editme')" />
   <!-- <van-icon name="chat" slot="right" /> -->
@@ -14,7 +14,7 @@
                           <span>{{form.nickName}}</span>
                         </van-col>
                         <van-col span='6' offset="1" class="goodIntegral">
-                          <span style="font-size: 12px;" @click="redirects('Calendar')"><van-icon name="points" />积分0</span>
+                          <span style="font-size: 12px;" @click="redirects('Calendar')"><van-icon name="points" />积分{{form.integral}}</span>
                         </van-col>
                      </van-col>
                      <!-- 订单 -->
@@ -203,7 +203,7 @@ export default {
 @import url("../assets/css/home.less");
 </style>
 <style scoped>
-#app >>> .van-nav-bar {
+#apps >>> .van-nav-bar {
   background: linear-gradient(
     48deg,
     rgba(239, 158, 62, 1) 0%,
@@ -211,56 +211,56 @@ export default {
   );
       height: 48px;
 }
-#app >>> .van-nav-bar .van-icon {
+#apps >>> .van-nav-bar .van-icon {
   color: #fff;
 }
-#app >>> .van-icon-discount::before {
+#apps >>> .van-icon-discount::before {
   font-size: 22px;
 }
 
-#app >>> .van-cell__title {
+#apps >>> .van-cell__title {
   text-align: left;
   font-size: 15px;
   color: #323232;
 }
-#app >>> .van-cell__value {
+#apps >>> .van-cell__value {
   font-size: 12px;
 }
-#app >>> .van-col--5 {
+#apps >>> .van-col--5 {
     width: 20%;
 }
-#app >>>  .headerImg img{
+#apps >>>  .headerImg img{
   width: 100%
 }
-#app >>> .headerImg .van-cell:not(:last-child)::after{
+#apps >>> .headerImg .van-cell:not(:last-child)::after{
   border-bottom: 0px solid #eee;
 } 
-#app >>> .van-icon-setting::before {
+#apps >>> .van-icon-setting::before {
     content: url(../assets/img/10.png);
 }
-#app >>> .van-icon-chat::before{
+#apps >>> .van-icon-chat::before{
    content: url(../assets/img/9.png);
 }
-#app >>> .van-icon-close::before{
+#apps >>> .van-icon-close::before{
    content: url(../assets/img/5.png);
 }
-#app >>> .van-icon-shoucang::before{
+#apps >>> .van-icon-shoucang::before{
    content: url(../assets/img/6.png);
 }
-#app >>> .van-icon-youhuijuan::before{
+#apps >>> .van-icon-youhuijuan::before{
    content: url(../assets/img/13.png);
 }
-#app >>> .van-icon-dizhi::before{
+#apps >>> .van-icon-dizhi::before{
    content: url(../assets/img/7.png);
 }
-#app >>> .van-icon-bangzhu::before{
+#apps >>> .van-icon-bangzhu::before{
    content: url(../assets/img/3.png);
 }
-#app >>> .van-icon-kefu::before{
+#apps >>> .van-icon-kefu::before{
    content: url(../assets/img/4.png);
 }
-#app >>> [class*=van-hairline]::after{
+#apps >>> [class*=van-hairline]::after{
       border: 0 solid #ef9e3e;
-          transform: none;
+          /* transform: none; */
 }
 </style>

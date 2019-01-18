@@ -54,7 +54,11 @@ export default {
             console.log(e);
         },
         shopCartInfo(state) {
-            state.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+            if (localStorage.getItem('getShopCarts')!==null) {
+            if (localStorage.getItem('getShopCarts').length>0) {
+                state.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length;
+            }
+        }
         },
         shopCartInfo2(state) {
             state.shop_info =state.shop_info + 1 ;

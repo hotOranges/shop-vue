@@ -14,7 +14,7 @@ import {onSessions, onUpdateSession} from './session'
 import {onRoamingMsgs, onOfflineMsgs, onMsg} from './msgs'
 import {onSysMsgs, onSysMsg, onSysMsgUnread, onCustomSysMsgs} from './sysMsgs'
 import {onTeams, onCreateTeam, onTeamMembers, onSyncTeamMembersDone, onUpdateTeamMember, getTeamMembers,getUser,getTeam,createNormalTeam, createAdvancedTeam, acceptTeamInvite,rejectTeamInvite} from './teams'
-
+import cookie from '../../components/im/utils/cookie'
 // 重新初始化 NIM SDK
 export function initNimSDK({state, commit, dispatch}, loginInfo) {
   if (state.niym) {
@@ -22,6 +22,7 @@ export function initNimSDK({state, commit, dispatch}, loginInfo) {
   }
   dispatch('showLoading')
   // 初始化SDK
+  console.log(state.nim)
   window.nim = state.nim = SDK.NIM.getInstance({
     // debug: true && { api: 'info', style: 'font-size:12px;color:blue;background-color:rgba(0,0,0,0.1)' },
     appKey: config.appkey,
@@ -37,8 +38,18 @@ export function initNimSDK({state, commit, dispatch}, loginInfo) {
     },
     onerror: function onError(event) {
       // alert(JSON.stringify(event))
-      alert('网络连接状态异常')
-      location.href = config.loginUrl
+     
+      if (cookie.readCookie('uid')!==null) {
+        let loginInfo = {
+          uid: cookie.readCookie('uid'),
+          sdktoken: cookie.readCookie('sdktoken'),
+        }
+        store.dispatch('initNimSDK', loginInfo)
+      }else{
+        alert('网络连接状态异常')
+        location.href = config.loginUrl
+      }
+    
     },
     onwillreconnect: function onWillReconnect() {
       console.log(event)

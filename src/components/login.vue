@@ -40,7 +40,6 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
 import cookie from '../components/im/utils/cookie'
-import config from '../components/im/configs'
 export default {
   name: "login",
   components: {},

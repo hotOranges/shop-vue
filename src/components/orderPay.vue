@@ -62,7 +62,7 @@
             :title="'优惠券：'"
             @click="showList = true"
     />
-  <van-cell title="商品总价" :value="'￥'+detial.specialPrice*selIn.orderNum" />
+  <van-cell title="商品总价" :value="'￥'+ (detial.specialPrice*selIn.orderNum).toFixed(2)" />
   <van-cell title="运费" value="+￥0.00" />
 <van-notice-bar :scrollable="false">
   配送至 {{deiladdress}}
@@ -442,7 +442,7 @@ export default {
   padding-right: 0px;
 }
 #app >>> .van-address-item__edit::before {
-      content: "\F009";
+      content: "\F00A";
 }
 #app >>> .van-address-list__add {
   display: none;

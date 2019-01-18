@@ -25,7 +25,7 @@
    <van-col span='11' offset="2" class="imgList">
         <span>{{formdata.productName}}</span>
         <span>数量：{{formdata.productNum}} 规格：{{formdata.productColor}}</span>
-        <span>￥499.00</span>
+        <span>￥{{formdata.productPrice}}</span>
   </van-col>
   <van-col span='4' offset="2" class="imgList">
       <span style="font-size: 11px;"></span>

@@ -64,7 +64,9 @@ export default {
            })
           }
           this.list = datas  
-       
+          if (this.list.length==0) {
+            localStorage.removeItem('LocalAdrrss')
+          }
       })
   },
   methods: {

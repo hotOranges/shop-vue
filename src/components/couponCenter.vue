@@ -38,7 +38,7 @@ export default {
 filters:{
 		capitalize:function(value){
             var newDate=new Date(value)
-			return formatDate(newDate,'yyyy-MM-dd')
+			return formatDate(newDate,'yyyy/MM/dd')
         }
 },
   components: {},

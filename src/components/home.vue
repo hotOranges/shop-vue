@@ -183,8 +183,9 @@ export default {
  
     // console.log(this.$store.state.myInfo)
     // console.log(this.$store.state.userInfos)
-    if (localStorage.getItem("token").length>3) {
+    if (localStorage.getItem("token")!==null) {
       this.getShopCart1()
+      this.$store.dispatch('connect')
     }else{
       this.infoAction()
     }

@@ -533,6 +533,7 @@ export default {
       });
     },
     myCouponss() {
+      if (localStorage.getItem("token")!==null) {
       let para = {
         token: JSON.parse(localStorage.getItem("token")),
         type: 0
@@ -552,6 +553,7 @@ export default {
         this.coupons = res;
         this.disabledcoupon();
       });
+       }
     },
     disabledcoupon() {
       let para = {

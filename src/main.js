@@ -8,7 +8,6 @@ import utils from './utils/utils'
 import store from './vuex/store'
 import promise from 'es6-promise';
 import Moment from 'moment'
-
 promise.polyfill();
 let id = utils.getUrlKey('openId')
 
@@ -20,6 +19,7 @@ Vue.config.productionTip = false
 const _ = require('lodash')
 const load = require('load-script')
 
+// load('../static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
 load('../customer/static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
   if (err) {
     console.log('LOAD NIM ERR:', err)
@@ -34,6 +34,23 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
 
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+   
+//   } else {
+//     setTimeout(() => {
+//       if (cookie.readCookie('uid')!==null) {
+//       let loginInfo = {
+//         uid: cookie.readCookie('uid'),
+//         sdktoken: cookie.readCookie('sdktoken'),
+//       }
+//       store.dispatch('initNimSDK', loginInfo)
+//     }else{
+//       console.log('登录过期')
+//     }
+//     }, 2000)
+//   }
+// });
 //状态管理
 import vuex from 'vuex'
 Vue.use(vuex);

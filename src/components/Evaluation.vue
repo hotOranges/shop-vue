@@ -127,7 +127,7 @@ export default {
   padding-bottom: 10px;
 }
 #app >>> .shopp_conent {
-  height: 100%;
+  /* height: 100%; */
   justify-content: center;
   align-items: center;
   display: -webkit-flex;

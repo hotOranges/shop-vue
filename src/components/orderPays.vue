@@ -408,7 +408,7 @@ export default {
   padding-right: 0px;
 }
 #app >>> .van-address-item__edit::before {
-      content: "\F007";
+     content: "\F00A";
 }
 #app >>> .van-address-list__add {
   display: none;
@@ -562,6 +562,6 @@ export default {
     margin-bottom: 60px;
   }
   #app >>> .van-address-item__edit::before {
-    content: "\F009";
+    content: "\F00A";
 }
 </style>

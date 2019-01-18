@@ -7,7 +7,7 @@
             waterfall-disabled="disabled"
             waterfall-offset="300"
             > -->
-                    <van-row v-if='imageList.length>0'   v-for="(img,index) in imageList" :key='img.id' class="lists">
+                    <van-row v-if='imageList.length >0'   v-for="(img,index) in imageList" :key='img.id' class="lists">
                         <van-col span='8' offset="1" class="goods_list">
                             <div class="imgList" @click.stop="buy(img)">
                                <img  :src="'http://'+img.productUrl+img.productImage" />
@@ -87,7 +87,7 @@ export default {
     }),
   },
   mounted(){
-    // this.inits()
+    this.inits()
   },
   methods: {
     inits(){
@@ -132,43 +132,43 @@ export default {
       this.$router.push('/goods/'+img.id +'/buy');
     },
   },
-  created(){
-      getProduct().then(res => {
-        // console.log(res);
-        switch (this.tabs) {
-          case "推荐":
-            this.imageList = res;
-            break;
-          case "手机":
-            var productType =  '1';
-             var mockUsers = res.filter(user => {
-            if (productType && user.productType.indexOf(productType) == -1) return false;
-            return true;
-             });
-            this.imageList = mockUsers;
-            break;
-          case "穿戴":
-            var productType =  '2';
-             var mockUsers = res.filter(user => {
-            if (productType && user.productType.indexOf(productType) == -1) return false;
-            return true;
-             });
-            this.imageList = mockUsers;
-            break;
-          case "健康":
-            var productType =  '3';
-             var mockUsers = res.filter(user => {
-            if (productType && user.productType.indexOf(productType) == -1) return false;
-            return true;
-             });
-            this.imageList = mockUsers;
-            break;  
-          default:
-            break;
-        }
+  // created(){
+  //     getProduct().then(res => {
+  //       // console.log(res);
+  //       switch (this.tabs) {
+  //         case "推荐":
+  //           this.imageList = res;
+  //           break;
+  //         case "手机":
+  //           var productType =  '1';
+  //            var mockUsers = res.filter(user => {
+  //           if (productType && user.productType.indexOf(productType) == -1) return false;
+  //           return true;
+  //            });
+  //           this.imageList = mockUsers;
+  //           break;
+  //         case "穿戴":
+  //           var productType =  '2';
+  //            var mockUsers = res.filter(user => {
+  //           if (productType && user.productType.indexOf(productType) == -1) return false;
+  //           return true;
+  //            });
+  //           this.imageList = mockUsers;
+  //           break;
+  //         case "健康":
+  //           var productType =  '3';
+  //            var mockUsers = res.filter(user => {
+  //           if (productType && user.productType.indexOf(productType) == -1) return false;
+  //           return true;
+  //            });
+  //           this.imageList = mockUsers;
+  //           break;  
+  //         default:
+  //           break;
+  //       }
      
-    });  
-  }
+  //   });  
+  // }
 };
 </script>
 
