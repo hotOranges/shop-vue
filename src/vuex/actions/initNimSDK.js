@@ -15,7 +15,8 @@ import {onRoamingMsgs, onOfflineMsgs, onMsg} from './msgs'
 import {onSysMsgs, onSysMsg, onSysMsgUnread, onCustomSysMsgs} from './sysMsgs'
 import {onTeams, onCreateTeam, onTeamMembers, onSyncTeamMembersDone, onUpdateTeamMember, getTeamMembers,getUser,getTeam,createNormalTeam, createAdvancedTeam, acceptTeamInvite,rejectTeamInvite} from './teams'
 import cookie from '../../components/im/utils/cookie'
-// 重新初始化 NIM SDK
+// const ulrs = config.sdk
+// const SDK = require('@/sdk/' + ulrs)
 export function initNimSDK({state, commit, dispatch}, loginInfo) {
   if (state.niym) {
     state.nim.disconnect()

@@ -74,7 +74,7 @@
     },
     // 进入该页面，文档被挂载
     mounted () {
-      this.$store.dispatch('connect')
+    //   this.$store.dispatch('connect')
       this.$store.dispatch('showLoading')
       // 此时设置当前会话
       console.log(cookie.readCookie('uid'))

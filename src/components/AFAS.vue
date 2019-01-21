@@ -201,6 +201,10 @@ export default {
   display: inline-block;
   padding-bottom: 5px;
 }
+#apps >>> .van-stepper__input[disabled] {
+    color: #7d7e80;
+    background-color: #f8f8f8;
+}
 #init-border {
   padding-left: 40px;
   padding-right: 25px;

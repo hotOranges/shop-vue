@@ -22,7 +22,13 @@ export default {
         transitionName: 'slide-left'
       }
     },
-
+    updated () {
+    // 提交sdk连接请求
+   if (localStorage.getItem('token')) {
+      this.$store.dispatch('connect')
+      this.$store.dispatch('updateRefreshState') 
+    }
+    },
     methods: {
       // 刷新方法
       reload: function () {

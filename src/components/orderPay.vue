@@ -120,7 +120,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { ImagePreview } from "vant";
 import { Toast } from "vant";
 import { listShipping,placeOrder,myCoupons,saveInvoice } from "../../src/api/login";
-import { formatDate } from "../utils/date";
+import { timestampToTime } from "../utils/date";
 
 export default {
   name: "pay",
@@ -176,8 +176,8 @@ export default {
   },
   filters: {
     capitalize: function(value) {
-      var newDate = new Date(value);
-      return formatDate(newDate, "yyyy-MM-dd");
+       var newDate=new Date(value).getTime()/1000
+			  return timestampToTime(newDate)
     }
   },                       
   mounted(){
@@ -195,6 +195,7 @@ export default {
     if (couponsIndex!==null) {
       this.chosenCoupon = couponsIndex;
       this.couponNumber = this.coupons[couponsIndex].value / 100;
+      this.couponId = this.coupons[couponsIndex].id
     }else{
       this.myCouponss()
     }
@@ -267,8 +268,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')) / 1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')) / 1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -288,8 +289,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')) / 1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')) / 1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -312,7 +313,7 @@ export default {
         let para = {
            token:JSON.parse(localStorage.getItem('token')),
            shippingId:this.list[0].id,
-           orderAmount:this.detial.specialPrice*this.selIn.orderNum,
+           orderAmount:(this.detial.specialPrice*this.selIn.orderNum).toFixed(2),
            buyerMessage:this.message,
            buyDetail:JSON.stringify(buyDetail),
            isInvoice:this.isInvoice,
@@ -333,7 +334,7 @@ export default {
                 bill:this.bill,
                 name:this.list[0].name,
                 tel:this.list[0].tel,
-                orderAmount:this.detial.specialPrice*this.selIn.orderNum
+                orderAmount:(this.detial.specialPrice*this.selIn.orderNum).toFixed(2)
         }
         localStorage.setItem('placeOrders', JSON.stringify(scopedSlotss))
         localStorage.setItem('numall',this.totalprices)

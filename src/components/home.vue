@@ -12,14 +12,22 @@
     <van-row>
       <div>{{sessionlist.lastMsgShow}}</div>
       <van-col span="24">
-        <van-tabs v-model="active" swipeable v-tab>
+        <van-tabs v-model="active" swipeable v-tab  @change="changeTab">
           <van-tab v-for="index in 4" :title="title[index]" :key="index.id" class="tab">
-            <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
               <!-- 推荐版块 -->
               <div v-if="title[index]== '推荐'" class="contain">
                 <!-- 轮播 -->
-                <swiper class="swiper"/>
-                <!-- 活动版块 -->
+               <van-row>
+                <van-col span="24">
+                  <van-swipe :autoplay="3000">
+                      <van-swipe-item v-for="(image, index) in images" :key="index">
+                          <!-- <img v-lazy="image" style="width:100%;height:160px;" @click.stop="redirect('/goods/id_0')"/> -->
+                          <img  @click.stop="buys(image)" :src=" 'http://'+image.url+ image.avatar" style="width:100%;" />
+                      </van-swipe-item>
+                  </van-swipe>
+                </van-col>
+              </van-row>
                 <div class="sort">
                   <span>智能热卖</span>
                   <!-- <span class="sort-tab">
@@ -27,20 +35,79 @@
                     <button>销量</button>
                   </span> -->
                 </div>
-                <active :tabs="title[index]"/>
+                 <!-- 商品列表 -->
+                 <div class="over2">
+                    <!-- <lazy-component class="lazys"
+            v-waterfall-lower="loadMore"
+            waterfall-disabled="disabled"
+            waterfall-offset="300"
+            > -->
+                    <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
+                        <van-col span='8' offset="1" class="goods_list">
+                            <div class="imgList" @click.stop="buy(img)">
+                               <img  :src="'http://'+img.productUrl+img.productImage" />
+                            </div>
+                            <van-col span="24" class="lazy-left">
+                              <span>{{img.productName}}</span>
+                            </van-col>
+                             <van-col span="24" class="lazy-bottom">
+                              <h4>￥{{img.specialPrice}} <span>￥{{img.originalPrice}}</span></h4> 
+                            </van-col>
+                        </van-col>
+                    </van-row>
+                    <!-- </lazy-component> -->
+                  </div>
+
+
               </div>
 
               <div v-if="title[index]== '手机'" class="contain">
-                <active :tabs="title[index]"/>
+               <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
+                        <van-col span='8' offset="1" class="goods_list">
+                            <div class="imgList" @click.stop="buy(img)">
+                               <img  :src="'http://'+img.productUrl+img.productImage" />
+                            </div>
+                            <van-col span="24" class="lazy-left">
+                              <span>{{img.productName}}</span>
+                            </van-col>
+                             <van-col span="24" class="lazy-bottom">
+                              <h4>￥{{img.specialPrice}} <span>￥{{img.originalPrice}}</span></h4> 
+                            </van-col>
+                        </van-col>
+                    </van-row>
               </div>
 
               <div v-if="title[index]== '穿戴'" class="contain">
-                <active :tabs="title[index]"/>
+               <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
+                        <van-col span='8' offset="1" class="goods_list">
+                            <div class="imgList" @click.stop="buy(img)">
+                               <img  :src="'http://'+img.productUrl+img.productImage" />
+                            </div>
+                            <van-col span="24" class="lazy-left">
+                              <span>{{img.productName}}</span>
+                            </van-col>
+                             <van-col span="24" class="lazy-bottom">
+                              <h4>￥{{img.specialPrice}} <span>￥{{img.originalPrice}}</span></h4> 
+                            </van-col>
+                        </van-col>
+                    </van-row>
               </div>
               <div v-if="title[index]== '健康'" class="contain">
-                <active :tabs="title[index]"/>
+                <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
+                        <van-col span='8' offset="1" class="goods_list">
+                            <div class="imgList" @click.stop="buy(img)">
+                               <img  :src="'http://'+img.productUrl+img.productImage" />
+                            </div>
+                            <van-col span="24" class="lazy-left">
+                              <span>{{img.productName}}</span>
+                            </van-col>
+                             <van-col span="24" class="lazy-bottom">
+                              <h4>￥{{img.specialPrice}} <span>￥{{img.originalPrice}}</span></h4> 
+                            </van-col>
+                        </van-col>
+                    </van-row>
               </div>
-            <!-- </van-pull-refresh> -->
+            </van-pull-refresh>
           </van-tab>
         </van-tabs>
       </van-col>
@@ -60,7 +127,7 @@
 </template>
 
 <script>
-import { getAllProject,getShopCart,severs } from "../../src/api/login";
+import { getAllProject,getShopCart,severs,getBanner,getProduct } from "../../src/api/login";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Waterfall } from "vant";
 import Swiper from "./swiper";
@@ -83,11 +150,13 @@ export default {
       active: 0,
       severs:severs(),
       info:'0',
+      tabs:'推荐',
       activeTitle: null,
       path: "../../static/images/",
       imageList: [],
       disabled: false,
       count: 0,
+      images:[],
       isLoading: false
     };
   },
@@ -184,22 +253,86 @@ export default {
     // console.log(this.$store.state.myInfo)
     // console.log(this.$store.state.userInfos)
     if (localStorage.getItem("token")!==null) {
-      this.getShopCart1()
-      this.$store.dispatch('connect')
-    }else{
-      this.infoAction()
+            this.getShopCart1()
+            let loginInfo = {
+              uid: cookie.readCookie('uid'),
+              sdktoken: cookie.readCookie('sdktoken'),
+          }
+          //  this.$store.dispatch('initNimSDK', loginInfo)
+          }else{
+            this.infoAction()
     }
+    this.banner()
   },
   methods: {
    ...mapActions(["infoAction"]),
     goToLink(link) {
         this.$router.push(`${link}`)
-      },
-
-   getShopCart1(){
-   let para = {
+    },
+    getProducts(){
+       getProduct().then(res => {
+        // console.log(res);
+        switch (this.tabs) {
+          case "推荐":
+            this.imageList = res;
+            break;
+          case "手机":
+            var productType =  '1';
+             var mockUsers = res.filter(user => {
+            if (productType && user.productType.indexOf(productType) == -1) return false;
+            return true;
+             });
+            this.imageList = mockUsers;
+            break;
+          case "穿戴":
+            var productType =  '2';
+             var mockUsers = res.filter(user => {
+            if (productType && user.productType.indexOf(productType) == -1) return false;
+            return true;
+             });
+            this.imageList = mockUsers;
+            break;
+          case "健康":
+            var productType =  '3';
+             var mockUsers = res.filter(user => {
+            if (productType && user.productType.indexOf(productType) == -1) return false;
+            return true;
+             });
+            this.imageList = mockUsers;
+            break;  
+          default:
+            break;
+        }
+     
+    });  
+    },
+    changeTab(e){
+       this.tabs = this.title[e+1]
+       this.getProducts()
+    },
+    banner(){
+       getBanner().then(res => {
+        // console.log(res.code)
+          this.images = res;
+          this.getProducts()
+      })
+    },
+     buys(img) {
+      img.id =Number(img.remarks)
+      if (img.id) {
+        
+      localStorage.setItem('productId', JSON.stringify(img.id))
+      this.$router.push('/goods/'+Number(img.id) +'/buy');
+      }
+    },
+    buy(img) {
+      localStorage.setItem('productId', JSON.stringify(img.id))
+      this.$router.push('/goods/'+img.id +'/buy');
+    },
+    getShopCart1(){
+     let para = {
       token: JSON.parse(localStorage.getItem("token"))
-    };
+     };
      let thisss= this
       const url = this.severs + '/customer/getShopCart'
       this.$ajax 
@@ -224,23 +357,24 @@ export default {
     onClickRight() {
       // Toast("暂无");
     },
-    // onRefresh() {
-    //   setTimeout(() => {
-    //     this.$toast("刷新成功");
-    //     this.isLoading = false;
-    //     this.count++;
-    //   }, 500);
-    // },
+    onRefresh() {
+      setTimeout(() => {
+        this.banner()
+        this.$toast("刷新成功");
+        this.isLoading = false;
+        // this.count++;
+      }, 500);
+    },
     
     // 瀑布流方法
     loadMore() {
-      this.disabled = true;
-      setTimeout(() => {
-        for (let i = 0; i < 5; i++) {
-          this.imageList.push(this.imageList[i]);
-        }
-        this.disabled = false;
-      }, 200);
+      this.disabled = false;
+      // setTimeout(() => {
+      //   for (let i = 0; i < 5; i++) {
+      //     this.imageList.push(this.imageList[i]);
+      //   }
+      //   this.disabled = false;
+      // }, 200);
     },
     redirects(url) {
       this.$router.push(url);
@@ -290,6 +424,17 @@ export default {
     // );
   },
   created() {
+    if (localStorage.getItem("token")!==null) {
+        
+            let loginInfo = {
+              uid: cookie.readCookie('uid'),
+              sdktoken: cookie.readCookie('sdktoken'),
+          }
+           setTimeout(() => {
+       this.$store.dispatch('initNimSDK', loginInfo)
+      }, 1000)
+           
+          }
      console.log('created', this.$store.state.msgs)
   }
 };
@@ -297,6 +442,7 @@ export default {
 
 <style lang="less" scoped>
 @import url("../assets/css/home.less");
+@import url("../assets/css/goods.less");
 </style>
 <style scoped>
 #app >>> .van-nav-bar__text {
@@ -334,6 +480,14 @@ export default {
 } */
 #app >>> .init-header .van-info{
   border:none
+}
+#app >>> .lists.van-row {
+    width: 30.333333%;
+    float: left;
+    margin-left: 2%;
+}
+#app >>> .contain .van-col--8 {
+  width: 100%;
 }
 </style>
 

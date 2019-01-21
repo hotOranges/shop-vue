@@ -62,7 +62,7 @@
             :title="'优惠券：'"
             @click="showList = true"
     /> 
-  <van-cell title="商品总价" :value="'￥'+total/100" />
+  <van-cell title="商品总价" :value="'￥'+(total/100).toFixed(2)" />
   <van-cell title="运费" value="+￥0.00" />
 <van-notice-bar :scrollable="false">
   配送至 {{deiladdress}}
@@ -146,6 +146,7 @@ export default {
       LocalAdrrss:[],
       invoiceId:'',
       display: false,
+      couponId:'',
       invoiceType:'',
       chosenAddressId: "",
       deiladdress:'',
@@ -247,8 +248,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')) / 1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')) / 1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -268,8 +269,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')) / 1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')) / 1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -283,7 +284,7 @@ export default {
       } else {
         var buyDetail = [];
         for (var i in this.detial) {
-             buyDetail.push({
+          buyDetail.push({
           productId:this.detial[i].productId,
           productNum:this.detial[i].productNum,
           price:this.detial[i].price,
@@ -294,12 +295,13 @@ export default {
         let para = {
            token:JSON.parse(localStorage.getItem('token')),
            shippingId:this.list[0].id,
-           orderAmount:this.total/100,
+           orderAmount:(this.total/100).toFixed(2),
            buyerMessage:this.message,
            buyDetail:JSON.stringify(buyDetail),
            isInvoice:this.isInvoice,
            invoiceType:this.invoiceType,
-           invoiceId:this.invoiceId
+           invoiceId:this.invoiceId,
+           couponId:this.couponId
         }
          Toast.loading({
                 duration: 0,
@@ -340,12 +342,15 @@ export default {
             this.chosenCoupon = index;
             this.couponNumber = this.coupons[index].value
             this.totals = this.total-this.couponNumber
+            this.couponId = this.coupons[index].id
           }
         
       } else {
         this.showList = false;
         this.chosenCoupon = index;
-        this.totals = this.total
+        this.totals = this.total;
+        localStorage.setItem("couponsIndex", index);
+        this.couponId = ''
       }
     },
     onExchange(code) {

@@ -8,6 +8,7 @@ import utils from './utils/utils'
 import store from './vuex/store'
 import promise from 'es6-promise';
 import Moment from 'moment'
+
 promise.polyfill();
 let id = utils.getUrlKey('openId')
 
@@ -18,7 +19,6 @@ localStorage.setItem(
 Vue.config.productionTip = false
 const _ = require('lodash')
 const load = require('load-script')
-
 // load('../static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
 load('../customer/static/nim/NIM_Web_SDK_v4.0.0.js', (err, script) => {
   if (err) {

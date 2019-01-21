@@ -227,8 +227,7 @@ export default {
           return
         }
         localStorage.setItem("detial_s", JSON.stringify(datas));
-        localStorage.setItem("total",this.total); 
-       console.log(this.total)
+        localStorage.setItem("total",(this.total).toFixed(2)); 
        this.$router.push('/orderPays')
         
 

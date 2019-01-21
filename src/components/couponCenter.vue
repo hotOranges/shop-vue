@@ -25,7 +25,7 @@
 <script>
 import { Toast } from "vant"; 
 import {couponCenter,collectCoupons} from '../api/login'
-import {formatDate} from '../utils/date'
+import {timestampToTime} from '../utils/date'
 export default {
   data () {
     return {
@@ -37,8 +37,8 @@ export default {
   },
 filters:{
 		capitalize:function(value){
-            var newDate=new Date(value)
-			return formatDate(newDate,'yyyy/MM/dd')
+            var newDate=new Date(value.replace(/\-/g, '/')).getTime()/1000
+			return timestampToTime(newDate)
         }
 },
   components: {},

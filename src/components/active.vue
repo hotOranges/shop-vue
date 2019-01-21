@@ -7,7 +7,7 @@
             waterfall-disabled="disabled"
             waterfall-offset="300"
             > -->
-                    <van-row v-if='imageList.length >0'   v-for="(img,index) in imageList" :key='img.id' class="lists">
+                    <van-row  v-for="(img,index) in imageList" :key='img.id' class="lists">
                         <van-col span='8' offset="1" class="goods_list">
                             <div class="imgList" @click.stop="buy(img)">
                                <img  :src="'http://'+img.productUrl+img.productImage" />

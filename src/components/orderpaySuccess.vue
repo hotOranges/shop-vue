@@ -55,7 +55,7 @@
       </van-cell-group>
     </van-radio-group>
     <van-goods-action>
-      <van-goods-action-mini-btn :text="'合计¥'+formdata.orderAmount"/>
+      <van-goods-action-mini-btn :text="'合计¥'+formdata.orderAmount.toFixed(2)"/>
       <!-- <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  /> -->
       <van-goods-action-big-btn @click="pay" text="去支付" primary/>
     </van-goods-action>

@@ -59,6 +59,9 @@ export default new Router({
     {
       path: '/chat/:sessionId',
       name: 'chat',
+      meta: {
+        requireAuth: true,
+      },
       component (resolve) {
         require(['../components/im/Chat'], resolve)
       }

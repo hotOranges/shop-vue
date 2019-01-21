@@ -128,6 +128,10 @@ export default {
   vertical-align: top;
   float: inherit;
 }
+#apps >>> .van-stepper__input[disabled] {
+    color: #7d7e80;
+    background-color: #f8f8f8;
+}
 /*掩藏滚动条*/
 ::-webkit-scrollbar {
   display: none !important;

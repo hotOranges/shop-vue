@@ -84,7 +84,9 @@
           <van-cell :title="'全部点评('+commentSize +')'"/>
           <van-cell v-for="(item, index) in fromData" :key="index">
             <span class="imgss">
-              <img class="initimg" :src="item.avatar" alt>
+
+              <img v-if="item.avatar.length>0" class="initimg" :src="item.avatar" alt>
+              <img v-else class="initimg" src="http://pay.iwingscom.com/image/head.png" alt>
               <i>{{item.nickName}}</i>
             </span>
             <span class="pls">
@@ -208,7 +210,7 @@ import {
   addShopCart,
   getShopCart
 } from "../../src/api/login";
-import { formatDate } from "../utils/date";
+import { timestampToTime } from "../utils/date";
 //obj 优惠券
 // const coupon = [
 //   {
@@ -406,8 +408,8 @@ export default {
   },
   filters: {
     capitalize: function(value) {
-      var newDate = new Date(value);
-      return formatDate(newDate, "yyyy-MM-dd");
+       var newDate=new Date(value).getTime()/1000
+			  return timestampToTime(newDate)
     }
   },
   mounted() {
@@ -544,8 +546,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')).getTime()/1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')).getTime()/1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -566,8 +568,8 @@ export default {
             res[i].name = res[i].couponName;
             res[i].originCondition = res[i].fullMoney * 100;
             res[i].name = res[i].couponName;
-            res[i].startAt = new Date(res[i].startTime) / 1000;
-            res[i].endAt = new Date(res[i].endTime) / 1000;
+            res[i].startAt = new Date((res[i].startTime).replace(/\-/g, '/')) / 1000;
+            res[i].endAt = new Date((res[i].endTime).replace(/\-/g, '/')) / 1000;
             res[i].value = Number(res[i].reductionMoney * 100);
             res[i].denominations = Number(res[i].reductionMoney * 100);
           }
@@ -607,8 +609,10 @@ export default {
       if (index !== -1) {
         var datas = localStorage.getItem("selIn");
         if (datas == null) {
-          alert("请选择商品规则");
-          //  this.showList = false;
+          Toast('请选择商品规则')
+          // alert("请选择商品规则");
+           this.showList = false;
+           this.orderShows()
         } else {
           var prise = this.detial.specialPrice;
           var orderNum = JSON.parse(datas)[0].orderNum;

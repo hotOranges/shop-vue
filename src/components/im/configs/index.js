@@ -2,6 +2,7 @@ export default {
   // appkey: 'fe416640c8e8a72734219e1847ad2547',
   // postUrl: 'https://apptest.netease.im',
   // 用户的appkey
+  sdk: 'NIM_Web_SDK_v5.8.0',
   appkey: 'a0484e11dfc87b5b02353e117ff4252f',
   // 用于在web demo中注册账号异步请求demo 服务器中使用
   postUrl: 'https://app.netease.im',
