@@ -17,7 +17,7 @@ export function onCreateTeam(team, owner) {
 }
 
 export function onSyncTeamMembersDone() {
-  console.log('同步群列表完成')
+  // console.log('同步群列表完成')
 }
 
 export function onUpdateTeamMember({state, commit}, teamMember) {

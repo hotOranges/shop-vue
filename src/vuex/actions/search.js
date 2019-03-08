@@ -22,10 +22,12 @@ export function searchUsers ({state, commit}, obj) {
   nim.getUsers({
     accounts,
     done: function searchUsersDone (error, users) {
+     
       if (error) {
         alert(error)
         return
       }
+      
       commit('updateSearchlist', {
         type: 'user',
         list: users

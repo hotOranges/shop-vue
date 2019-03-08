@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     search() {
-      console.log(this.value);
+      
     },
     search_shows() {
       this.$router.back(-1);
@@ -142,7 +142,7 @@ export default {
     );
   },
   created() {
-    console.log(this.show, this.search_show);
+    // console.log(this.show, this.search_show);
   }
 };
 </script>

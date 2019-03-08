@@ -151,10 +151,13 @@ export default {
               uid: cookie.readCookie('uid'),
               sdktoken: cookie.readCookie('sdktoken'),
             }
-           this.$store.dispatch('initNimSDK', loginInfo)
+          setTimeout(() => {
+          this.$store.dispatch("initNimSDK", loginInfo);
+           this.redirects("/");
+            Toast("登录成功");
+        }, 1000);
         // dispatch('initNimSDK', loginInfo) 
-         this.redirects("/");
-         Toast("登录成功");
+        
     },
     redirects(url) {
       this.$router.push(url);

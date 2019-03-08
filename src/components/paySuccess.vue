@@ -32,7 +32,7 @@
       </van-cell>
       <van-cell>
         <template slot="title">
-          <span class="custom-text">收货地址</span>
+          <span class="custom-text">联系方式</span>
           <span class="custom-text">{{placeOrders.name}}（{{placeOrders.tel}}）</span>
         </template>
       </van-cell>
@@ -116,7 +116,7 @@ export default {
             var params = JSON.parse(this.datas);
 
             function onBridgeReady() {
-               console.log(WeixinJSBridge)
+              
               WeixinJSBridge.invoke(
                 "getBrandWCPayRequest",
                 {

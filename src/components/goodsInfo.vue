@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     search() {
-      console.log(this.value);
+      // console.log(this.value);
     },
     search_shows() {
       this.$router.push("/");
@@ -170,7 +170,7 @@ export default {
 
               break;
             case "id_1":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_1.title[0];
               this.title.title_2 = data.id_1.title[1];
 
@@ -188,7 +188,7 @@ export default {
 
               break;
             case "id_2":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_2.title[0];
               this.title.title_2 = data.id_2.title[1];
 
@@ -206,7 +206,7 @@ export default {
 
               break;
             case "id_3":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_3.title[0];
               this.title.title_2 = data.id_3.title[1];
 
@@ -224,7 +224,7 @@ export default {
 
               break;
             case "id_4":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_4.title[0];
               this.title.title_2 = data.id_4.title[1];
 
@@ -242,7 +242,7 @@ export default {
 
               break;
             case "id_5":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_5.title[0];
               this.title.title_2 = data.id_5.title[1];
 
@@ -260,7 +260,7 @@ export default {
 
               break;
             case "id_6":
-              console.log(data.id_1.limit_price[0]);
+              // console.log(data.id_1.limit_price[0]);
               this.title.title_1 = data.id_6.title[0];
               this.title.title_2 = data.id_6.title[1];
 

@@ -2,7 +2,6 @@
   <!--  组件 -->
   <div id="apps">
     <van-nav-bar class="init-header" left-arrow title="请选择支付方式" @click-left="onClickLeft"/>
-
     <van-row>
       <van-col span="24" offset="0" class="payContent">
         <van-icon
@@ -32,7 +31,7 @@
       </van-cell>
       <van-cell>
         <template slot="title">
-          <span class="custom-text">收货地址</span>
+          <span class="custom-text">联系方式</span>
           <span class="custom-text">{{formdata.consigneeName}}（{{formdata.consigneePhone}}）</span>
         </template>
       </van-cell>
@@ -55,7 +54,7 @@
       </van-cell-group>
     </van-radio-group>
     <van-goods-action>
-      <van-goods-action-mini-btn :text="'合计¥'+formdata.orderAmount.toFixed(2)"/>
+      <van-goods-action-mini-btn :text="'合计¥'+formdata.orderAmount"/>
       <!-- <van-goods-action-big-btn text="查看订单" @click="redirects('Orderdetail')"  /> -->
       <van-goods-action-big-btn @click="pay" text="去支付" primary/>
     </van-goods-action>
@@ -123,7 +122,11 @@ export default {
       }
       getOrderDetail(para).then(res =>{
        if (res) {
-          //  console.log(res)
+          if (res.payMethod.length==0) {
+            res.payMethod='1'
+            res.invoiceType = '1'
+          }
+          
          this.formdata = res
           localStorage.setItem('placeOrders', JSON.stringify(res))
         }
@@ -145,7 +148,7 @@ export default {
         this.datas = JSON.stringify(res);
           var params = JSON.parse(this.datas);
             function onBridgeReady() {
-              console.log(WeixinJSBridge)
+             
               WeixinJSBridge.invoke(
                 "getBrandWCPayRequest",
                 {

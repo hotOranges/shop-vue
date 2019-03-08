@@ -51,7 +51,7 @@ export default {
         },
         addNum(state,e) {
             state.numO = e;
-            console.log(e);
+            // console.log(e);
         },
         shopCartInfo(state) {
             state.shop_info = JSON.parse(localStorage.getItem('getShopCarts')).length;

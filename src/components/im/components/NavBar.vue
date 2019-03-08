@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     changePage (page) {
-      console.log()
+      // console.log()
     }
   }
 }

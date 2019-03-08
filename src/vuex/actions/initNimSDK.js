@@ -23,14 +23,14 @@ export function initNimSDK({state, commit, dispatch}, loginInfo) {
   }
   dispatch('showLoading')
   // 初始化SDK
-  console.log(state.nim)
+  // console.log(state.nim)
   window.nim = state.nim = SDK.NIM.getInstance({
     // debug: true && { api: 'info', style: 'font-size:12px;color:blue;background-color:rgba(0,0,0,0.1)' },
     appKey: config.appkey,
     account: loginInfo.uid,
+    syncSessionUnread:true,
     token: loginInfo.sdktoken,
     db: false,
-    syncSessionUnread: false,
     onconnect: function onConnect(event) {
       if (loginInfo) {
         // 连接上以后更新uid

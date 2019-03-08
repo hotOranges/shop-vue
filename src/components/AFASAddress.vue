@@ -44,7 +44,7 @@ export default {
   },
   mounted(){
       this.formaddress = JSON.parse(localStorage.getItem('mydatas'))
-      console.log(this.formaddress)
+      // console.log(this.formaddress)
       if (this.formaddress.name.length>0) {
           this.addressInfo.name = this.formaddress.name
       }

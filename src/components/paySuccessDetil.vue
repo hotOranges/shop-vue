@@ -11,7 +11,7 @@
 <van-row>
      <van-col span='24' offset="0" class="payContent">
   <van-icon name="passed"  size="60px" color="#2BA6B0" style="padding-top:20px;padding-bottom:10px"/>   
- <p>支付方式：微信支付</p>
+ <!-- <p>支付方式：微信支付</p> -->
  <p style="margin-bottom:30px">订单金额：¥{{orderAmount}}</p>
  </van-col>
   <van-col span='24' offset="0" class="payBack">

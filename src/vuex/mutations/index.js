@@ -80,6 +80,7 @@ const mutations = {
   },
   updateSearchlist (state, obj) {
     const type = obj.type
+  
     switch (type) {
       case 'user':
         if (obj.list.length !== 0 || state.searchedUsers.length !== 0) {
@@ -235,9 +236,11 @@ const mutations = {
       if (state.currSessionId) {
         let sessionId = state.currSessionId
         let currSessionMsgs = [].concat(state.msgs[sessionId] || [])
+        
         // 做消息截断
         let limit = config.localMsglimit
         let msgLen = currSessionMsgs.length
+     
         if (msgLen - limit > 0) {
           state.currSessionLastMsg = currSessionMsgs[msgLen - limit]
           currSessionMsgs = currSessionMsgs.slice(msgLen - limit, msgLen)

@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     onSave(content) {
-      console.log(content)
+      
       var isDefault = content.isDefault == true ? 1 : 0 ;
      let para = {
        token:JSON.parse(localStorage.getItem('token')),
@@ -57,7 +57,7 @@ export default {
       this.$router.back(-1);
     },
     onChangeDetail(val) {
-     console.log(val)
+  
     }
   }
 };

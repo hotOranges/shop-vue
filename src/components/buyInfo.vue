@@ -26,7 +26,6 @@
         </van-swipe-item>
       </van-swipe>
     </van-row>
-
     <van-row class="col-3">
       <div v-if="oShow1">
         <van-col span="24" class="lazy-bottom">
@@ -182,7 +181,7 @@
         :show-exchange-bar="false"
       />
     </van-popup>
-
+    
     <!-- 底部购买 -->
     <van-goods-action>
       <van-goods-action-mini-btn icon="chat" text="客服" @click="im" />

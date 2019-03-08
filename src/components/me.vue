@@ -20,28 +20,32 @@
                      <!-- 订单 -->
                      <van-col span="24" class="headerImg">
                       <van-cell @click="toOrder('0')" style="border-bottom: 1px solid #D9D9D9;padding-top: 25px;margin-bottom: 25px;padding-right: 10px;" title="我的订单" value="查看全部订单" icon="close" is-link />
-                     <van-col span='5' offset="0">
+                     <van-col span='5' offset="0" >
                      <div @click="toOrder('1')">
                      <span><img src="../../static/images/icon/1.png"  /></span>  
                      <span>待付款</span>
+                     <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value>0">{{numberShop.value | filterwhet2}}</van-tag>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0">
                      <div @click="toOrder('2')">
                      <span><img src="../../static/images/icon/2.png"  /></span>  
                      <span>待收货</span>
+                     <!-- <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value2>0">{{numberShop.value2 | filterwhet2}}</van-tag> -->
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('3')">
                      <div @click="toOrder('3')">
                      <span><img src="../../static/images/icon/12.png"  /></span>  
                      <span>已收货</span>
+                     <!-- <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value3>0">{{numberShop.value3 | filterwhet2}}</van-tag> -->
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('4')">
                      <div @click="toOrder('4')">
                      <span><img src="../../static/images/icon/11.png"  /></span>  
                      <span>已取消</span>
+                     <!-- <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value4>0">{{numberShop.value4 | filterwhet2}}</van-tag> -->
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('4')">
@@ -77,7 +81,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { Dialog } from "vant";
 import { Uploader } from 'vant';
-import {getUser,logOut} from '../api/login'
+import {getUser,logOut,listOrder} from '../api/login'
 export default {
   name: "Me",
   components: {},
@@ -96,6 +100,7 @@ export default {
         nickName:'',
         avatar:''
       },
+      fromData:[],
       pass: false,
       value: 5,
       active: 3,
@@ -107,8 +112,26 @@ export default {
       list: [
       ],
       value: "",
+      numberShop:{
+        value:0,
+        value2:0,
+        value3:0,
+        value4:0,
+        value5:0
+      },
       showKeyboard: true
     };
+  },
+  filters:{
+     filterwhet2(e){
+      var text;
+      if (e>9) {
+        text = '9+'
+      }else {
+        text = e
+      }
+    return text
+    }
   },
   computed: {
     ...mapState({
@@ -163,7 +186,35 @@ export default {
           if (res.avatar.length>0) {
             this.form.avatar = res.avatar
           }
+          this.number()
         }
+      })
+      
+    },
+    number(){
+      let para = {
+        token:JSON.parse(localStorage.getItem('token')),
+        currentPage: 0,
+        pageSize: 9999,
+        orderStatus: ''
+      }
+     listOrder(para).then(res=>{
+        if (res) {
+        for (let i = 0; i < res.length; i++) {
+         if (res[i].status=='1') {
+            this.numberShop.value++
+         }
+         if (res[i].status=='2') {
+            this.numberShop.value2++
+         }
+         if (res[i].status=='3') {
+            this.numberShop.value3++
+         }
+         if (res[i].status=='4') {
+            this.numberShop.value4++
+         }
+        }
+      }        
       })
     },
     outin(){
@@ -171,10 +222,8 @@ export default {
          token:JSON.parse(localStorage.getItem('token'))
       }
       logOut(para).then(res =>{
-          localStorage.removeItem('token')
-          localStorage.removeItem('getShopCarts')
-          this.$store.dispatch('logout')
-          // this.$router.push("/login");
+         this.$store.dispatch('logout')
+         localStorage.clear()
       })
     },
     onClickLeft() {
@@ -190,7 +239,7 @@ export default {
     //tabBar 消息通知指令
     infos: {
       inserted(el, obj) {
-        console.log(obj.value);
+        // console.log(obj.value);
         const info = el.childNodes[0].childNodes[1];
         info.innerText = obj.value;
       }
@@ -203,6 +252,26 @@ export default {
 @import url("../assets/css/home.less");
 </style>
 <style scoped>
+#apps >>> .col-me .headerImg .bagInit.van-tag{
+  position: absolute;
+  right: 12px;
+  top: -12px;
+  border-radius: 50%;
+  -webkit-transition: opacity 2s linear;
+  -moz-transition: opacity 2s linear;
+  -o-transition: opacity 2s linear;
+  transition: opacity 2s linear;
+  opacity:0;
+  filter:alpha(opacity=0);
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+}
+#apps >>> .col-me .headerImg .bagInit.van-tag.fadein{
+  opacity:100;
+  filter:alpha(opacity=100);
+  }
 #apps >>> .van-nav-bar {
   background: linear-gradient(
     48deg,
@@ -228,6 +297,7 @@ export default {
 }
 #apps >>> .van-col--5 {
     width: 20%;
+    position: relative;
 }
 #apps >>>  .headerImg img{
   width: 100%

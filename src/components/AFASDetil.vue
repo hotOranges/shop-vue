@@ -116,7 +116,7 @@ export default {
              tel:arrs2.tel,
              address:arrs2.address
             })
-        this.deiladdress =arrs2.address 
+        this.deiladdress = arrs2.address 
       //  console.log(this.deiladdress) 
        this.list =datas
       

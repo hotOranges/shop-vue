@@ -26,6 +26,7 @@ export function onMsg (msg) {
 
 function onSendMsgDone (error, msg) {
   store.dispatch('hideLoading')
+  console.log(JSON.stringify(msg))
   if (error) {
     // 被拉黑
     if (error.code === 7101) {

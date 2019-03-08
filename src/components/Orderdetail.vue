@@ -137,7 +137,7 @@ export default {
     this.axios.get("./static/data.json").then(
       res => {
         const buy_id = this.$route.params.id;
-        console.log(buy_id);
+        // console.log(buy_id);
         //或许商品信息
         if (res.status == 200) {
           const data = res.data.goods;

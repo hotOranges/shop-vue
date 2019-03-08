@@ -314,7 +314,7 @@ export default {
     //tabBar 消息通知指令
     infos: {
       inserted(el, obj) {
-        console.log(obj.value);
+        // console.log(obj.value);
         const info = el.childNodes[0].childNodes[1];
         info.innerText = obj.value;
       }

@@ -44,6 +44,7 @@
   import ChatList from './components/ChatList'
   import util from './utils'
   import pageUtil from './utils/page'
+  import { Toast } from "vant";
   import cookie from '../../components/im/utils/cookie'
   export default {
     /*eslint-disable*/
@@ -65,10 +66,11 @@
     },
     watch: {
       $route(to, from) {
-        console.log('watch', to, from)
+        // console.log('watch', to, from)
       },
       sessionId(val) {
-        console.log('sessionId:', val)
+        // console.log('sessionId:', val)
+        
         this.$store.dispatch('setCurrSession', val)
       },
     },
@@ -77,7 +79,13 @@
     //   this.$store.dispatch('connect')
       this.$store.dispatch('showLoading')
       // 此时设置当前会话
-      console.log(cookie.readCookie('uid'))
+      if (cookie.readCookie('uid')==null) {
+         Toast("token错误~，请重新登录··")
+         setTimeout(() => {
+        this.$router.push("/login");
+         },300)
+         
+      }
       this.$store.dispatch('setCurrSession', this.sessionId)
       pageUtil.scrollChatListDown()
       setTimeout(() => {
@@ -94,7 +102,6 @@
     computed: {
       sessionId () {
         let sessionId = this.$route.params.sessionId
-        console.log('sessionId', sessionId)
         return sessionId
       },
       sessionName () {
@@ -112,7 +119,7 @@
         }
       },
       scene () {
-        console.log('scene', util.parseSession(this.sessionId).scene)
+        // console.log('scene', util.parseSession(this.sessionId).scene)
         return util.parseSession(this.sessionId).scene
       },
       to () {
@@ -122,6 +129,8 @@
         return this.$store.state.myInfo
       },
       userInfos () {
+          
+        //  console.log(this.$store.state.userInfos)
         return this.$store.state.userInfos
       },
       msglist () {
@@ -157,10 +166,18 @@
       },
       enterTeamInfo(){
         let account = this.sessionId.replace(/^team-/, '')
-        console.log(account)
+        // console.log(account)
         this.$router.push({path: `/im_web/teamInfo/${account}`})
       }
-    }
+    },
+    //  created() {
+    //   const searchText = 'admin'
+    //   this.searchText = searchText
+    //   console.log('searchText', searchText)
+    //   console.log(this.$store.dispatch('searchUsers', {
+    //     accounts: [this.searchText]
+    //   }))
+    // }
   }
 </script>
 

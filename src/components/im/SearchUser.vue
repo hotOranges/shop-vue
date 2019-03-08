@@ -74,7 +74,7 @@
     },
     methods: {
       enterCard(link){
-        console.log(link)
+        // console.log(link)
         this.$router.push(link)
       },
       searchUser () {
@@ -91,10 +91,10 @@
     created() {
       const searchText = this.$route.params.searchText
       this.searchText = searchText
-      console.log('searchText', searchText)
-      console.log(this.$store.dispatch('searchUsers', {
-        accounts: [this.searchText]
-      }))
+      // console.log('searchText', searchText)
+      // console.log(this.$store.dispatch('searchUsers', {
+      //   accounts: [this.searchText]
+      // }))
     }
   }
 </script>

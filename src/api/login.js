@@ -308,3 +308,17 @@ export function getBanner(params) {
       data: params
     })
   }
+  export function isExist(params) {
+    return request({
+      url: `${base}/customerUser/isExist`,
+      method: 'post',
+      data: params
+    })
+  }
+  export function accessRegister(params) {
+    return request({
+      url: `${base}/customerUser/accessRegister`,
+      method: 'post',
+      data: params
+    })
+  }

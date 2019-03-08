@@ -110,7 +110,7 @@ export default {
           var params = JSON.parse(this.datas);
 
             function onBridgeReady() {
-               console.log(WeixinJSBridge)
+               
               WeixinJSBridge.invoke(
                 "getBrandWCPayRequest",
                 {

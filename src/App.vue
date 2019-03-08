@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition  :name="transitionName">
-    <router-view  class="Router" />
+    <router-view  class="Router"  />
     </transition>
   </div>
 </template>
@@ -72,5 +72,8 @@ export default {
      position: absolute;
      width: 100%;
       transition: all .8s cubic-bezier(.55,0,.1,1);
+}
+.emoji-item img{
+  width: 32px ;
 }
 </style>

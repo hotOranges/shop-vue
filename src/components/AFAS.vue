@@ -64,7 +64,6 @@
 </van-actionsheet>
   </div>
 </template>
-
 <script>
 import {applyPage,severs,imgsevers} from '../api/login'
 export default {
@@ -111,7 +110,7 @@ export default {
         token:JSON.parse(localStorage.getItem('token'))
       }
       applyPage(para).then(res =>{
-        console.log(res)
+        // console.log(res)
         this.formdata = res
       })
     },
