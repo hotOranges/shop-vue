@@ -119,10 +119,10 @@ import {
   saveInvoice
 } from "../../src/api/login";
 import { formatDate } from "../utils/date";
-
 export default {
   name: "pay",
   data() {
+    
     return {
       detial: {},
       businessLookUp: "",
@@ -183,21 +183,21 @@ export default {
       token: JSON.parse(localStorage.getItem("token"))
     };
     this.LocalAdrrss = JSON.parse(localStorage.getItem("LocalAdrrss"));
-    // if (this.LocalAdrrss !== null) {
-    //     var datas = [];
-    //    this.deiladdress = this.LocalAdrrss.address
-    //    var arrs2 = this.LocalAdrrss
-    //     datas.push({
-    //          id:arrs2.id,
-    //          name:arrs2.name,
-    //          tel:arrs2.tel,
-    //          address:arrs2.address
-    //         })
-    //     this.deiladdress =arrs2.address
-    //   //  console.log(this.deiladdress)
-    //    this.list =datas
+    if (this.LocalAdrrss !== null) {
+        var datas = [];
+       this.deiladdress = this.LocalAdrrss.address
+       var arrs2 = this.LocalAdrrss
+        datas.push({
+             id:arrs2.id,
+             name:arrs2.name,
+             tel:arrs2.tel,
+             address:arrs2.address
+            })
+        this.deiladdress =arrs2.address
+      //  console.log(this.deiladdress)
+       this.list =datas
 
-    //  }else{
+     }else{
     listShipping(para).then(res => {
       var datas = [];
       this.listShippings = res;
@@ -225,10 +225,9 @@ export default {
         });
         this.deiladdress = arrs.address;
       }
-
       this.list = datas;
     });
-    //  }
+     }
     this.myCouponss();
   },
   methods: {
@@ -322,7 +321,6 @@ export default {
             localStorage.setItem("placeOrders", JSON.stringify(scopedSlotss));
             localStorage.setItem("numall", this.totals);
             Toast.clear();
-            return
              if (this.iswx=='true') {
               this.$router.push("/paySuccess");
             } else {

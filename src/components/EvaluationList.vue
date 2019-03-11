@@ -90,13 +90,17 @@ export default {
 <style scoped>
 #apps >>> .imgList img {
   width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 #apps >>> .init-soller-list2 {
-  padding-bottom: 0px;
+  margin-bottom: 5px;
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
+  height: 150px;
+
 }
 #apps >>> .van-col--offset-2 span {
   font-size: 13px;
@@ -113,6 +117,11 @@ export default {
     margin-top: -20px;
     padding-bottom: 10px;
     text-align: right;
+} 
+#apps .van-hairline--top-bottom::after {
+    border-width: 0px 0;
+    -webkit-transform: scale(0);
+   
 }
 #apps .btn button {
   font-weight: 500;

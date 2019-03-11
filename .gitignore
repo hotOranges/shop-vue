@@ -10,7 +10,9 @@ yarn-error.log*
 selenium-debug.log
 package-lock.json
 dist.rar
-
+/.history/
+customer.rar
+/customer/
 
 
 # Editor directories and files

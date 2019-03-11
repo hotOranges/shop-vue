@@ -115,6 +115,7 @@ export default {
 }
 #apps >>> .imgList img {
   width: 100%;
+  margin-top: 15px;
 }
 
 #apps >>> .init-soller-list2 {

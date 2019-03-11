@@ -312,10 +312,10 @@ export default {
         this.fromData = this.fromData.filter(function(is) {
           return i.orderNo !== is.orderNo;
         });
-        --this.number;
+        // --this.number;
         Toast("删除成功");
 
-        //  this.initData()
+         this.initData()
       });
     },
     orderDeil(i) {
@@ -482,8 +482,8 @@ export default {
 }
 #app .btn {
   float: right;
-  margin-left: 8px;
-  margin-right: 8px;
+  margin-left: 2px;
+  margin-right: 2px;
   margin-top: 10px;
   padding-bottom: 10px;
 }
@@ -495,8 +495,8 @@ export default {
   line-height: 31px;
   border-radius: 3px;
   font-size: 14px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 #app >>> .van-col--4 {
   text-align: right;

@@ -91,18 +91,18 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 //懒加载
 import { Lazyload } from 'vant';
-Vue.use(Lazyload, {
-  lazyComponent: true,
-  attempt: 8,
-  loading: 'https://i.loli.net/2019/02/27/5c76628238cfd.jpg',
-  error: 'https://i.loli.net/2019/02/27/5c76628238cfd.jpg',
-  })
-//   Vue.use(Lazyload, {
-//     lazyComponent: true,
-//     attempt: 8,
-//     error: '../customer/static/images/lunbo/err.jpg',
-//     error: '../customer/static/images/lunbo/err.jpg',
-// })
+// Vue.use(Lazyload, {
+//   lazyComponent: true,
+//   attempt: 8,
+//   loading: 'https://i.loli.net/2019/02/27/5c76628238cfd.jpg',
+//   error: 'https://i.loli.net/2019/02/27/5c76628238cfd.jpg',
+//   })
+  Vue.use(Lazyload, {
+    lazyComponent: true,
+    attempt: 8,
+    error: '../customer/static/images/lunbo/err.jpg',
+    error: '../customer/static/images/lunbo/err.jpg',
+})
 //瀑布流
 import { Waterfall } from 'vant';
 Vue.use(Waterfall);

@@ -651,6 +651,7 @@ export default {
       if (this.initgeval == "请选择颜色 型号 数量") {
         this.orderShow = true;
       } else {
+        // this.onBuyClicked()
         this.$router.push("/goods/id_2/buy/pay");
       }
     },
@@ -679,6 +680,7 @@ export default {
           addShopCart(para).then(res => {
             this.getShopCart1();
             Toast("加入成功");
+            
             this.orderShow = false;
           });
         }
@@ -757,6 +759,7 @@ export default {
           orderNum: sel.value,
           color: color.innerHTML
         });
+         localStorage.setItem("selIn", JSON.stringify(selIn));
         var str = selIn[0].color.replace(/\s+/g, "");
         var addShopData = {
           productId: this.detial.id,

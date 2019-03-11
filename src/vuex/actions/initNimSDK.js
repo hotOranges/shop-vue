@@ -71,8 +71,8 @@ export function initNimSDK({state, commit, dispatch}, loginInfo) {
             WindowsPhone: '手机版'
           }
           let str = error.from
-          let errorMsg = `你的帐号于${util.formatDate(new Date())}被${(map[str] || '其他端')}踢出下线，请确定帐号信息安全!`
-          pageUtil.turnPage(errorMsg, 'login')
+          // let errorMsg = `你的帐号于${util.formatDate(new Date())}被${(map[str] || '其他端')}踢出下线，请确定帐号信息安全!`
+          // pageUtil.turnPage(errorMsg, 'login')
           break
         default:
           break
@@ -176,8 +176,8 @@ export function initNimSDK2({state, commit, dispatch}, loginInfo) {
             WindowsPhone: '手机版'
           }
           let str = error.from
-          let errorMsg = `你的帐号于${util.formatDate(new Date())}被${(map[str] || '其他端')}踢出下线，请确定帐号信息安全!`
-          pageUtil.turnPage(errorMsg, 'login')
+          // let errorMsg = `你的帐号于${util.formatDate(new Date())}被${(map[str] || '其他端')}踢出下线，请确定帐号信息安全!`
+          // pageUtil.turnPage(errorMsg, 'login')
           break
         default:
           break

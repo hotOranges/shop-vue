@@ -2,7 +2,7 @@
   <!-- 首页组件 -->
   <div id="app">
     <!-- 搜索区 -->
-    <van-nav-bar v-if="iswx" class="init-header" title="商城">
+    <van-nav-bar v-if="iswx=='true'" class="init-header" title="商城">
       <van-icon name="chat" slot="right" @click="im" :info="myInfo"/>
     </van-nav-bar>
     <van-nav-bar
@@ -347,7 +347,7 @@ export default {
           this.images = res;
           if (localStorage.getItem("token") !== null) {
             this.getShopCart1();
-            //  this.$store.dispatch('initNimSDK', loginInfo)
+          
           } else {
             // this.infoAction()
             localStorage.removeItem("getShopCarts");
@@ -370,17 +370,16 @@ export default {
     chatlogin() {
       cookie.setCookie("uid", this.account);
       cookie.setCookie("sdktoken", this.sdktoken);
-      // this.$store.dispatch('connect',true)
+
       let loginInfo = {
         uid: cookie.readCookie("uid"),
         sdktoken: cookie.readCookie("sdktoken")
       };
        setTimeout(() => {
           this.$store.dispatch("initNimSDK", loginInfo);
-          this.redirects("/");
           //  Toast("登录成功");
         }, 1000);
-      // dispatch('initNimSDK', loginInfo)
+     
     
     },
     getShopCart1() {
@@ -423,6 +422,7 @@ export default {
         token: JSON.parse(localStorage.getItem("token"))
       };
       if (this.$CheckIsIOS) {
+         this.$store.dispatch('logout2')
         share(parmas);
       } else {
         window.control.jsonData(JSON.stringify(parmas));
@@ -562,6 +562,7 @@ export default {
 }
 #app >>> .van-nav-bar .van-icon {
   color: #323232;
+  font-size: 18px;
 }
 #app >>> .van-swipe__indicator {
   background-color: transparent;

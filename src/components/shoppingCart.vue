@@ -3,7 +3,7 @@
   <div id="app">
      <!-- 搜索区 -->
      <van-row gutter="20" class="row-1">
-     <van-nav-bar
+     <van-nav-bar v-if="shops.length>0"
   class="init-header"
   title="购物车"
   left-text=""
@@ -11,6 +11,13 @@
   left-arrow
   @click-left="onClickLeft"
   @click-right="onClickRight"
+/>
+<van-nav-bar v-else
+  class="init-header"
+  title="购物车"
+  left-text=""
+  left-arrow
+  @click-left="onClickLeft"
 />
     </van-row>
   <div v-if="shops.length>0">
@@ -75,17 +82,6 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { getShopCart,addShopCart,subShopCart,delShopCart } from "../../src/api/login";
 
-const coupon = {
-  available: 1,
-  discount: 0,
-  denominations: 10000,
-  origin_condition: 0,
-  reason: "",
-  value: 150,
-  name: "满498减100",
-  start_at: 1489104000,
-  end_at: 1514592000
-};
 
 export default {
   name: "shoppingCart",
@@ -107,9 +103,6 @@ export default {
       checked: [],
       checkeds: [],
       checkAll:false,
-      chosenCoupon: -1,
-      coupons: [coupon],
-      disabledCoupons: [coupon],
       imageUrl: [],
       newcons: [],
       goodsTitle: [],
@@ -281,7 +274,11 @@ export default {
       }
     },
     onClickRight() {
-      this.canel = !this.canel;
+      if (this.canel==true) {
+        this.canel = false
+      }else{
+        this.canel = true
+      }
       if (this.canel == true) {
         this.cantext = "完成";
       } else {
@@ -289,19 +286,9 @@ export default {
       }
     },
    
-    //优惠券
-    onChange(index) {
-      this.chosenCoupon = index;
-    },
-    onExchange(code) {
-      this.coupons.push(coupon);
-    },
     redirects(url) {
       this.$router.push(url);
     }
-  },
-  watch: {
-    
   },
   directives: {
     tab: {
@@ -329,9 +316,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/css/home.less");
-</style>
+
 
 <style scoped>
 #app >>> .van-card {

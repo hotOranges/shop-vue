@@ -206,21 +206,22 @@ export default {
       token: JSON.parse(localStorage.getItem("token"))
     };
     this.LocalAdrrss = JSON.parse(localStorage.getItem("LocalAdrrss"));
-    //    if (this.LocalAdrrss !== null) {
-    //     var datas = [];
-    //    this.deiladdress = this.LocalAdrrss.address
-    //    var arrs2 = this.LocalAdrrss
-    //     datas.push({
-    //          id:arrs2.id,
-    //          name:arrs2.name,
-    //          tel:arrs2.tel,
-    //          address:arrs2.address
-    //         })
-    //     this.deiladdress =arrs2.address
-    //   //  console.log(this.deiladdress)
-    //    this.list =datas
 
-    //  }else{
+       if (this.LocalAdrrss !== null) {
+        var datas = [];
+       this.deiladdress = this.LocalAdrrss.address
+       var arrs2 = this.LocalAdrrss
+        datas.push({
+             id:arrs2.id,
+             name:arrs2.name,
+             tel:arrs2.tel,
+             address:arrs2.address
+            })
+        this.deiladdress =arrs2.address
+      //  console.log(this.deiladdress)
+       this.list =datas
+
+     }else{
     listShipping(para).then(res => {
       var datas = [];
       this.listShippings = res;
@@ -250,7 +251,7 @@ export default {
       }
       this.list = datas;
     });
-    // }
+    }
   },
   methods: {
     ...mapActions(["orderShows"]),

@@ -95,7 +95,13 @@ export default {
     }
     pageUtil.turnPage('', '#/login')
   },
-
+  logout2 ({state, commit}) {
+    cookie.delCookie('uid')
+    cookie.delCookie('sdktoken')
+    if (state.nim) {
+      state.nim.disconnect()
+    }
+  },
   // 初始化 重新连接SDK
   initNimSDK,
   // 清空所有搜索历史纪录
