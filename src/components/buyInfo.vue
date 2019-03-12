@@ -829,7 +829,8 @@ export default {
     //         }
     //     },13);
     // }
-  }
+  },
+  
 };
 </script>
 
@@ -857,7 +858,7 @@ export default {
   color: #b8b8b8;
 }
 #app >>> .van-sku-header__img-wrap {
-  margin-top: 1px;
+  margin-top: -5px;
 }
 #app >>> .van-button--square {
   border-radius: 24px 24px 24px 24px;
@@ -1003,7 +1004,8 @@ export default {
   padding-bottom: 10px;
 }
 #app >>> .van-sku-header__img-wrap img {
-  max-height: initial;
+      max-height: 66px;
+      /* top: -10px; */
 }
 </style>
 

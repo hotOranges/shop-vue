@@ -9,6 +9,8 @@ import store from './vuex/store'
 import promise from 'es6-promise';
 import Moment from 'moment'
 import Bridge from './config/bridge.js'
+import cookie from "./components/im/utils/cookie";
+import 'babel-polyfill' 
 Vue.prototype.$bridge = Bridge
 let u = navigator.userAgent;
 let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;   //判断是否是 android终端
@@ -17,6 +19,7 @@ let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);     //判断是否是 io
 Vue.prototype.$CheckIsIOS = isIOS
 Vue.prototype.$CheckIsAndroid = isAndroid
 promise.polyfill();
+require('es6-promise').polyfill()
   var ua = window.navigator.userAgent.toLowerCase();
 if (ua.match(/MicroMessenger/i) == "micromessenger") {
   localStorage.setItem(
@@ -127,7 +130,22 @@ axios.interceptors.request.use(config => {
   Promise.reject(error)
 })
 router.afterEach((to,from,next) => {
-  window.scrollTo(0,0);
+  if (to.name =='buyInfo' && from.name=='Home' ||to.name =='Me' && from.name=='Home' || to.name =='shoppingCart' && from.name=='Home') {
+   cookie.setCookie('scroll',document.documentElement.scrollTop)
+   setTimeout(()=>{ 
+   window.scrollTo(0,0)
+   },500)
+  }else{
+    window.scrollTo(0,0);
+  }
+  if (to.name =='Home' && from.name=='buyInfo' ||to.name =='Home' && from.name=='shoppingCart' || to.name =='Home' && from.name=='Me') {
+    setTimeout(()=>{
+      window.scrollTo(0,cookie.readCookie('scroll'));
+    },100)
+   
+  }
+ 
+  
 });
 
 /*登录拦截*/

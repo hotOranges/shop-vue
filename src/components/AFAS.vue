@@ -203,6 +203,8 @@ export default {
 #apps >>> .van-stepper__input[disabled] {
     color: #7d7e80;
     background-color: #f8f8f8;
+    -webkit-text-fill-color: #7d7e80;
+    -webkit-opacity: 1;
 }
 #init-border {
   padding-left: 40px;

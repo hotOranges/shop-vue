@@ -7,8 +7,11 @@
   @click-left="onClickLeft"
 >
 </van-nav-bar>
-
- <div class="init-list" v-for="i in fromData">
+<div v-if="fromData.length<=0">
+          <h5 style="color:#8C8C8C;text-align: center;padding-top: 200px;">没有退换/售后记录～</h5>
+  </div>
+  <div v-else>
+ <div  class="init-list" v-for="i in fromData">
   <van-cell-group>
   <van-cell :title="i.applyTime" :value="typeText(i.saleType)" />
   </van-cell-group>
@@ -31,10 +34,10 @@
   </van-cell-group>
   
   <div class="init-clear"></div>
-  
   </div>
   <div class="init-border-20"></div>
   <h5 v-if="fromData.length>0 && shows && fromData.length>=(page+1)*5" @click="more" class="more"><van-icon name="add-o" /><i class="text">点击加载更多</i></h5>
+  </div>
   </div>
 </template>
 
@@ -132,6 +135,8 @@ export default {
 #apps >>> .van-stepper__input[disabled] {
     color: #7d7e80;
     background-color: #f8f8f8;
+    -webkit-text-fill-color: #7d7e80;
+    -webkit-opacity: 1;
 }
 /*掩藏滚动条*/
 ::-webkit-scrollbar {

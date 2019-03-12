@@ -79,7 +79,11 @@ export default {
   methods: {
     ...mapActions(["newtoken"]),
     onClickLeft(){
-      this.$router.push('/')
+      this.$store.state.shop_info = 0
+      setTimeout(()=>{
+        this.$router.push('/')
+      },100)
+     
     },
      changeType() {
         this.paswldtype = this.paswldtype === 'password' ? 'text' : 'password';

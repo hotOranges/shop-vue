@@ -75,7 +75,10 @@ export default {
     },
     oned(item,index){
       localStorage.setItem('LocalAdrrss', JSON.stringify(item))
-     this.onClickLeft()
+      setTimeout(()=>{
+        this.onClickLeft()
+      },50)
+    
     },
     onClickLeft() {
       this.$router.back(-1);

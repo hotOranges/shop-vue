@@ -45,7 +45,9 @@
     </van-col>
         </div>
     </div>
-    <div style="padding-bottom:80px"></div>  
+    <div style="padding-bottom:80px"></div> 
+   <input type="text" v-model="total"  style="position: absolute;top:0;height: 2px;width: 2px;">
+    <input type="text" v-model="cantext" style="position: absolute;top:0;height: 2px;width: 2px;">
 <van-submit-bar
   :price="total"
   button-text="去结算"
@@ -81,7 +83,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Toast } from "vant";
 import { getShopCart,addShopCart,subShopCart,delShopCart } from "../../src/api/login";
-
+import { Dialog } from "vant";
 
 export default {
   name: "shoppingCart",
@@ -254,13 +256,18 @@ export default {
         this.shops[index].danxuan = false;
          this.$set(this.shops, index, this.shops[index]);
         if (this.total>0) {
+           setTimeout(()=>{
           this.total -= p*100;
+        })
         }
       } else {
         // this.checked += 1;
         this.shops[index].danxuan = true;
          this.$set(this.shops, index, this.shops[index]);
-        this.total += p*100 ;
+        setTimeout(()=>{
+          this.total += p*100 ;
+        })
+        
    
        
       }
@@ -268,13 +275,13 @@ export default {
           return vals.danxuan == true
         }) 
       if (check.length == this.shops.length) {
-        this.checkAll = true;
+        this.checkAll = true
       } else {
         this.checkAll = false;
       }
     },
     onClickRight() {
-      if (this.canel==true) {
+     if (this.canel==true) {
         this.canel = false
       }else{
         this.canel = true
@@ -284,6 +291,7 @@ export default {
       } else {
         this.cantext = "编辑";
       }
+    
     },
    
     redirects(url) {
@@ -327,6 +335,9 @@ export default {
 #app >>> .van-stepper__input[disabled] {
     color: #7d7e80;
     background-color: #f8f8f8;
+    -webkit-text-fill-color: #000;
+    -webkit-opacity: 1;
+
 }
 #app >>> .imgList img {
   width: 100%;

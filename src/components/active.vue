@@ -87,6 +87,7 @@ export default {
     }),
   },
   mounted(){
+    
     this.inits()
   },
   methods: {

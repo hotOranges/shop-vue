@@ -57,4 +57,7 @@ export default {
 #apps >>> .van-nav-bar .van-icon {
     color: #323232;
 }
+#apps.Router >>> .van-hairline--top-bottom::after{
+    border-width:0
+}
 </style>

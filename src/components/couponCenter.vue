@@ -2,7 +2,10 @@
   <div id="apps" :style="{height:fullHeight + 'px'}">
       <van-nav-bar title="领券中心" @click-left="onClickLeft" left-arrow>
     </van-nav-bar>
-    <van-cell-group>
+   <div v-if="couponcardData.length<=0">
+          <h5 style="color:#8C8C8C;text-align: center;padding-top: 200px;">没有优惠券～</h5>
+  </div> 
+    <van-cell-group v-else>
   <van-cell class="bg1">
       <van-row class="couponcard" v-for="(item, index) in couponcardData" :key="index+1">
          <van-col span="9" class="couponleft">
@@ -41,14 +44,10 @@ filters:{
 			return timestampToTime(newDate)
         }
 },
-  components: {},
-
-  computed: {},
 
   mounted() {
       this.inits()
   },
-
   methods: {
     inits(){
          let para = {

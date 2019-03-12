@@ -407,7 +407,7 @@ export default {
       });
       this.$ajax.post(url, para).then(function(response) {
         if (response.data.code == "1013") {
-          Toast("暂无轨迹数据");
+          Toast("暂无物流信息");
         } else if (response.data.code == "200") {
           thiss.stepsData = response.data.data;
           thiss.sysAppIds = thiss.stepsData.logisticCode;

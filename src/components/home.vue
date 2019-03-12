@@ -142,7 +142,7 @@
     <!-- tabBar -->
     <van-tabbar v-model="tabarActive">
       <van-tabbar-item icon="contact" @click="redirects('/Me')"></van-tabbar-item>
-      <van-tabbar-item icon="cart" :info="info" @click="redirects('/shoppingCart')"></van-tabbar-item>
+      <van-tabbar-item icon="cart" :info="shop_info" @click="redirects('/shoppingCart')"></van-tabbar-item>
       <!-- <van-tabbar-item icon="contact" info="2" v-infos="my_info" @click="redirects('/me')">我的</van-tabbar-item> -->
     </van-tabbar>
   </div>
@@ -181,7 +181,7 @@ export default {
       value: null,
       active: 0,
       severs: severs(),
-      info: "0",
+      // info: "0",
       tabs: "推荐",
       account: "",
       sdktoken: "",
@@ -289,11 +289,13 @@ export default {
     }
   },
   mounted() {
+    
     this.banner();
   },
   methods: {
-    ...mapActions(["infoAction"]),
     ...mapActions(["newtoken"]),
+    ...mapActions(["infoAction"]),
+    ...mapActions(["infoAction2"]),
     goToLink(link) {
       this.$router.push(`${link}`);
     },
@@ -349,7 +351,7 @@ export default {
             this.getShopCart1();
           
           } else {
-            // this.infoAction()
+            this.infoAction2()
             localStorage.removeItem("getShopCarts");
             this.getProducts();
           }
@@ -408,6 +410,7 @@ export default {
             thisss.info = JSON.parse(
               localStorage.getItem("getShopCarts")
             ).length;
+             thisss.infoAction()
             thisss.getProducts();
           }
         })
@@ -465,7 +468,7 @@ export default {
       Toast("网络错误o(╥﹏╥)o 请稍后再试~");
     }
   },
-  watch: {},
+
   directives: {
     //瀑布流
     WaterfallLower: Waterfall("lower"),

@@ -62,6 +62,9 @@ export default {
         },
         shopCartInfo2(state) {
             state.shop_info =state.shop_info + 1 ;
+        },
+        shopCartInfo3(state) {
+            state.shop_info = 0 ;
         }
     },
     actions: {
@@ -89,6 +92,9 @@ export default {
        infoAction(context) {
          context.commit('shopCartInfo');
        },
+       infoAction2(context) {
+        context.commit('shopCartInfo3');
+      },
        addInfoAction(context){
          context.commit('shopCartInfo2');
        }

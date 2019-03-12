@@ -19,7 +19,10 @@
                      </van-col>
                      <!-- 订单 -->
                      <van-col span="24" class="headerImg">
-                      <van-cell @click="toOrder('0')" style="border-bottom: 1px solid #D9D9D9;padding-top: 25px;margin-bottom: 25px;padding-right: 10px;" title="我的订单" value="查看全部订单" icon="close" is-link />
+                      <van-cell @click="toOrder('0')" class="init-boder" style="margin-bottom: 14px;padding-right: 10px;padding-bottom: 0px"   is-link>
+                       <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/5.png" /><span style="position: absolute;top: -2px;left: 30px;color: #323233;font-size: 14px;">我的订单</span></div>  
+                       <span style="float: right;color:#6B6B6B;font-size:14px">查看全部订单</span>
+                      </van-cell>
                      <van-col span='5' offset="0" >
                      <div @click="toOrder('1')">
                      <span><img src="../../static/images/icon/1.png"  /></span>  
@@ -31,7 +34,7 @@
                      <div @click="toOrder('2')">
                      <span><img src="../../static/images/icon/2.png"  /></span>  
                      <span>待收货</span>
-                     <!-- <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value2>0">{{numberShop.value2 | filterwhet2}}</van-tag> -->
+                     <van-tag type="danger" class="bagInit fadein" v-if="numberShop.value2>0">{{numberShop.value2 | filterwhet2}}</van-tag>
                      </div>
                      </van-col>
                      <van-col span='5' offset="0"  @click="toOrder('3')">
@@ -58,12 +61,24 @@
                       
                       <!-- 列表区 -->
                       <van-col span="24" class="headerList">
-                      <van-cell style="padding-bottom: 15px;"  @click="redirects('couponCenter')" title="领券中心"  icon="shoucang" is-link />
-                      <van-cell style="padding-bottom: 15px;" @click="redirects('coupon')" title="我的优惠劵"  icon="youhuijuan" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="收货地址"  @click="redirects('/address')" icon="dizhi" is-link />
-                      <van-cell style="padding-bottom: 15px;" @click="$toast('敬请期待')" title="帮助与反馈"  icon="bangzhu" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="客服中心"  @click="im" icon="kefu" is-link />
-                      <van-cell style="padding-bottom: 15px;" title="退出登录"  @click="outin" icon="kefu" />    
+                      <van-cell  @click="redirects('couponCenter')"  is-link>
+                      <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/6.png"  /><span style="position: absolute;top: -2px;left: 30px;">领券中心</span></div>  
+                      </van-cell>
+                      <van-cell @click="redirects('coupon')"  is-link >
+                         <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/13.png"  /><span style="position: absolute;top: -2px;left: 30px;">我的优惠劵</span></div>  
+                      </van-cell>
+                      <van-cell   @click="redirects('/address')"  is-link >
+                         <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/7.png"  /><span style="position: absolute;top: -2px;left: 30px;">收货地址</span></div>  
+                      </van-cell>
+                      <van-cell  @click="$toast('敬请期待')" is-link >
+                      <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/3.png"  /><span style="position: absolute;top: -2px;left: 30px;">帮助与反馈</span></div>  
+                      </van-cell>
+                      <van-cell  @click="im"  is-link >
+                       <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/4.png"  /><span style="position: absolute;top: -2px;left: 30px;">客服中心</span></div>  
+                      </van-cell>
+                      <van-cell  v-if="iswx=='true'"   @click="outin"  is-link >    
+                     <div style="width: 50%;line-height: 32px;float: left;"><img src="../../static/images/icon/out.png"  /><span style="position: absolute;top: -2px;left: 30px;">退出登录</span></div>  
+                      </van-cell>
                      </van-col>
  
        </van-row>
@@ -109,6 +124,7 @@ export default {
       showList: false,
       showEdit: false,
       isEdit: false,
+      iswx: localStorage.getItem("iswx"),
       list: [
       ],
       value: "",
@@ -161,6 +177,7 @@ export default {
   },
   methods: {
     ...mapActions(["searchA", "infoAction"]),
+    ...mapActions(["infoAction2"]),
     redirects(url) {
       this.$router.push(url);
     },
@@ -222,8 +239,9 @@ export default {
          token:JSON.parse(localStorage.getItem('token'))
       }
       logOut(para).then(res =>{
-         this.$store.dispatch('logout')
          localStorage.clear()
+         this.$store.dispatch('logout')
+         
       })
     },
     onClickLeft() {
@@ -267,6 +285,7 @@ export default {
   height: 20px;
   line-height: 20px;
   padding: 0;
+  color: #fff;
 }
 #apps >>> .col-me .headerImg .bagInit.van-tag.fadein{
   opacity:100;
@@ -280,8 +299,14 @@ export default {
   );
       height: 48px;
 }
+#apps >>> .headerList .van-cell{
+      padding: 7px 15px;
+}
 #apps >>> .van-nav-bar .van-icon {
   color: #fff;
+}
+#apps >>> .init-boder::after{
+
 }
 #apps >>> .van-icon-discount::before {
   font-size: 22px;
@@ -293,17 +318,23 @@ export default {
   color: #323232;
 }
 #apps >>> .van-cell__value {
-  font-size: 12px;
+    font-size: 15px;
+    color: #323232;
+}
+#apps >>> .van-cell__value img{ 
+  width:25px
 }
 #apps >>> .van-col--5 {
     width: 20%;
     position: relative;
 }
 #apps >>>  .headerImg img{
-  width: 100%
+  width: 25px
 }
 #apps >>> .headerImg .van-cell:not(:last-child)::after{
-  border-bottom: 0px solid #eee;
+  border-bottom: 1px solid #eee;
+  left:5px;
+  right:5px;
 } 
 #apps >>> .van-icon-setting::before {
     content: url(../assets/img/10.png);
@@ -311,23 +342,11 @@ export default {
 #apps >>> .van-icon-chat::before{
    content: url(../assets/img/9.png);
 }
-#apps >>> .van-icon-close::before{
-   content: url(../assets/img/5.png);
+#apps >>> .van-icon-arrow:before {
+    color: #CACACA;
 }
-#apps >>> .van-icon-shoucang::before{
-   content: url(../assets/img/6.png);
-}
-#apps >>> .van-icon-youhuijuan::before{
-   content: url(../assets/img/13.png);
-}
-#apps >>> .van-icon-dizhi::before{
-   content: url(../assets/img/7.png);
-}
-#apps >>> .van-icon-bangzhu::before{
-   content: url(../assets/img/3.png);
-}
-#apps >>> .van-icon-kefu::before{
-   content: url(../assets/img/4.png);
+#apps >>> .van-cell:not(:last-child)::after{
+  border-bottom:0px
 }
 #apps >>> [class*=van-hairline]::after{
       border: 0 solid #ef9e3e;

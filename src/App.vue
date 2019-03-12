@@ -38,7 +38,7 @@ export default {
       }
     },
     beforeRouteUpdate (to, from, next) {
-      let isBack = this.$router.isBack
+      let isBack = this.$router.isBack;
       if (isBack) {
         this.transitionName = 'slide-right'
       } else {

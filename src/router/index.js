@@ -54,7 +54,10 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/chat/:sessionId',
@@ -296,5 +299,19 @@ export default new Router({
       path:'*',
       redirect:'/'
     }
-  ]
+  ],
+  //  scrollBehavior (to, from, savedPosition) {
+  //    console.log(from.meta.savedPosition)
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     if (from.meta.keepAlive) {
+  //       console.log(1 )
+  //       from.meta.savedPosition =  document.documentElement.scrollTop
+  //     }else {
+  //       return { x: 0, y: to.meta.savedPosition || 0 }
+  //     }
+      
+  //   }
+  // },
 })
