@@ -349,7 +349,7 @@ export default {
   border-bottom:0px
 }
 #apps >>> [class*=van-hairline]::after{
-      border: 0 solid #ef9e3e;
+  border: 0 solid #ef9e3e;
           /* transform: none; */
 }
 </style>
